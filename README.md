@@ -1,7 +1,7 @@
 # goldfinch
 A set of scripts for working with postgres and arangodb databases based on extending Jeroen Janssens 'Data Science on the Command Line' https://github.com/jeroenjanssens/data-science-at-the-command-line  
 
-1) create_table.py: Based on column names in a tsv file-format this python3 script create a postgres import script 
+1) **create_table.py** Based on column names in a tsv file-format this python3 script create a postgres import script 
 
    Run the script to create a table create/import script 'table_CORPUS.sql' that imports the file 'CORPUS.tsv':
 
@@ -15,7 +15,7 @@ A set of scripts for working with postgres and arangodb databases based on exten
   * All columns are varchar by default but can be changed in the import script ahead of the import
   * csv is also supported by editing the create_table.py script
 
-2.1) aqls.sh: A command-line wrapper script for arangodb that allows either readline quoted text or input file. Connection parameters are set in shell environment variables as follows:  
+2.1) **aqls.sh** A command-line wrapper script for arangodb that allows either readline quoted text or input file. Connection parameters are set in shell environment variables as follows:  
    username      ARUSR default root   
    password      ARPWD default lookup as key:pair from $HOME/.aqlpass file
 
@@ -35,9 +35,9 @@ return i
 
    The output is in json pretty-printed using the 'jq' command-line tool https://stedolan.github.io/jq/
 
-2.2) aqlx.sh: A command-line wrapper script for arangodb identical to aqls.sh but without 'jq' pretty-print.  
+2.2) **aqlx.sh** A command-line wrapper script for arangodb identical to aqls.sh but without 'jq' pretty-print.  
 
-2.3) ar-env.sh: A wrapper script to set the following shell environment parameters used by the aqls.sh and aqlx.sh arangodb wrapper scripts   
+2.3) **ar-env.sh** A wrapper script to set the following shell environment parameters used by the aqls.sh and aqlx.sh arangodb wrapper scripts   
    username      ARUSR default root  
 
    password      ARPWD default lookup as key:pair from $HOME/.aqlpass file  
