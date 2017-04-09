@@ -8,13 +8,13 @@ A set of scripts for working with postgres and arangodb databases based on exten
    To then import 'CORPUS.tsv' into the table table_corpus (database user 'finch' and postgres server 'raven') run the following:  
 `$ < table_CORPUS.sql psql -U finch -h raven` 
 
-   The tablename is lowercase 'table_corpus'
+  * The tablename is lowercase 'table_corpus'
   * All columns are varchar by default but can be changed in the import script ahead of the import  
   * csv is also supported by editing the create_table.py script
 
-2.1) **aqls.sh**
+2.1) **aqls.sh**  
 A command-line wrapper script for arangodb that allows either readline quoted text or input file. Connection parameters are set in shell environment variables as follows:
-  * username      ARUSR default root
+* username      ARUSR default root
   * password      ARPWD default lookup as key:pair from $HOME/.aqlpass file
   * server-name   ARSVR default ar-server
   * database-name ARDBN default _system
