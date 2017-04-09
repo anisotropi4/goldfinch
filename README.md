@@ -7,7 +7,7 @@ A set of scripts for working with postgres and arangodb databases based on exten
 
 `$ bin/create_table.py CORPUS.tsv`
 
-    To import 'CORPUS.tsv'into the table table_corpus (database user 'finch' and postgres server 'raven') run the following:
+   To then import 'CORPUS.tsv' into the table table_corpus (database user 'finch' and postgres server 'raven') run the following:
 
 `$ < table_CORPUS.sql psql -U finch -h raven` 
 
