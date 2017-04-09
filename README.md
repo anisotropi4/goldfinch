@@ -7,7 +7,6 @@ A set of scripts for working with postgres and arangodb databases based on exten
 
    To then import 'CORPUS.tsv' into the table table_corpus (database user 'finch' and postgres server 'raven') run the following:  
 `$ < table_CORPUS.sql psql -U finch -h raven` 
-
   * The tablename is lowercase 'table_corpus'
   * All columns are varchar by default but can be changed in the import script ahead of the import  
   * csv is also supported by editing the create_table.py script
@@ -23,13 +22,13 @@ A command-line wrapper script for arangodb that allows either readline quoted te
 `$ aqlx.sh 'for i in fullnodes limit 5 return i'`  
 
    The same query using the script file 'test-script.aql':  
-`$ cat test-script.aql`
-`for i in fullnodes`
-`limit 5` 
-`return i`
+`$ cat test-script.aql`  
+`for i in fullnodes`  
+`limit 5`  
+`return i`  
 `$ < test-script.aql aql.sh`
 
-   The output is in json pretty-printed using the 'jq' command-line tool https://stedolan.github.io/jq
+The output is in json pretty-printed using the 'jq' command-line tool https://stedolan.github.io/jq
 
 2.2) **aqlx.sh** 
 A command-line wrapper script for arangodb identical to aqls.sh but without 'jq' pretty-print.  
@@ -41,6 +40,6 @@ A wrapper script to set the following shell environment parameters used by the a
 * server-name   ARSVR default ar-server  
 * database-name ARDBN default _system  
 
-   If the ARPWD password variable is not set, the script uses the 'jq' command-line tool https://stedolan.github.io/jq to lookup from a json format file in the $HOME/.aqlpass  
+ If the ARPWD password variable is not set, the script uses the 'jq' command-line tool https://stedolan.github.io/jq to lookup from a json format file in the $HOME/.aqlpass  
 `$ cat ~/.aqlpass  
 {"root": "dontbedaft", "nodeuser": "tryagain"}`  
