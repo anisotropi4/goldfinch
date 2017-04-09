@@ -3,14 +3,14 @@ A set of scripts for working with postgres and arangodb databases based on exten
 
 1) create_table.py: Based on column names in a tsv file-format this python3 script create a postgres import script 
 
-For the file called 'CORPUS.tsv' run the script to creates the import script 'table_CORPUS.sql':
+..For the file called 'CORPUS.tsv' run the script to create the table create/import script 'table_CORPUS.sql':
 
 `$ bin/create_table.py CORPUS.tsv`
 
-To import the file 'CORPUS.tsv' with user 'finch' on the postgres server 'raven' run into the table table_corpus:
+..To import the file 'CORPUS.tsv'into the table table_corpus (database user 'finch' and postgres server 'raven') run:
 
 `$ < table_CORPUS.sql psql -U finch -h raven` 
 
-The table created will be lowercase 'table_corpus' 
-All columns are varchar by default but can be edited in the import script
-Edit the create_table.py script as indentified in the script to supports csv rather than tsv import
+..* The tablename is lowercase 'table_corpus' 
+..* All columns are varchar by default but can be changed in the import script ahead of the import
+..* csv is also supported by editing the create_table.py script
