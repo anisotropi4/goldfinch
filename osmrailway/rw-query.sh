@@ -1,0 +1,5 @@
+wget -O railway.json --post-file=rw-query.json "http://osm3s-server/api/interpreter"
+wget -O level-crossing.json --post-file=lc-query.json "http://osm3s-server/api/interpreter"
+wget -O station.json --post-file=st-query.json "http://osm3s-server/api/interpreter"
+wget -O tunnel.json --post-file=tl-query.json "http://osm3s-server/api/interpreter"
+wget -O bridge.json --post-file=bg-query.json "http://osm3s-server/api/interpreter"

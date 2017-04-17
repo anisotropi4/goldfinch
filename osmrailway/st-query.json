@@ -1,0 +1,12 @@
+data=[out:json][timeout:600];
+// gather results
+(
+  // query part for: “railway=*”
+  node["railway"]["railway"="station"];
+  way["railway"]["railway"="station"];
+  relation["railway"]["railway"="station"];
+);
+// print results
+out body;
+>;
+out skel qt;
