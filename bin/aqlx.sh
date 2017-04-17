@@ -7,7 +7,7 @@ if [ $# = 0 ]; then
    CMD=`cat -`
 fi
 
-node <<- @EOF 
+${NODE} <<- @EOF 
 Database = require('arangojs').Database;
 db = new Database({url: 'http://${ARUSR}:${ARPWD}@${ARSVR}:8529', databaseName: '${ARDBN}' });
 db.query(\`${CMD}\`)
