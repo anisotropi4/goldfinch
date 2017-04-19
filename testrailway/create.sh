@@ -23,5 +23,5 @@ done
 
 ./creategeoindex.sh fullnodes
 
-echo "dump nodes to 'output.json' file"
-sh ./report.sh > visualisation/output.json
+echo "dump nodes to 'raildata.json' file"
+sh ./report.sh > visualisation/raildata.json
