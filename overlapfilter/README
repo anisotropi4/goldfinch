@@ -1,0 +1,26 @@
+This uses the data created in railway/fullrailway arango database to calculate the overlap between points to be used in a filter heuristic when rendered using a d3/leaflet interactive map
+
+This assumes that the 'fullrailway' database is populated and accessable by the 'railway' user as in the goldfinch/fullrailway scripts
+
+1) Install the 'pyArango' and dependencies using pip:
+$ pip install pyArango
+
+2) Create and populate the 'fullfilternodes' table and create the 'raildata.json' report in the visualisation directory
+$ sh ./create.sh
+
+The calculation is carried out in the 'filter02.py' which works as follows:
+
+0) Create a table that contains all nodes and give these a 'valid' range of 33,554.432km. This is 2^25 metres, or the power-of-two in metres larger than half the circumference of the Earth Earth (20,238km). 
+1) Using the arangodb 'within' function, for a given node, create a list of all other nodes within a distance of n metres 
+2) Starting with n = 2 iterate through this list of nodes and nearest nodes
+3) If the 'valid' distance for the current node is greater than 'n' and there are nodes within this a distance of 'n', set the 'valid' distance for all nodes nearest to this node to 'n / 2'
+4) Count the number of nodes with a 'valid' distance less than 'n'
+5) Set the valid distance for the nodes identified as being within a distance of 'n' for a given node
+6) If there is one or less nodes with a 'valid' distance then stop
+7) Double the value of 'n' and repeat from 1
+
+This is clunky and slow but does provide an heuristic around overlapping points. For 900k points this takes about 30 minutes on a fairly ordinary Lenovo laptop.
+
+The 'raildata.json' report then contains the information about the node plus the corresponding 'lvalue' or base 2 log of the 'valid' distance which is then used to scale the number of points displayed
+
+The 'raildata.json' file can be viewed using an d3 and OpenStreetMap Leaflet javascript framework described in the visualisation sub-directory

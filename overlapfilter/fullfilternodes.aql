@@ -1,0 +1,5 @@
+// 33,554.432km is just bigger than half the circumference of the Earth Earth (20,238km) in base 2^25 metres
+for i in fullnodes
+upsert { _key: i._key }
+insert merge(i, {_key: i._key, node: to_number(i._key), lat: i.lat, lon: i.lon, valid: 33554432})
+update merge(i, {_key: i._key, valid: 33554432}) in fullfilternodes

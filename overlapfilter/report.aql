@@ -1,0 +1,6 @@
+for i in fullfilternodes
+let log2 = log(2.0)
+for j in fullnodes 
+filter i._key == j._key
+return merge({node: i.id, lat: i.lat, lon: i.lon, lvalid: (log(i.valid) / log2)}, is_null(j.tags) ? {} : {tags: j.tags})
+
