@@ -1,0 +1,8 @@
+for i in fullosm2
+filter i.type == "way" 
+upsert { _key: to_string(i.id) }
+insert merge(i, {_key: to_string(i.id)})
+update (is_null(i.tags) ? merge(i, {_key: to_string(i)})
+: 
+merge(i, {_key: to_string(i)}))
+in fullways
