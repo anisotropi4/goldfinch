@@ -9,52 +9,50 @@
     <body>
         <div id="map" style="width: 1340px; height: 635px"></div>
         <script type="text/javascript">
-            
-// Define the div for the tooltip
-var radius = 4;
+                       
+// Set the centre point for the map
 // var map = L.map('map').setView([51.53, -0.124], 14); //KGX
-// var map = L.map('map').setView([53.79, -1.548], 14); //Leeds
-// var map = L.map('map').setView([51.75, -0.327], 14); //St Albans
-var map = L.map('map').setView([53.96, -1.08], 14); //York
+var map = L.map('map').setView([53.96, -1.08], 14); //YRK
 mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; ' + mapLink + ' Contributors',
-    maxZoom: 18,
+    minZoom: 3,
+    maxZoom: 18
 }).addTo(map);
-/* Initialize the SVG layer */
+
 L.svg().addTo(map);
-/* We simply pick up the SVG from the map object */
 var svg = d3.select("#map").select("svg")
   , g = svg.selectAll("g");
+
+var radius = 4;
 var collections = [];
 var colours15 = {0: "GreenYellow", 13: "DeepSkyBlue", 3: "Gold", 5: "Red", 4: "Purple", 6: "Orange", 7: "DeepPink", 8: "Magenta", 9: "DarkSlateBlue", 10: "GreenYellow", 11: "Lime", 12: "Cyan", 1: "Blue", 14: "DarkBlue", 15: "DarkOrange", 16: "DarkOrchid"};
 var colourscale = function(n) {
     return colours15[n];
 }
-d3.json("output.json", function(err, d) {
+
+d3.json("raildata.json", function(err, d) {
     if (err)
         return console.warn(err);
     d.forEach(function(v) {
         v.type = "output";
         v.colour = colourscale(5);
-        v.LatLng = new L.LatLng(v.latitude,v.longitude);        
+        v.LatLng = new L.LatLng(v.lat,v.lon);        
     });
     collections = collections.concat(d);
     render();
 });
+
 function render() {
-    /* Add a LatLng object to each item in the dataset */
     var tree = d3.quadtree().x(function(d) {
-        return d.latitude;
+        return d.lat;
     }).y(function(d) {
-        return d.longitude;
-    }).addAll(collections);
-    //console.log(tree.extent());
-    var zscale = d3.scaleLinear().domain([0, 18]).range([19, 0]);
+        return d.lon;
+    }).addAll(collections);   
+
     function visiblenodes() {
         var nodes = [];
         var z = map.getZoom();
-        console.log("zoom:", z, " zoomu:", zscale(z));
         var bounds = map.getBounds();
         var p0 = bounds._southWest
           , p3 = bounds._northEast;
@@ -64,12 +62,13 @@ function render() {
             }
             return x1 >= p3.lat || y1 >= p3.lon || x2 < p0.lat || y2 < p0.lon;
         });
-        console.log("# nodes", nodes.length);
+        console.log("# nodes selected", nodes.length);
         return nodes;
     }
     map.on("viewreset", update);
     map.on("moveend", update);
     update();
+
     function update() {
         g.selectAll("circle").remove();
         g.selectAll("text").remove();
@@ -88,6 +87,7 @@ function render() {
         });
     }
 }       
+        
         
         </script>
     </body>

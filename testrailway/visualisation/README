@@ -1,7 +1,9 @@
 1) Run a simple webserver on a random port, say 1357:
 $ python -m SimpleHTTPServer 1357
 
-2) Using a modern webrowser load to http://localhost:1357 and load the railmap.html to render the Open Street Map data points of interest.
+2) Using a modern webrowser load to http://localhost:1357 and load the index.html to render the Open Street Map data points of interest.
+
+Example of this and other renders can be found here https://gist.github.com/anisotropi4 or seen here https://bl.ocks.org/anisotropi4
 
 Notes:
 This simple render uses a mash up of d3 (https://d3js.org) and leaflet (http://leafletjs.com)
