@@ -9,6 +9,9 @@
     <body>
         <div id="map" style="width: 1340px; height: 635px"></div>
         <script type="text/javascript">
+            
+            
+            
                                            
 var radius = 4;
 var log2 = Math.log(2.0);
@@ -42,15 +45,19 @@ function mapply(a, fn) {
     return m;
 }
 
-var arange;
+var arange = [25, 0];
+
 d3.json("raildata.json", function(err, d) {
     if (err)
         return console.warn(err);
-    var arange = [mapply(a, Math.min), mapply(a, Math.max)]
     d.forEach(function(v, i) {
         v.type = "output";
         v.colour = colourscale(5);
         v.LatLng = new L.LatLng(v.lat,v.lon);
+        arange[0] = Math.min(arange[0], v.lvalid);
+        if (v.lvalid < 25) {
+            arange[1] = Math.max(arange[1], v.lvalid);        
+        }
     });
     collections = collections.concat(d);
     render();
@@ -62,7 +69,7 @@ function render() {
     }).y(function(d) {
         return d.lon;
     }).addAll(collections);
-    var zscale = d3.scaleLinear().domain([minZoom, maxZoom]).range([arange[1], arange[0]]);
+    var zscale = d3.scaleLinear().domain([minZoom+1, maxZoom]).range([arange[1], arange[0]]);
 
     function visiblenodes() {
         var nodes = [];
@@ -72,7 +79,8 @@ function render() {
         var p0 = bounds._southWest
           , p3 = bounds._northEast;
         tree.visit(function(node, x1, y1, x2, y2) {
-            if (node.data &&  node.data.lrange >= zscale(map.getZoom())) {
+            if (node.data &&  node.data.lvalid >= zscale(map.getZoom())) {
+            //if (node.data) {
                 nodes.push(node.data);
             }
             return x1 >= p3.lat || y1 >= p3.lon || x2 < p0.lat || y2 < p0.lon;
@@ -102,7 +110,7 @@ function render() {
         });
     }
 }                        
-
+        
         </script>
     </body>
 </html>
