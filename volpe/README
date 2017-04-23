@@ -1,0 +1,31 @@
+This uses OpenStreetMap data extracted from Overpass API into ArangoDB to calculate and visualise the shortest railway path using a d3/leaflet interactive map using the 'goldfinch/fullrailway' framework (https://github.com/anisotropi4/goldfinch') 
+
+A simple URL start/end parameter is used to reference the start and end OpenStreetmap node ID
+
+0) Set up a docker network 'dockernet'
+$ docker network create --subnet 172.18.1.0/24 --gateway 172.18.1.254 dockernet
+
+By default 'update.sh' allocates 172.18.1.3 to the database on hostname 'ar-server'
+Add an ar-server entry to /etc/hosts:
+172.18.1.3      ar-server
+
+1) Install jq, npm and node/nodejs plus the 'request', 'sync' and 'arangojs' modules.
+On a Debian based system this looks something like:
+$ sudo apt-get install jq npm
+$ npm install request sync arangojs
+
+Install 'foxx-manager' using the arangodb3-client package follow https://www.arangodb.com/download-major/ubuntu/
+
+2) Create the 'fullrailway' database as set out in 'https://github.com/anisotropi4/goldfinch' directory
+
+3) Create the 'fulledges' collection using the existing OpenStreetMap fullnodes and fullways collections:  
+$ sh ./create.sh
+
+The 'volpe' API on (http://ar-server:8529/_db/fullrailway/volpe) consists of:
+'/hello-world'	Prints a generic greeting and simple usage
+'/run_aql'	Runs a simple test query
+'/node/{key}'	Retrieves the ID for an entry from the "fullnodes" collection by key
+'/shortestpath/'	Retrieves the ID for an entry from the "fullnodes" collection by key
+'/shortestpath/{start}/{end}'	Assembles all nodes in the shortest path between nodes in url /shortestpath/start/end
+
+The shortest path can be viewed using an d3 and OpenStreetMap Leaflet javascript framework described in the visualisation sub-directory

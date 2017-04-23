@@ -1,0 +1,12 @@
+for i in fullways
+filter length(i.nodes) > 1
+for j in 0..(length(i.nodes) - 2)
+let from = document(fullnodes, concat("fullnodes/",to_string(i.nodes[j])))
+let to = document(fullnodes, concat("fullnodes/",to_string(i.nodes[j+1])))
+filter from
+filter to
+insert {"_from" : from._id, 
+	"_to" : to._id, 
+	"wayid" : i.id, 
+	"distance": distance(from.lat, from.lon, to.lat, to.lon)} 
+into fulledges

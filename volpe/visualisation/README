@@ -1,0 +1,22 @@
+1) Run a simple webserver on a random port, say 1357:
+$ python -m SimpleHTTPServer 1357
+
+2) Using a modern webrowser load to http://localhost:1357/ the OpenStreetMap railway shortest-path points of interest data between York and Scarborough. 
+
+3) To vary the start and end point use the "start" and "end" parameter. For example, 
+York Scarborough:	http://localhost:1357/index.html?start=20913296&end=2512646
+
+Lincoln Middlesborough:	http://localhost:1357/?start=1720744919&end=34402088
+
+Notes:
+This simple render uses a mash up of d3 (https://d3js.org) and leaflet (http://leafletjs.com)
+
+The key element is the use of the quadtree function in the visiblenodes functionto quickly find nodes and is based on at least:
+The excellent work of Mike Bostock in developing d3 (https://bost.ocks.org/mike/)
+OpenStreetMap data and maptiles (https://www.openstreetmap.org)
+The Leaflet javascript library (http://leafletjs.com)
+
+Plus the data visualised is from OpenStreetMap (http://www.openstreetmap.org) using Overpass API (http://www.overpass-api.de) plus:
+Arangodb (https://www.arangodb.com)
+jq (https://stedolan.github.io/jq)
+The data is used under the OpenStreetMap Creative Commons Attribution (http://wiki.openstreetmap.org/wiki/Wiki_content_license)

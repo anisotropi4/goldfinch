@@ -1,0 +1,12 @@
+{
+  "name": "volpe",
+  "version": "0.1.0",
+  "author": "anisotropi4 (will.deakin@crinstitute.org.uk)",
+  "description": "simple aql query",
+  "license": "Apache License, Version 2.0",
+  "main": "index.js",
+  "engines": {
+    "arangodb": "^3.0"
+  }
+
+}
