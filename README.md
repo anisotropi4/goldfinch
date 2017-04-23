@@ -1,6 +1,10 @@
 # goldfinch
 A set of scripts for working with postgres and arangodb databases based on extending Jeroen Janssens 'Data Science on the Command Line' https://github.com/jeroenjanssens/data-science-at-the-command-line
 
+More information about ArangoDB and PostGres can be found here:
+ * ArangoDB: https://www.arangodb.com
+ * PostGres: https://www.postgresql.org
+ 
 ## osmrailway
 
 A set of query shell-scripts that extract railway data from an OpenStreetMap Overpass API server. An example docker build for OpenStreetMap Overpass API server under a Debian based Linux distribution can be found here. https://github.com/guidoeco/osm-overpass
@@ -13,11 +17,21 @@ More information about OpenStreetMap and Overpass API can be found here:
 
 The scripts in **testrailway** will create a **testrailway** Arangodb database instance, import the railway data extracted from an OpenStreetMap Overpass API server in **osmrailway** and create a json report containing OSM node information which can then be viewed in the 'visualisation' sub-directory using a d3/leaflet mashup http://bl.ocks.org/anisotropi4/3452a4d2d7e848511feafe8a6c1bfaee
 
-The **testrailway** dataset was used on a smaller North Yorkshire dataset based to prove the concept before moving to the British Isles due to issues with scaling the visualisation code.
+The **testrailway** dataset was used on a smaller North Yorkshire dataset based to prove the concept before moving to the British Isles which is manged using the **fullrailway** scripts, and is due to issues with scaling the visualisation.
 
 The ArangoDB used is based on the ArangoDB server docker build scripts here https://github.com/guidoeco/docker in the arangodb directory.
 
 The render uses a mash up of d3 (https://d3js.org) and leaflet (http://leafletjs.com).
+
+## fullrailway
+
+The scripts in **fullrailway** will create a **fullrailway** Arangodb database instance for a larger geographical area, import the railway data extracted from an OpenStreetMap Overpass API server in **osmrailway** and create a json report containing OSM node information which can then be viewed in the 'visualisation' sub-directory using a d3/leaflet mashup. 
+
+Due to the large size of data associated with the British Isles (920k+ points) two approaches are used to render the information. The first is based on a random selection heuristic and can be seen here http://bl.ocks.org/anisotropi4/85107c0e617f382e8462b1f264998718 
+
+## overlapfilter
+
+This contains a set of scripts that calculate a "valid distance" parameter for the data associated with the British Isles (920k+ points). The visualisation based on this overlap heuristic can be seen here: http://bl.ocks.org/anisotropi4/003ed4f355160a49f0c4b3e169191ac8
 
 ## 'bin' directory scripts  
 
