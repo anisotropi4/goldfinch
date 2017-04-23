@@ -21,3 +21,5 @@ the arangodb3-client package follow https://www.arangodb.com/download-major/ubun
 $ sh ./create.sh
 
 The 'raildata.json' file can be viewed using an d3 and OpenStreetMap Leaflet javascript framework described in the visualisation sub-directory
+
+The visualisation has been posted as a gist and can be viewed on bl.ocks.org here: http://bl.ocks.org/anisotropi4/3452a4d2d7e848511feafe8a6c1bfaee
