@@ -33,6 +33,10 @@ Due to the large size of data associated with the British Isles (920k+ points) t
 
 This contains a set of scripts that calculate a "valid distance" parameter for the data associated with the British Isles (920k+ points). The visualisation based on this overlap heuristic can be seen here: http://bl.ocks.org/anisotropi4/003ed4f355160a49f0c4b3e169191ac8
 
+## volpe
+
+This contains a set of scripts to create an ArangoDB edge collection and Foxx service that provides a shortest-path d3/leaflet mashup visualisation using a simple URL /startnode/endnode/ microservice
+
 ## 'bin' directory scripts  
 
 The 'bin' directory 'aql' scripts are used extensively in the 'goldfinch' and other projects and should be installed in the user-account `${HOME}/bin` directory:
