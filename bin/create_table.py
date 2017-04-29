@@ -19,7 +19,7 @@ instances = {}
 attributes = []
 unique = True
 
-s1_re = re.compile('[ ()\/\-\\%]+')
+s1_re = re.compile('[ ()\/\-\\%\]\[]+')
 s2_re = re.compile('[\.:\?%]')
 s3_re = re.compile('#')
 s4_re = re.compile('£')
