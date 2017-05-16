@@ -11,12 +11,15 @@ function createdb(callback) {
     db = new Database({url: 'http://root:${ARPASSWORD}@ar-server:8529', databaseName: '_system' });
     db.listDatabases()
     .then(names => { console.log('names: ', names);
+    db.dropDatabase('${ARDBN}')
+    .then(info => { console.log('drop: ', info); },
+          err => { console.error('names error: ', err)});   
     db.createDatabase('${ARDBN}')
-    .then(info => { console.log('drop: ', info);
-		    db.listDatabases()
+    .then(info => { console.log('create: ', info);
+		 db.listDatabases()
     .then(names => { console.log('names: ', names)},
           err => { console.error('names error: ', err)})}),
-    err => { console.error('error drop: ', err)}});
+    err => { console.error('error create: ', err)}});
 }
 function createuser(callback) {
     request.post('http://root:${ARPASSWORD}@${ARSVR}:8529/_api/user',
