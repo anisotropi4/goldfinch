@@ -11,7 +11,6 @@ ${NODE} <<- @EOF
 Database = require('arangojs').Database;
 db = new Database({url: 'http://${ARUSR}:${ARPWD}@${ARSVR}:8529', databaseName: '${ARDBN}' });
 db.query(\`${CMD}\`)
-.then(cursor => cursor.all(), err => console.error(err))
-.then((data) => console.log(JSON.stringify(data)))
+.then(cursor => { cursor.every(function(data) { console.log(JSON.stringify(data)); return cursor.hasNext();})}, err => console.error(err))
 @EOF
 
