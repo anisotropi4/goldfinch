@@ -7,10 +7,13 @@ if [ $# = 0 ]; then
    CMD=`cat -`
 fi
 
-( ${NODE} | jq '.' ) <<- @EOF 
+( ${NODE} | jq -s '.' ) <<- @EOF 
 Database = require('arangojs').Database;
 db = new Database({url: 'http://${ARUSR}:${ARPWD}@${ARSVR}:8529', databaseName: '${ARDBN}' });
-db.query(\`${CMD}\`)
-.then(cursor => { cursor.every(function(data) { console.log(JSON.stringify(data)); return cursor.hasNext();})}, err => console.error(err))
+db.query(\`${CMD}\`).then(cursor => { 
+  cursor.map(function(data) { 
+    console.log(JSON.stringify(data));
+  })
+}, err => console.error(err))
 @EOF
 

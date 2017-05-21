@@ -1,4 +1,7 @@
 #!/bin/sh
+
+DEBUG=$-
+set +x
 # set arangodb connection string shell variables
 # username      ARUSR default root
 # password      ARPWD default lookup as key:pair from ~/.aqlpass file
@@ -28,3 +31,9 @@ ARSVR=${ARSVR:-ar-server}
 ARDBN=${ARDBN:-testdb}
 ARPASSWORD=$(jq -r '.root | select(. != null)' ${HOME}/.aqlpass)
 ARPASSWORD=${ARPASSWORD:-'pleasechangeme'}
+
+if [ x"$DEBUG" != x ] && [ $(expr index "$DEBUG" 'x') != 0 ]
+then
+    set -x
+fi
+
