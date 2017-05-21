@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh 
 
 . ${HOME}/bin/ar-env.sh
 
