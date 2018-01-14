@@ -1,10 +1,10 @@
 # goldfinch dependencies
 
-I found the build and installation of the `xml-to-json` utility (a dependency of the `xml-to-ndjson.sh` script) required some fettling. To help with this my install notes are as follows:
+I found the build and installation of the `xml-to-json` utility (a dependency of the `xml-to-ndjson.sh` script) required a little fettling. To help with this my install notes are as follows:
   
 ### **xml-to-json**
 
-The `xml-to-json` utilitiy is a Haskell source code build. On my Debian based Linux test environment I found the following worked:
+The `xml-to-json` utility is a Haskell source-code build. On my Debian based Linux test environment I found the following worked:
 
   * Clone the latest `xml-to-json` source code from github into a suitable build directory:
 
@@ -24,13 +24,13 @@ Run the following command to download Haskell dependencies. By default this appe
 
 Run the build and install command. By default this creates a stand-alone executable `xml-to-json` in the `.cabal/bin` subdirectory, that is `~/.cabal/bin`
 
-`$ cd xml-to-json
-$ cabal install xml-to-json`
+`$ cd xml-to-json`
+`$ cabal install xml-to-json`
 
   * Add the `xml-to-json` to the shell executable path
 
 On my environment I created a symbolic link from the `.cabal/bin` file to `~/bin` as `~/bin` was already in the `$PATH` shell executable path:
 
-`$ cd ~/bin
-$ ln -s ~/.cabal/bin/xml-to-json`
+`$ cd ~/bin`
+`$ ln -s ~/.cabal/bin/xml-to-json`
  
