@@ -24,13 +24,14 @@ Run the following command to download Haskell dependencies. By default this appe
 
 Run the build and install command. By default this creates a stand-alone executable `xml-to-json` in the `.cabal/bin` subdirectory, that is `~/.cabal/bin`
 
-`$ cd xml-to-json`
-`$ cabal install xml-to-json`
+    $ cd xml-to-json
+    $ cabal install xml-to-json
+   
 
   * Add the `xml-to-json` to the shell executable path
 
 On my environment I created a symbolic link from the `.cabal/bin` file to `~/bin` as `~/bin` was already in the `$PATH` shell executable path:
 
-`$ cd ~/bin`
-`$ ln -s ~/.cabal/bin/xml-to-json`
+    $ cd ~/bin
+    $ ln -s ~/.cabal/bin/xml-to-json
  
