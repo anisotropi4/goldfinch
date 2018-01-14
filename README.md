@@ -1,6 +1,8 @@
 # goldfinch
 A set of scripts for working with PostgreSQL and ArangoDB databases based on extending Jeroen Janssens 'Data Science on the Command Line' https://github.com/jeroenjanssens/data-science-at-the-command-line
 
+Now with additional scripts for processing and converting large(ish) xml files to (ndjson)
+
 More information about ArangoDB and PostGres can be found here:
  * ArangoDB: https://www.arangodb.com
  * PostgreSQL: https://www.postgresql.org
@@ -91,3 +93,25 @@ Notes: The key element is the use of the quadtree function in the visiblenodes f
  * The Sumbera implementation 'Many points with d3 and leaflet' here http://bl.ocks.org/sumbera/10463358  
  * OpenStreetMap data and maptiles (https://www.openstreetmap.org)  
  * Leaflet javascript library (http://leafletjs.com)  
+
+### **add-x-tag.sh**
+A wrapper script that applies a filter (default 'cat') and adds an arbitary xml tag (default "_wrapper") to an xml-file for use in a shell script. This allows large xml files to be split and inserted into a pipeline to allow for easier processing.
+
+### **rmxmlns.sh**
+A wrapper script that uses the `xsltproc` transformation `rmxmlns.xslt` to remove namespace information from an xml-file.
+
+Assumptions
+  * The xml tranformation `xsltproc` utility is installed
+
+The `rmxmlns.sh` xslt transformation is based on the answer by "jasso" in the discussion stackoverflow discussoin "https://stackoverflow.com/questions/5268182/how-to-remove-namespaces-from-xml-using-xslt"
+
+   On an Debian base Linux version run:
+
+  `$ sudo apt install xsltproc`
+
+  
+### **xml-to-ndjson.sh**
+A wrapper script that transforms xml to ndjson files in a shell pipeline. The transformation takes pre-split temporary xml-file with an arbitrary wrapper xml-tag, applies the transformation using the `xml-to-json` script, and deletes the temporary file. 
+
+  *  `jq` tool is installed (https://stedolan.github.io/jq/)
+  * `xml-to-json` untility is installed ("https://github.com/sinelaw/xml-to-json")
