@@ -88,11 +88,11 @@ If the ARPWD password variable is not set, the script uses the 'jq' command-line
 `{"root": "dontbedaft", "nodeuser": "tryharder"}`  
 
 Notes: The key element is the use of the quadtree function in the visiblenodes function to quickly find nodes and is based on at least:  
- * The excellent work of Mike Bostock in developing d3 (https://bost.ocks.org/mike/)  
- * Scott Murray's 'Interactive Data Visualization for the Web' (http://alignedleft.com/work/d3-book)  
- * The Sumbera implementation 'Many points with d3 and leaflet' here http://bl.ocks.org/sumbera/10463358  
- * OpenStreetMap data and maptiles (https://www.openstreetmap.org)  
- * Leaflet javascript library (http://leafletjs.com)  
+ * The excellent work of Mike Bostock in developing d3 (<https://bost.ocks.org/mike>)  
+ * Scott Murray's 'Interactive Data Visualization for the Web' (<http://alignedleft.com/work/d3-book>)  
+ * The Sumbera implementation 'Many points with d3 and leaflet' here <http://bl.ocks.org/sumbera/10463358>
+ * OpenStreetMap data and maptiles (<https://www.openstreetmap.org>)  
+ * Leaflet javascript library (<http://leafletjs.com>)  
 
 ### **add-x-tag.sh**
 A wrapper script that applies a filter (default 'cat') and adds an arbitary xml tag (default "_wrapper") to an xml-file for use in a shell script. This allows large xml files to be split and inserted into a pipeline to allow for easier processing.
@@ -103,7 +103,7 @@ A wrapper script that uses the `xsltproc` transformation `rmxmlns.xslt` to remov
 Assumptions
   * The xml tranformation `xsltproc` utility is installed
 
-The `rmxmlns.sh` xslt transformation is based on the answer by "jasso" in the discussion stackoverflow discussoin "https://stackoverflow.com/questions/5268182/how-to-remove-namespaces-from-xml-using-xslt"
+The `rmxmlns.sh` xslt transformation is based on the answer by "jasso" in the discussion stackoverflow discussoin <https://stackoverflow.com/questions/5268182/how-to-remove-namespaces-from-xml-using-xslt">.
 
    On an Debian base Linux version run:
 
@@ -113,5 +113,5 @@ The `rmxmlns.sh` xslt transformation is based on the answer by "jasso" in the di
 ### **xml-to-ndjson.sh**
 A wrapper script that transforms xml to ndjson files in a shell pipeline. The transformation takes pre-split temporary xml-file with an arbitrary wrapper xml-tag, applies the transformation using the `xml-to-json` script, and deletes the temporary file. 
 
-  *  `jq` tool is installed (https://stedolan.github.io/jq/)
-  * `xml-to-json` untility is installed ("https://github.com/sinelaw/xml-to-json")
+  *  `jq` tool is installed (<https://stedolan.github.io/jq>)
+  * `xml-to-json` untility is installed (<https://github.com/sinelaw/xml-to-json>)
