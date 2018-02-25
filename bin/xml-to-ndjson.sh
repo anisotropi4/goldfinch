@@ -7,5 +7,3 @@ XTAG=${XTAG:-"_wrapper"}
 
 xml-to-json ${FILENAME} | jq -c ".${XTAG}.${TAG}[]"
 
-rm ${FILENAME}
-
