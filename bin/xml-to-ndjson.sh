@@ -1,10 +1,11 @@
 #!/bin/sh
-FILENAME=$1
-FILENAME=$(echo ${FILENAME} | sed 's/.xml$//')
+FILEPATH=$1
+FILENAME=$(basename ${FILEPATH})
+
 TAG=$2
-TAG=${TAG:-${FILENAME}}
+TAG=${TAG:-$(${FILENAME} | sed 's/.xml$//')}
 XTAG=$3
 XTAG=${XTAG:-"_wrapper"}
 
-xml-to-json ${FILENAME}.xml | jq -c ".${XTAG}.${TAG}[]"
+xml-to-json ${FILEPATH} | jq -c ".${XTAG}.${TAG}[]"
 
