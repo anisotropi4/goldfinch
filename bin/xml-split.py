@@ -46,6 +46,7 @@ document = ET.iterparse(fin, events=('start', 'end', 'start-ns', 'end-ns'))
 root = None
 v = {}
 n = 0
+s = {}
 filename = None
 f = None
 
@@ -70,23 +71,29 @@ for event, e in document:
         if n > depth:
             tag = strip_ns(e.tag, namespaces)
             u = ET.Element(tag, e.attrib)
-            u.text = e.text
             v[tag] = u
+            u.text = e.text
+            if tag in s:
+                s[tag].append(u)
+            else:
+                s[tag] = [u]
             i = e.iter()
             r = strip_ns(next(i).tag, namespaces)
             for j in i:
                 k = strip_ns(j.tag, namespaces)
-                v[r].append(v[k])
+                v[r].append(s[k].pop(0))
             root = r
             e.clear()
         if n == (depth + 1) and root:
             t = v[root]
+            
             p = ET.tostring(t, method='xml').decode('UTF-8')
             (_, r) = md.parseString(p).toxml().replace('\n', '').split('>', 1)
             r = re.sub(re_strip, '><', r)
             u.clear()
-            e.clear()
+            s.clear()
             v.clear()
+            e.clear()
             if args.split:
                 if root != filename:
                     if f and not f.closed:
@@ -99,5 +106,5 @@ for event, e in document:
             root = None
         n = n - 1
 
-if not f.closed:
+if f and not f.closed:
     f.close()
