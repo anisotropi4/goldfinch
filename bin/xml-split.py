@@ -50,7 +50,7 @@ s = {}
 filename = None
 f = None
 
-re_strip = re.compile('>  *<')
+re_strip = re.compile('>\s+<')
 
 for event, e in document:
     if event == 'start-ns':
