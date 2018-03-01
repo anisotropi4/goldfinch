@@ -50,7 +50,7 @@ s = {}
 filename = None
 f = None
 
-re_strip = re.compile('>\s+<')
+re_strip = re.compile('>  *<')
 
 for event, e in document:
     if event == 'start-ns':
@@ -65,6 +65,7 @@ for event, e in document:
     if event == 'start':
         if n < depth:
             e.clear()
+            e.tag = None
         n = n + 1
 
     if event == 'end':
@@ -84,9 +85,12 @@ for event, e in document:
                 v[r].append(s[k].pop(0))
             root = r
             e.clear()
+        else:
+            e.clear()
+            e.tag = None
+
         if n == (depth + 1) and root:
             t = v[root]
-            
             p = ET.tostring(t, method='xml').decode('UTF-8')
             (_, r) = md.parseString(p).toxml().replace('\n', '').split('>', 1)
             r = re.sub(re_strip, '><', r)
