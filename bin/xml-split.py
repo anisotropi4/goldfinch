@@ -90,10 +90,6 @@ for event, e in document:
             p = ET.tostring(t, method='xml').decode('UTF-8')
             (_, r) = md.parseString(p).toxml().replace('\n', '').split('>', 1)
             r = re.sub(re_strip, '><', r)
-            u.clear()
-            s.clear()
-            v.clear()
-            e.clear()
             if args.split:
                 if root != filename:
                     if f and not f.closed:
@@ -104,6 +100,15 @@ for event, e in document:
             else:
                 print(r)
             root = None
+            u.clear()
+            u = None
+            v.clear()
+            s.clear()
+            t.clear()
+            t = None
+            e.clear()
+            e.tag = None
+
         n = n - 1
 
 if f and not f.closed:
