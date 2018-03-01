@@ -3,6 +3,7 @@ import xml.etree.cElementTree as ET
 import xml.dom.minidom as md
 import sys
 import re
+import gc
 
 import argparse
 
@@ -46,6 +47,7 @@ document = ET.iterparse(fin, events=('start', 'end', 'start-ns', 'end-ns'))
 root = None
 v = {}
 n = 0
+m = 0
 s = {}
 w = []
 filename = None
@@ -55,6 +57,7 @@ flist = {}
 re_strip = re.compile('>\s+<')
 
 for event, e in document:
+    m = m +1
     if event == 'start-ns':
         (nk, nv) = e
         namespaces[nk] = nv
@@ -123,6 +126,10 @@ for event, e in document:
             t = None
             e.clear()
             e.tag = None
+
+        if m == 10000:
+            gc.collect()
+            m = 0
 
         n = n - 1
 
