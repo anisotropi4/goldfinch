@@ -49,8 +49,9 @@ n = 0
 s = {}
 filename = None
 f = None
+flist = {}
 
-re_strip = re.compile('>  *<')
+re_strip = re.compile('>\s+<')
 
 for event, e in document:
     if event == 'start-ns':
@@ -88,19 +89,20 @@ for event, e in document:
         else:
             e.clear()
             e.tag = None
-
+            
         if n == (depth + 1) and root:
-            t = v[root]
+            t = v[root]            
             p = ET.tostring(t, method='xml').decode('UTF-8')
             (_, r) = md.parseString(p).toxml().replace('\n', '').split('>', 1)
             r = re.sub(re_strip, '><', r)
             if args.split:
-                if root != filename:
-                    if f and not f.closed:
-                        f.close()
-                    filename = root
-                    f = open(path + root + '.xml', 'w')
-                f.write(r + '\n')
+                if root in flist:
+                    with open(path + root + '.xml', 'a') as f:
+                        f.write(r + '\n')
+                else:
+                    flist[root] = True
+                    with open(path + root + '.xml', 'w') as f:
+                        f.write(r + '\n')
             else:
                 print(r)
             root = None
