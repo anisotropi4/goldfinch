@@ -47,6 +47,7 @@ root = None
 v = {}
 n = 0
 s = {}
+w = []
 filename = None
 f = None
 flist = {}
@@ -73,6 +74,7 @@ for event, e in document:
         if n > depth:
             tag = strip_ns(e.tag, namespaces)
             u = ET.Element(tag, e.attrib)
+            w.append(u)
             v[tag] = u
             u.text = e.text
             if tag in s:
@@ -105,9 +107,16 @@ for event, e in document:
                         f.write(r + '\n')
             else:
                 print(r)
+
             root = None
             u.clear()
             u = None
+
+            for i in w:
+                i.clear()
+                i.tag = None
+
+            w = []
             v.clear()
             s.clear()
             t.clear()
