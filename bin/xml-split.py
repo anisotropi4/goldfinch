@@ -14,6 +14,9 @@ parser.add_argument('--depth', dest='depth', type=int, default=2,
 parser.add_argument('--split', dest='split', action='store_true',
                     default=False,
                     help='split output into <xml-tag>.xml files')
+parser.add_argument('--append', dest='append', action='store_true',
+                    default=False,
+                    help='append output to <xml-tag>.xml files')
 parser.add_argument('--split-path', dest='path', type=str, default='output',
                     help='directory file for split files (default: ./output)')
 parser.add_argument('inputfile', type=str, nargs='?',
@@ -29,9 +32,7 @@ fin = sys.stdin
 if args.inputfile:
     fin = open(args.inputfile, 'r')
 
-
 depth = args.depth
-
 
 def strip_ns(tag, namespaces):
     for nk, nv in namespaces.items():
@@ -108,6 +109,10 @@ for event, e in document:
                     flist[root] = True
                     with open(path + root + '.xml', 'w') as f:
                         f.write(r + '\n')
+            elif args.append:
+                with open(path + root + '.xml', 'a') as f:
+                    f.write(r + '\n')
+                flist[root] = True
             else:
                 print(r)
 
