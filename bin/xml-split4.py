@@ -52,9 +52,13 @@ n = 0
 
 spacematch = re.compile(r'>\s+<')
 tagsplit = re.compile(r'[>\s]')
+nsclear1 = re.compile(r'<[^\s:/]+:')
+nsclear2 = re.compile(r'</[^\s:]+:')
 
 for line in fin:
     line = line.rstrip('\n')
+    line = re.sub(nsclear1, '<', line)
+    line = re.sub(nsclear2, '</', line)
     line = re.sub(spacematch, '><', line)
     line = line.rstrip().lstrip()
 
@@ -64,13 +68,18 @@ for line in fin:
     multiline = False
     stag = None
     etag = None    
-    
-    (tag, _) = re.split(tagsplit, line[1:], 1)
 
-    if tag[0] == '/':
-        etag = tag[1:-1]
-    elif line[0] == '<':
-        stag = tag
+    try:
+        (tag, _) = re.split(tagsplit, line[1:], 1)
+    except ValueError:        
+        fout.write(line)
+        continue
+
+    if tag != '':
+        if tag[0] == '/':        
+            etag = tag[1:-1]
+        elif line[0] == '<':
+            stag = tag
 
     if line[-2:] == '/>':
         etag = tag
@@ -111,6 +120,7 @@ for line in fin:
         qtag = root.pop()
         if etag != qtag:
             sys.stderr.write('Error: tag mismatch between "' + qtag + '" "' + etag + '" in file "' + inputfile + '"\n')
+            sys.stderr.write('"' + line + '"\n')
             sys.exit(1)
     
     if multiline and not etag and len(root) > depth:
@@ -118,5 +128,4 @@ for line in fin:
     elif len(root) == depth and not nl:
         fout.write('\n')
         nl = True
-
 #fout.write('\n')
