@@ -18,6 +18,8 @@ parser.add_argument('--path', dest='path', type=str, default='output',
 parser.add_argument('--badxml', dest='badxml', action='store_true',
                     default=False,
                     help='ignore tag mismatch errors')
+parser.add_argument('--encoding', dest='xmlencoding', default='utf-8',
+                    help='optional file encoding parameter')
 
 parser.add_argument('inputfile', type=str, nargs='?', help='name of xml-file to parse')
 
@@ -25,6 +27,7 @@ args = parser.parse_args()
 
 path = args.path
 depth = args.depth
+xmlencoding = args.xmlencoding
 
 namespaces = {}
 
@@ -46,7 +49,7 @@ outputfile = 'STDOUT'
 
 inputfile = args.inputfile
 if inputfile:
-    fin = open(inputfile, 'r')
+    fin = open(inputfile, 'r', encoding=xmlencoding)
 else:
     inputfile = 'STDIN'
 
@@ -103,7 +106,7 @@ for line in fin:
     multiline = None
 
     if stag and not etag:
-        if line[(len(stag) + 2):] != '':
+        if line[(len(stag) + 2):] != '' and line[-1] != '>':
             multiline = True
 
     if not stag and etag:
