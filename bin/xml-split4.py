@@ -3,7 +3,7 @@ import sys
 import argparse
 import re
 
-parser = argparse.ArgumentParser(description='Reformats an xml-filename so tags and sub-trees below a given depth are on a single line')
+parser = argparse.ArgumentParser(description='Reformats an xml-filename so that sub-trees below a given tag depth are on a single line')
 
 parser.add_argument('--depth', dest='depth', type=int, default=3,
                     help='depth to remove outer xml tags (default: 3)')
@@ -15,6 +15,10 @@ parser.add_argument('--stdout', dest='tostdout', action='store_true',
 parser.add_argument('--path', dest='path', type=str, default='output',
                     help='output directory file')
 
+parser.add_argument('--badxml', dest='badxml', action='store_true',
+                    default=False,
+                    help='ignore tag mismatch errors')
+
 parser.add_argument('inputfile', type=str, nargs='?', help='name of xml-file to parse')
 
 args = parser.parse_args()
@@ -22,12 +26,17 @@ args = parser.parse_args()
 path = args.path
 depth = args.depth
 
+namespaces = {}
+
 if path != '':
     path = path + '/'
 
 fin = sys.stdin
 
 tostdout = args.tostdout
+badxml = args.badxml
+
+filenames = {}
 
 if depth == 0:
     tostdout = True
@@ -50,19 +59,17 @@ nl = True
 m = 0
 n = 0
 
-spacematch = re.compile(r'>\s+<')
+spacematch1 = re.compile(r'>[\s]+<')
+spacematch2 = re.compile(r'[\s]+/>')
 tagsplit = re.compile(r'[>\s]')
-nsclear1 = re.compile(r'<[^\s:/]+:')
-nsclear2 = re.compile(r'</[^\s:]+:')
 
 for line in fin:
     line = line.rstrip('\n')
-    line = re.sub(nsclear1, '<', line)
-    line = re.sub(nsclear2, '</', line)
-    line = re.sub(spacematch, '><', line)
+    line = re.sub(spacematch1, '><', line)
+    line = re.sub(spacematch2, '/>', line)
     line = line.rstrip().lstrip()
 
-    if 'xml ' in line[:10]:
+    if 'xml ' in line[:8]:
         continue
 
     multiline = False
@@ -87,6 +94,7 @@ for line in fin:
         (etag, _) = line[::-1][1:].split('/<', 1)        
         etag = etag[::-1]
 
+    
     multiline = None
 
     if stag and not etag:
@@ -100,6 +108,16 @@ for line in fin:
     if not stag and not etag:
         multiline = True
 
+    if stag and ':' in stag:
+        (ns, tag) = stag.split(':')
+        line = line.replace(stag, tag)
+        stag = tag
+
+    if etag and ':' in etag:
+        (ns, tag) = etag.split(':')
+        line = line.replace(etag, tag)
+        etag = tag
+
     if stag:
         root.append(stag)
 
@@ -110,7 +128,11 @@ for line in fin:
             if fout and not fout.closed and fout is not sys.stdout:        
                 fout.close()
             outputfile = rtag + '.xml'
-            fout = open(path + outputfile, 'a')
+            if outputfile in filenames:
+                fout = open(path + outputfile, 'a')
+            else:
+                fout = open(path + outputfile, 'w')
+                filenames[outputfile] = True
 
     if len(root) > depth:
         fout.write(line)
@@ -119,13 +141,16 @@ for line in fin:
     if etag:
         qtag = root.pop()
         if etag != qtag:
-            sys.stderr.write('Error: tag mismatch between "' + qtag + '" "' + etag + '" in file "' + inputfile + '"\n')
-            sys.stderr.write('"' + line + '"\n')
-            sys.exit(1)
+            if badxml:
+                root.append(qtag)
+                pass
+            else:
+                sys.stderr.write('Error: tag mismatch between "' + qtag + '" "' + etag + '" in file "' + inputfile + '"\n')
+                sys.stderr.write('"' + line + '"\n')
+                sys.exit(1)
     
     if multiline and not etag and len(root) > depth:
         fout.write(' ')
     elif len(root) == depth and not nl:
         fout.write('\n')
         nl = True
-#fout.write('\n')
