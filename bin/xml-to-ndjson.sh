@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 FILEPATH=$1
 FILENAME=$(basename ${FILEPATH})
 
@@ -7,5 +7,12 @@ TAG=${TAG:-$(${FILENAME} | sed 's/.xml$//')}
 XTAG=$3
 XTAG=${XTAG:-"_wrapper"}
 
-xml-to-json ${FILEPATH} | jq -c ".${XTAG}.${TAG}[]"
+< ${FILEPATH} mapfile -n 4
+echo ${#MAPFILE[@]}
+
+if [ ${#MAPFILE[@]} -gt 3 ]; then
+    xml-to-json ${FILEPATH} | jq -c ".${XTAG}.${TAG}[]"
+else
+    xml-to-json ${FILEPATH} | jq -c ".${XTAG}.${TAG}"
+fi
 
