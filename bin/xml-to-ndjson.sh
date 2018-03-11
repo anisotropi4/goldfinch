@@ -8,7 +8,6 @@ XTAG=$3
 XTAG=${XTAG:-"_wrapper"}
 
 < ${FILEPATH} mapfile -n 4
-echo ${#MAPFILE[@]}
 
 if [ ${#MAPFILE[@]} -gt 3 ]; then
     xml-to-json ${FILEPATH} | jq -c ".${XTAG}.${TAG}[]"
