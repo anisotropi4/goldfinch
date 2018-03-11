@@ -73,9 +73,9 @@ for line in fin:
         first == False
 
     line = line.rstrip('\n')
+    line = line.strip()
     line = re.sub(spacematch1, '><', line)
     line = re.sub(spacematch2, '/>', line)
-    line = line.rstrip().lstrip()
 
     if 'xml ' in line[:8]:
         continue
@@ -101,9 +101,6 @@ for line in fin:
     elif '</' in line:
         (etag, _) = line[::-1][1:].split('/<', 1)        
         etag = etag[::-1]
-
-    
-    multiline = None
 
     if stag and not etag:
         if line[(len(stag) + 2):] != '' and line[-1] != '>':
