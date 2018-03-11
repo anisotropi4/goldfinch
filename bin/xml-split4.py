@@ -63,7 +63,12 @@ spacematch1 = re.compile(r'>[\s]+<')
 spacematch2 = re.compile(r'[\s]+/>')
 tagsplit = re.compile(r'[>\s]')
 
+first = True
 for line in fin:
+    if first:
+        line = line.encode().decode('ascii', 'ignore')
+        first == False
+
     line = line.rstrip('\n')
     line = re.sub(spacematch1, '><', line)
     line = re.sub(spacematch2, '/>', line)
@@ -139,7 +144,11 @@ for line in fin:
         nl = False
 
     if etag:
-        qtag = root.pop()
+        try:
+            qtag = root.pop()
+        except IndexError:
+            sys.stderr.write('Error: missing root tag "' + etag + '" in file "' + inputfile + '"\n')
+            pass
         if etag != qtag:
             if badxml:
                 root.append(qtag)
