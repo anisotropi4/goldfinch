@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/bin/sh
 # Set database name and user
 ARUSR=railway
 ARDBN=fullrailway

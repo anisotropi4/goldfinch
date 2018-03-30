@@ -8,7 +8,7 @@ Add an ar-server entry to /etc/hosts:
 172.18.1.3      ar-server
 
 1) Install jq, npm and node/nodejs plus the 'request', 'sync' and 'arangojs' modules.
-On a Debian based system this looks somethign like:
+On a Debian based system this looks something like:
 $ sudo apt-get install jq npm
 $ npm install request sync arangojs
 

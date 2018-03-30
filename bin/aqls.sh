@@ -8,8 +8,10 @@ if [ $# = 0 ]; then
 fi
 
 ( ${NODE} | jq -s '.' ) <<- @EOF 
-Database = require('arangojs').Database;
-db = new Database({url: 'http://${ARUSR}:${ARPWD}@${ARSVR}:8529', databaseName: '${ARDBN}' });
+const arangojs = require('arangojs');
+const db = new arangojs.Database({url: 'http://${ARUSR}:${ARPWD}@${ARSVR}:8529'});
+db.useBasicAuth('${ARUSR}', '${ARPWD}');
+db.useDatabase('${ARDBN}');
 db.query(\`${CMD}\`).then(cursor => { 
   cursor.map(function(data) { 
     console.log(JSON.stringify(data));

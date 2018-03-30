@@ -1,48 +1,45 @@
-#!/bin/sh 
+#!/bin/sh
 # based on arangodb docker here https://github.com/guidoeco/docker/tree/master/arangodb
 . ${HOME}/bin/ar-env.sh
 
 # create database, user and grant user read-write permissions to database 
 ${NODE} <<@@EOF2
-sync = require('sync');
-request = require('request');
-function createdb(callback) {
-    Database = require('arangojs').Database;
-    db = new Database({url: 'http://root:${ARPASSWORD}@ar-server:8529', databaseName: '_system' });
+const arangojs = require('arangojs');
+const db = new arangojs.Database({url: 'http://ar-server:8529', databaseName: '_system' });
+db.useBasicAuth("root", "${ARPASSWORD}");
+function createdb() {
     db.listDatabases()
-    .then(names => { console.log('names: ', names);
-    db.dropDatabase('${ARDBN}')
-    .then(info => { console.log('drop: ', info); },
-          err => { console.error('names error: ', err)});   
-    db.createDatabase('${ARDBN}')
-    .then(info => { console.log('create: ', info);
-		 db.listDatabases()
-    .then(names => { console.log('names: ', names)},
-          err => { console.error('names error: ', err)})}),
-    err => { console.error('error create: ', err)}});
-}
+    .then(names => {
+                 for (i in names ) {
+                         console.log('name: ', names[i])
+                         if (names[i] == "${ARDBN}") {
+                                db.dropDatabase('${ARDBN}')
+                                .then(info => { console.log('drop: ', info); },
+                                      err => { console.error('names error: ', err)})};}})
+          .then(t => { db.createDatabase('${ARDBN}')
+                .then(info => { console.log('create: ', info);
+		                            db.listDatabases()
+                                .then(names => { console.log('names: ', names)},
+                                      err => { console.error('names error: ', err)})},
+                      err => { console.error('error create: ', err)})})
+         }
+const request = require('request');
 function createuser(callback) {
     request.post('http://root:${ARPASSWORD}@${ARSVR}:8529/_api/user',
 		 { json: { 'user': '${ARUSR}', 'passwd': '${ARPWD}' }},
 		 function (error, response, body) {
-		     if (!error && response.statusCode == 200) {
-			    console.log(body)
-			}
+		     if (!error && response.statusCode == 200) { console.log(body); }
+            if (error) { console.error(error); }
 		 });
 };
-sync(function(){
-	    createdb.sync(null);
-	});
-sync(function(){
-	    createuser.sync(null);
-	});
+createdb();
+createuser();
 @@EOF2
 
 sleep 1
 ${NODE} <<@@EOF3
-sync = require('sync');
-request = require('request');
-function grantpermissions(callback) {
+var request = require('request');
+function grantpermissions() {
     request.put('http://root:${ARPASSWORD}@${ARSVR}:8529/_api/user/${ARUSR}/database/${ARDBN}',
 		{ json: { 'grant': 'rw' }},
 	     function (error, response, body) {
@@ -51,7 +48,5 @@ function grantpermissions(callback) {
 		    }
 	     });
 };
-sync(function(){
-	    grantpermissions.sync(null);
-	});
+grantpermissions();
 @@EOF3
