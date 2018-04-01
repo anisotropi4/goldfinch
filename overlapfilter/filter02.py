@@ -1,3 +1,4 @@
+#!/home/diablo/anaconda3/bin/python3
 #!/usr/bin/python3
 import sys
 from pyArango.connection import *
@@ -25,7 +26,7 @@ return {node: i._key, nodes: nodes, valid: i.valid}'
 
 update = 'for i in @a update i.k with { "valid": i.v } in fullfilternodes'
 
-print('\t'.join(['n','count', 'elapsed']))
+print('\t'.join(['n','count', 'time [s]']))
 n = 2
 for k in range(22):
     s0 = datetime.now()
@@ -47,12 +48,12 @@ for k in range(22):
                 if j in node:
                     documents[j] = n // 2
 
-    r = db.AQLQuery(update, bindVars={'a': [{'k': k, 'v': v} for k, v in documents.items()]})
+    db.AQLQuery(update, bindVars={'a': [{'k': k, 'v': v} for k, v in documents.items()]})
 
     count = len(documents)
     s1 = datetime.now()
 
-    print('\t'.join([str(i) for i in [n // 2, count, (s1 - s0).total_seconds()]]))
+    print('\t'.join([str(i) for i in [n // 2, count, '{0:0.3f}'.format((s1 - s0).total_seconds())]]))
 
     if(count <= 1): break
 
