@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import sys
 from pyArango.connection import *
 import os
@@ -24,42 +24,32 @@ filter n > 0 \
 sort n desc \
 return {node: i._key, nodes: nodes, valid: i.valid}'
 
+update = 'for i in @a update i.k with { "valid": i.v } in fullfilternodes'
+
 n = 2
+
+print("n	count")
 
 for k in range(22):
     results = db.AQLQuery(query, rawResults=True, bindVars={'n': n})
 
-    #print(results)
-    sequence = []
     node = {}
 
     for i in results:
-        sequence.append(i["node"])
         node[i["node"]] = {"nodes": i["nodes"], "valid": i["valid"] }
 
-        #print(i["node"],i["nodes"],i["valid"])
-
-    for i in sequence:
+    documents = {}
+    for i in node.keys():
         if (node[i]["valid"] > n):
-            nodes = node[i]["nodes"]
-            for j in nodes:
+            for j in node[i]["nodes"]:
                 if j in node:
-                    node[j]["valid"] = n / 2
-                    
-    count = 0
-    for i in sequence:
-        if node[i]["valid"] < n:
-            count=count+1
-    print(n / 2, count)    
-            
-    collection = db.collections["fullfilternodes"]
-    for i in sequence:
-        if node[i]["valid"] < n:
-            document = collection[i]
-            document["valid"] = node[i]["valid"]
-            document.patch()
-            
+                    documents[j] = n // 2
+
+    count = len(documents)
+    print(n // 2, '	', count)
     if(count <= 1):
         sys.exit()
+
+    r = db.AQLQuery(update, bindVars={'a': [{'k': k, 'v': v} for k, v in documents.items()]})
 
     n = n * 2
