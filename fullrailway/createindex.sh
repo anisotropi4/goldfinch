@@ -8,8 +8,10 @@ if [ $# = 0 ]; then
 fi
 
 ${NODE}  <<- @EOF 
-Database = require('arangojs').Database;
-db = new Database({url: 'http://${ARUSR}:${ARPWD}@${ARSVR}:8529', databaseName: '${ARDBN}' });
+arangojs = require('arangojs');
+db = new arangojs.Database({url: 'http://${ARSVR}:8529'});
+db.useBasicAuth("${ARUSR}", "${ARPWD}");
+db.useDatabase("${ARDBN}");
 
 db.collection('${COLLECTION}').createIndex(['lat','lon'])
     .then(index => console.log("create geoindex ${COLLECTION}: ",index.id, index.fields),

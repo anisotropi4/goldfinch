@@ -6,16 +6,18 @@ if [ $# = 0 ]; then
 fi
 
 ${NODE}  <<- @EOF 
-Database = require('arangojs').Database;
-db = new Database({url: 'http://${ARUSR}:${ARPWD}@${ARSVR}:8529', databaseName: '${ARDBN}' });
+const arangojs = require('arangojs');
+const db = new arangojs.Database({url: 'http://ar-server:8529'});
+db.useBasicAuth("${ARUSR}", "${ARPWD}");
+db.useDatabase("${ARDBN}");
 
 db.collection('${COLLECTION}').drop()
-    .then(() => console.log("dropped ${COLLECTION}"),
-          err => console.error("No ${COLLECTION}"))
+    .then(() => console.log('dropped ${COLLECTION}'),
+          err => console.error('No ${COLLECTION}'))
     .then(() => {
-        console.log("create ${COLLECTION}");
+        console.log('create ${COLLECTION}');
         db.collection('${COLLECTION}').create();
-        console.log("created ${COLLECTION}");},
-          err => console.error("cannot create ${COLLECTION}"));
+        console.log('created ${COLLECTION}');},
+          err => console.error("cannot create ${COLLECTION}"))
 @EOF
 

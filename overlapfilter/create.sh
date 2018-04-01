@@ -20,6 +20,7 @@ done
 for i in fullfilternodes
 do
     ./creategeoindex.sh ${i}
+    ./createindex.sh ${i} valid
 done
 
 export ARPWD ARSVR
