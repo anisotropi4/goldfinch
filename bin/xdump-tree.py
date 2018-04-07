@@ -8,7 +8,11 @@ parser = argparse.ArgumentParser(description='Strip namespace and dump a list xm
 parser.add_argument('--path', dest='path', type=str, default='',
                     help='output directory file')
 
+parser.add_argument('--depth', dest='depth', type=int, default=3,
+                    help='depth to remove outer xml tags (default: 3)')
+
 parser.add_argument('inputfile', type=str, nargs='?', help='name of xml-file to parse')
+
 parser.add_argument('outputfile', type=str, nargs='?', help='name of output file')
 
 args = parser.parse_args()
@@ -16,6 +20,8 @@ args = parser.parse_args()
 path = args.path
 if path != '':
     path = path + '/'
+
+depth = args.depth
 
 fin = sys.stdin
 if args.inputfile:
@@ -65,14 +71,16 @@ for event, e in document:
             v[tag] = m
             u.append(tag)
 
-        s.append('#' + str(m))
+        if len(s) < depth:
+            s.append(tag)
         n = n + 1
         r = "\t".join(s + [str(n)])
         fout.write(r + '\n')
         e.clear()
         
     if event == 'end':
-        s.pop()
+        if n <= depth:
+            s.pop()
         n = n - 1        
 
 if fout is not sys.stdout:        
@@ -80,12 +88,12 @@ if fout is not sys.stdout:
 
 fout = sys.stdout
 if args.outputfile:
-    (f0, *f1) = args.outputfile.split('.', 1)
+    (f0, *_) = args.outputfile.split('.', 1)
     fout = open(path + f0 + '-key.tsv', 'w')
 
 fout.write('#\telement\n')
 for i in u:
-    fout.write('#' + str(v[i]) + '\t' + i + '\n')
+    fout.write(str(v[i]) + '\t' + i + '\n')
 
 if fout is not sys.stdout:        
     fout.close()
