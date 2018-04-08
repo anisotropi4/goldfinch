@@ -1,5 +1,4 @@
 #!/bin/sh
-
 . ${HOME}/bin/ar-env.sh
 
 CMD=`echo $@`
@@ -9,7 +8,7 @@ fi
 
 ${NODE} <<- @EOF 
 const arangojs = require('arangojs');
-const db = new arangojs.Database({url: 'http://${ARUSR}:${ARPWD}@${ARSVR}:8529'});
+const db = new arangojs.Database({url: 'http://${ARSVR}:8529'});
 db.useBasicAuth("${ARUSR}", "${ARPWD}");
 db.useDatabase("${ARDBN}");
 db.query(\`${CMD}\`).then(cursor => { 

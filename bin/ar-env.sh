@@ -1,12 +1,11 @@
 #!/bin/sh
-
 DEBUG=$-
 set +x
 # set arangodb connection string shell variables
 # username      ARUSR default root
 # password      ARPWD default lookup as key:pair from ~/.aqlpass file
 # server-name   ARSVR default ar-server
-# database-name ARDBN default testdb
+# database-name ARDBN default _system
 
 # determine if node is installed
 NODE=$(which node)
@@ -15,11 +14,11 @@ NODE=${NODE:-$(which nodejs)}
 # Stop unless ~/.aqlpass file permissions are 0600
 if [ "x"$(stat -c %a ${HOME}/.aqlpass) != "x600" ]
 then
-    echo "Set permission on ~/.pgpass to 0600 or nosuch file"
+    echo "Set permission on ~/.aqlpass to 0600 or nosuch file"
     exit 1
 fi
 
-ARUSR=${ARUSR:-aruser}
+ARUSR=${ARUSR:-root}
 ARPWD=${ARPWD:-$(jq -r '.'${ARUSR}' | select(. != null)' ${HOME}/.aqlpass)}
 if [ "x"${ARPWD} = "x" ]
 then
@@ -28,7 +27,7 @@ then
 fi
 
 ARSVR=${ARSVR:-ar-server}
-ARDBN=${ARDBN:-testdb}
+ARDBN=${ARDBN:-_system}
 ARPASSWORD=$(jq -r '.root | select(. != null)' ${HOME}/.aqlpass)
 ARPASSWORD=${ARPASSWORD:-'pleasechangeme'}
 
