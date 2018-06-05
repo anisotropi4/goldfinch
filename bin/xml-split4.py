@@ -30,8 +30,6 @@ path = args.path
 depth = args.depth
 xmlencoding = args.xmlencoding
 
-namespaces = {}
-
 if path != '':
     path = path + '/'
 
@@ -59,9 +57,6 @@ rtag = None
 stag = None
 etag = None
 nl = True
-
-m = 0
-n = 0
 
 spacematch1 = re.compile(r'>[\s]+<')
 spacematch2 = re.compile(r'[\s]+/>')
@@ -115,12 +110,12 @@ for line in fin:
         multiline = True
 
     if stag and ':' in stag:
-        (ns, tag) = stag.split(':')
+        (_, tag) = stag.split(':')
         line = line.replace(stag, tag)
         stag = tag
 
     if etag and ':' in etag:
-        (ns, tag) = etag.split(':')
+        (_, tag) = etag.split(':')
         line = line.replace(etag, tag)
         etag = tag
 
