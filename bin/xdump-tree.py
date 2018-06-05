@@ -45,10 +45,7 @@ v = {}
 
 document = ET.iterparse(fin, events=('start', 'end', 'start-ns', 'end-ns'))
 
-root = None
 s = []
-outfile = args.outputfile
-
 n = 0
 
 for event, e in document:

@@ -37,9 +37,7 @@ namespaces = {}
 
 document = ET.iterparse(fin, events=('start', 'end', 'start-ns', 'end-ns'))
 
-root = None
 s = []
-filename = None
 
 n = 0
 
