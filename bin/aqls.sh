@@ -9,7 +9,7 @@ fi
 
 ( ${NODE} | jq -s '.' ) <<- @EOF 
 const arangojs = require('arangojs');
-const db = new arangojs.Database({url: 'http://{ARSVR}:8529'});
+const db = new arangojs.Database({url: 'http://${ARSVR}:8529'});
 db.useBasicAuth('${ARUSR}', '${ARPWD}');
 db.useDatabase('${ARDBN}');
 db.query(\`${CMD}\`).then(cursor => { 
