@@ -113,5 +113,5 @@ The `rmxmlns.sh` xslt transformation is based on the answer by "jasso" in the di
 ### **xml-to-ndjson.sh**
 A wrapper script that transforms xml to ndjson files in a shell pipeline. The transformation takes pre-split temporary xml-file with an arbitrary wrapper xml-tag, applies the transformation using the `xml-to-json` script, and deletes the temporary file. 
 
-  *  `jq` tool is installed (<https://stedolan.github.io/jq>)
-  * `xml-to-json` untility is installed (<https://github.com/sinelaw/xml-to-json>)
+  * `jq` tool is installed (<https://stedolan.github.io/jq>)
+  * `xml-to-json` utility is installed (<https://github.com/sinelaw/xml-to-json>)
