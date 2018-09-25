@@ -1,6 +1,8 @@
 #!/bin/sh -x 
 
 URL="https://networkrail.opendata.opentraintimes.com/mirror/schedule/cif/"
+FILTER=20180925/20180926
+
 if [ ! -f tbody.html ]; then
     curl ${URL} | scrape -e 'tbody' > tbody.html
 fi
@@ -41,6 +43,15 @@ if [ ! -f timetable-${DATESTRING}.ndjson ]; then
     cat schedule/*-path | ./wtt-timetable2.py > timetable-${DATESTRING}.ndjson
 fi
 
+
 if [ ! -f wtt-${DATESTRING}.ndjson ]; then
-    < timetable-${DATESTRING}.ndjson ./wtt-select2.py '20180910/20180911' > wtt-${DATESTRING}.ndjson
+    < timetable-${DATESTRING}.ndjson ./wtt-select2.py ${FILTER} > wtt-${DATESTRING}.ndjson
+fi
+
+if [ ! -f output-all.json ]; then
+    < wtt-${DATESTRING}.ndjson ./wtt-map.py > output-all.json 2> missing-TIPLOC.tsv
+    < output-all.json sort -n | jq -sc '.' > /tmp/output-all.json.$$
+    mv /tmp/output-all.json.$$ output-all.json
+    echo "TIPLOC	HeadCode	count" > missing-report.tsv
+    < missing-TIPLOC.tsv cut -f1-2 -d'	' | unip >> missing-report.tsv
 fi
