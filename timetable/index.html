@@ -40,7 +40,7 @@
          for (var i = 0; i < events.length; i++)
              ncolours[events[i]] = d3.interpolatePlasma(i / (events.length - 1));
 
-         d3.json("output-all3.json").then(function(d) {
+         d3.json("output-all.json").then(function(d) {
              var minseq = Number.MAX_SAFE_INTEGER;
              d.forEach(function(v, i) {
                  v.type = "CIFdata";
