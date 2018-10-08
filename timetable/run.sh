@@ -1,7 +1,6 @@
 #!/bin/sh -x 
 
 URL="https://networkrail.opendata.opentraintimes.com/mirror/schedule/cif/"
-FILTER=20180925/20180926
 
 if [ ! -f tbody.html ]; then
     curl ${URL} | scrape -e 'tbody' > tbody.html
@@ -44,6 +43,7 @@ if [ ! -f timetable-${DATESTRING}.ndjson ]; then
 fi
 
 
+FILTER=20180925/20180926
 if [ ! -f wtt-${DATESTRING}.ndjson ]; then
     < timetable-${DATESTRING}.ndjson ./wtt-select2.py ${FILTER} > wtt-${DATESTRING}.ndjson
 fi
