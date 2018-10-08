@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 import csv
 import sys
 import os
@@ -7,11 +8,8 @@ import re
 filename = sys.argv[1]
 
 tablename = filename
-
-#[1/3] For csv file uncomment the next line and comment out tsv
 #tablename = re.sub(r'\.csv$', '', tablename)
 tablename = re.sub(r'\.tsv$', '', tablename)
-
 tablename = re.sub(r'[ \.()\/\-]', '_', tablename)
 tablename = re.sub(r'^', 'table_', tablename)
 
@@ -28,7 +26,6 @@ s6_re = re.compile('_+$')
 
 print(tablename)
 with open(filename) as csvfile:
-    #[2/3] For csv file uncomment the next line and comment out tsv
     #reader = csv.reader(csvfile, delimiter=',', quotechar='"')
     reader = csv.reader(csvfile, delimiter='\t', quotechar='"')
     for fields in reader:
@@ -57,9 +54,8 @@ if unique:
         sqlfile.write('drop table {} cascade;\n'.format(tablename))
         sqlfile.write('create table {} ('.format(tablename))
         sqlfile.write(' varchar, '.join(attributes)+' varchar);\n')
-        #[3/3] For csv file uncomment the next line and comment out tsv
         #sqlfile.write("\\copy {0} from '{1}/{2}' csv header\n".format(tablename,os.getcwd(),filename))
-        sqlfile.write("\\copy {0} from '{1}/{2}' delimiter as '\t' csv header\n".format(tablename,os.getcwd(),filename))
+        sqlfile.write("\\copy {0} from '{1}/{2}' delimiter as '	' csv header\n".format(tablename,os.getcwd(),filename))
 else:
     print('**duplicate fields')
 
