@@ -1,0 +1,11 @@
+#!/bin/sh
+
+RFLAG=
+while getopts r NAME
+do
+    case ${NAME} in
+        r)   RFLAG=-r
+    esac
+done
+
+sort - | uniq -c | sort -n ${RFLAG} | sed 's/^ *\([1-9][0-9]*\) \(.*$\)/\2\t\1/'
