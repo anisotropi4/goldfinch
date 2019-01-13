@@ -1,0 +1,11 @@
+for i in fullosm2
+filter i.type == "relation" 
+let members = i.member
+let relation = merge(unset(i, "member"), {members})
+upsert { _key: to_string(i.id) }
+insert merge(relation, {_key: to_string(i.id)})
+update (is_null(i.tags) ? merge(relation, {_key: to_string(i)})
+: 
+merge(relation, {_key: to_string(i)}))
+in fullrelations
+

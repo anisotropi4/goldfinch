@@ -1,0 +1,10 @@
+for i in fullosm2
+filter i.type == "way"
+let nodes = (for j in i.nd return j.ref)
+let way = merge(unset(i, "nd"), {nodes})
+upsert { _key: to_string(i.id) }
+insert merge(way, {_key: to_string(i.id)})
+update (is_null(i.tags) ? merge(way, {_key: to_string(i)})
+: 
+merge(way, {_key: to_string(i)}))
+in fullways
