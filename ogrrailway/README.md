@@ -42,11 +42,11 @@ The `create-update.sh` script archives the last `great-britain-lastest.osm.pbf` 
 
 This uses a simple pipeline to extract and manipulate OpenStreetMap data extracted from Overpass API using ArangoDB and then rendered using a d3/leaflet interactive map
 
-1) Using the `run.sh` script
+The `run.sh` script executes the pipeline of activities:
 
 $ ./run.sh
 
-This then:
+Which then:
 
 * Converts the `.osm.pbf` file to a `.o5m` format file
 * Extracts elements associated with tags 'rail', 'railway' or 'train' to a `.osm` format
@@ -54,13 +54,9 @@ This then:
 * Converts the node, way and relation `.xml` data into Newline Delimited JSON`.ndjson`and tag values from `{"k": key, "v": value}` format to `key: value` pairs
 * Combines the node, way and relation files into a `great-britain-railway.ndjson` file
 * Creates an `ogrrailway` arangodb database and uploads the `node`, `way` and `relationship` data
-* Exports railway data into the `visualisation` directory to be visualised in an javascript based interactive webpage
+* Exports railway data into `raildata.json` file in the `visualisation` directory to be visualised in an javascript based interactive webpage
 
-The resulting 'raildata.json' file is visualised in an interactive webpage, using an d3 and OpenStreetMap Leaflet javascript framework, by running a simple webserver on a random port, say 8273, in the `visualisation` directory
-
-$ python3 -m http.server 8273
-
-Then browsing to http://localhost:8273
+Running a webserver on a random port, say 8273, with access to the `visualisation` directory and and viewing through a webbrowser to a local URL (http://localhost:8273), the data is rendered in an interactive d3 and OpenStreetMap Leaflet javascript framework  
 
 ## Notes:
 
@@ -75,6 +71,13 @@ $ sh ./clean-up.sh
 ### Set up of an arangodb database
 
 Information and scripts to install and configure an arangodb docker installation on a Debian based Linux system is detailed here https://github.com/guidoeco/docker
+
+### Running a simple webserver on a local machine
+
+A simple webserver running on port 8273 can be accessed in `python3` as follows  
+
+$ python3 -m http.server 8273
+
 
 ### Visualisation References
 
