@@ -1,103 +1,168 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>d3.js with leaflet.js rendering OSM points-of-interest</title>
-        <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.3/dist/leaflet.css">
-        <script src="https://npmcdn.com/leaflet@1.0.3/dist/leaflet.js"></script>
-        <script src="http://d3js.org/d3.v4.min.js"></script>
+        <title>d3.js with OSM leaflet.js rendering National NaPTAN points-of-interest</title>
+        <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.3.1/dist/leaflet.css">
+        <script src="https://npmcdn.com/leaflet@1.3.1/dist/leaflet.js"></script>
+        <script src="http://d3js.org/d3.v5.min.js"></script>
     </head>
     <body>
         <div id="map" style="width: 1340px; height: 635px"></div>
         <script type="text/javascript">
-                                    
-var radius = 4;
-var log2 = Math.log(2.0);
-var minZoom = 3;
-var maxZoom = 18;
+         var radius = 4;
+         var log2 = Math.log(2.0);
+         var minZoom = 2;
+         var maxZoom = 18;
 
-// var map = L.map('map').setView([51.53, -0.124], 14); //KGX
-var map = L.map('map').setView([53.96, -1.08], 14); //YRK
-mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
-L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; ' + mapLink + ' Contributors',
-    minZoom: minZoom,
-    maxZoom: maxZoom
-}).addTo(map);
-L.svg().addTo(map);
-var svg = d3.select("#map").select("svg")
-  , g = svg.selectAll("g");
-var collections = [];
-var colours15 = {0: "GreenYellow", 13: "DeepSkyBlue", 3: "Gold", 5: "Red", 4: "Purple", 6: "Orange", 7: "DeepPink", 8: "Magenta", 9: "DarkSlateBlue", 10: "GreenYellow", 11: "Lime", 12: "Cyan", 1: "Blue", 14: "DarkBlue", 15: "DarkOrange", 16: "DarkOrchid"};
-var colourscale = function(n) {
-    return colours15[n];
-}
+         // var map = L.map('map').setView([51.53, -0.124], 14); //KGX
+         var map = L.map('map').setView([53.96, -1.08], 10); //YRK
+         mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+         L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+             attribution: '&copy; ' + mapLink + ' Contributors',
+             minZoom: minZoom,
+             maxZoom: maxZoom
+         }).addTo(map);
+         L.svg().addTo(map);
+         var svg = d3.select("#map").select("svg")
+             , g = svg.selectAll("g");
+         var collections = [];
+         var active = {};
 
-var arange = [25, 0];
+         var colours15 = {0: "GreenYellow", 13: "DeepSkyBlue", 3: "Gold", 5: "Red", 4: "Purple", 6: "Orange", 7: "DeepPink", 8: "Magenta", 9: "DarkSlateBlue", 10: "GreenYellow", 11: "Lime", 12: "Cyan", 1: "Blue", 14: "DarkBlue", 15: "DarkOrange", 16: "DarkOrchid"};
+         var AreaLookup = {"900": "Coach Stop", "910": "Rail Station", "920": "Airport", "930": "Ferry Terminal", "940": "Metro Station"};
+         var colourscale = function(n) {
+             return colours15[n];
+         }
+         var ncolours = {};
+         var arange;
 
-d3.json("raildata.json", function(err, d) {
-    if (err)
-        return console.warn(err);
-    d.forEach(function(v, i) {
-        v.type = "output";
-        v.colour = colourscale(5);
-        v.LatLng = new L.LatLng(v.lat,v.lon);
-        if (! v.lvalid) 
-            v.lvalid = 25;       
-        arange[0] = Math.min(arange[0], v.lvalid);
-        if (v.lvalid < 25) {
-            arange[1] = Math.max(arange[1], v.lvalid);        
-        }
-    });
-    collections = collections.concat(d);
-    render();
-});
+         d3.json("raildata.json").then(function(d) {
+             var a = [];
+             for (var i = 1; i <= d.length; i++)
+                 a.push(Math.ceil(Math.log(i)/log2));
 
-function render() {
-    var tree = d3.quadtree().x(function(d) {
-        return d.lat;
-    }).y(function(d) {
-        return d.lon;
-    }).addAll(collections);
-    var zscale = d3.scaleLinear().domain([minZoom-2, maxZoom]).range([arange[1], arange[0]]);
+             arange = [a[0], a[a.length -1]];
+             var ascale = d3.scaleLinear().domain([arange[0], arange[1]]).range([maxZoom-3, minZoom+6]);
+             a = d3.shuffle(a);
 
-    function visiblenodes() {
-        var nodes = [];
-        var z = map.getZoom();
-        console.log("zoom:", z, " zoomu:", zscale(z));
-        var bounds = map.getBounds();
-        var p0 = bounds._southWest
-          , p3 = bounds._northEast;
-        tree.visit(function(node, x1, y1, x2, y2) {
-            if (node.data &&  node.data.lvalid >= zscale(map.getZoom())) {
-            //if (node.data) {
-                nodes.push(node.data);
-            }
-            return x1 >= p3.lat || y1 >= p3.lon || x2 < p0.lat || y2 < p0.lon;
-        });
-        console.log("# nodes selected", nodes.length);
-        return nodes;
-    }
-    map.on("viewreset", update);
-    map.on("moveend", update);
-    update();
-    
-    function update() {
-        g.selectAll("circle").remove();
-        g.selectAll("text").remove();
-        g.selectAll("rect").remove();
-        var nodes = visiblenodes()
-          , i = 0;
-        var feature = g.selectAll("circle").data(nodes).enter().append("g").style("fill", function(d, i) {
-            return d.colour;
-        }).append("svg:circle").style("stroke", "black").style("opacity", function(d, i) {
-            return 0.6;
-        }).attr("r", radius).attr("transform", function(d) {
-            var p = map.latLngToLayerPoint(d.LatLng);
-            d.x = p.x;
-            d.y = p.y;
-            return "translate(" + d.x + "," + d.y + ")";
-        });
-    }
+             d.forEach(function(v, i) {
+                 var w = {};
+                 w.type = "osmdata";
+                 w.title = v.node;
+                 w.colour = colourscale(0);
+                 w.LatLng = new L.LatLng(v.lat,v.lon);
+                 w.lrange = ascale(a[i]);
+                 collections.push(w);
+             });
+             render();
+         });
+         function render() {
+             var tree = d3.quadtree().x(function(d) {
+                 return d.LatLng.lat;
+             }).y(function(d) {
+                 return d.LatLng.lng;
+             }).addAll(collections);
+             var zscale = d3.scaleLinear().domain([minZoom, maxZoom]).range([arange[1], arange[0]]);
+
+             function visiblenodes() {
+                 var nodes = [];
+                 var z = map.getZoom();
+                 console.log("zoom:", z, " zoomu:", zscale(z));
+                 var bounds = map.getBounds();
+                 var p0 = bounds._southWest
+                   , p3 = bounds._northEast;
+                 tree.visit(function(node, x1, y1, x2, y2) {
+                     if (node.data && node.data.lrange >= zscale(map.getZoom())) nodes.push(node.data);
+                     return x1 >= p3.lat || y1 >= p3.lng || x2 < p0.lat || y2 < p0.lng;
+                 });
+                 console.log("# nodes selected", nodes.length);
+                 return nodes;
+             }
+             map.on("viewreset", update);
+             map.on("moveend", update);
+             update();
+             function update() {
+                 g.selectAll("circle").remove();
+                 clearRectangle();
+                 var nodes = visiblenodes()
+                     , i = 0;
+                 var feature = g.attr("pointer-events", "visible")
+                                .selectAll("circle")
+                                .data(nodes)
+                                .enter()
+                                .append("g")
+                                .on("click", handleMouseClick)
+                                .style("fill", function(d, i) { return d.colour; })
+                                .append("svg:circle")
+                                .style("stroke", "black")
+                                .style("opacity", function(d, i) { return 0.6; })
+                                .attr("r", radius)
+                                .attr("transform", function(d) {
+                                    var p = map.latLngToLayerPoint(d.LatLng);
+                                    d.x = p.x;
+                                    d.y = p.y;
+                                    return "translate(" + d.x + "," + d.y + ")";
+                                });
+             }
+             svg.attr("pointer-events", "visible").on("click",clearRectangle);
+             function clearRectangle() {
+                 for (var key in active) {
+                     active[key].style("fill", function(d, i) { return d.colour; });
+                     d3.select("#r"+key).remove();
+                     d3.select("#t"+key).remove();
+                     delete(active[key]);
+                 }
+             }
+             function handleMouseClick(d, i) {
+                 d3.event.stopPropagation();
+                 var node = d3.select(this);
+                 var output = [];
+                 var key = (d.x + "-" + d.y + "-" + i);
+                 clearRectangle();
+                 //node.style("fill", "white");
+                 output.push("OSM node: " + d.title);
+                 if (d.title2) output.push(d.title2);
+                 if (d.title3) output.push(d.title3);
+                 if (d.node) output.push("Node: " + d.node);
+                 if (d.indicator) output.push("Indicator: " + d.indicator);
+                 if (d.street && d.street != "-") output.push("Street: " + d.street);
+                 if (d.stoptype) output.push("Type: " + d.stoptype);
+                 //output.push("[" + parseFloat(d.LatLng.lat).toFixed(5) + "," + parseFloat(d.LatLng.lng).toFixed(5) + "]");
+                 output.push("[" + parseFloat(d.LatLng.lat).toFixed(7) + "," + parseFloat(d.LatLng.lng).toFixed(7) + "]");
+                 if (d.type) output.push("Source: " + d.type);
+                 svg.insert("rect")
+                    .attr("id", "r" + key)
+                    .attr("x", d.x)
+                    .attr("y", (d.y - 110))
+                    .attr("rx", 4)
+                    .attr("ry", 4)
+                    .attr("width", 270)
+                    .attr("height", 120)
+                    .attr("fill", "white");
+                 svg.insert("text")
+                    .attr("id", "t" + key)
+                    .attr("x", (d.x + 4))
+                    .attr("y", (d.y - 110))
+                    .call(lineOutput, output);
+                 active[key] = node;
+             }
+             function lineOutput(text, lines) {
+                 text.each(function() {
+                     var text = d3.select(this),
+                         x = text.attr("x"),
+                         y = text.attr("y"),
+                         tspan = text.text(null)
+                                     .append("tspan")
+                                     .attr("x", x)
+                                     .attr("y", y);
+                     lines.forEach(function (v) {
+                         tspan = text.append("tspan")
+                                     .attr("x", x)
+                                     .attr("dy", "1.2em")
+                                     .text(v);
+                     });
+                 });
+             }
          }
         </script>
     </body>
