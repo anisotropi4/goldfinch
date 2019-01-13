@@ -8,4 +8,4 @@ PATH=${PATH}:./bin
 export ARUSR ARDBN
 . bin/ar-env.sh
 
-< report.aql aqlx.sh > visualisation/raildata.json
+< report.aql aqlx.sh | jq -sc '.' > visualisation/raildata.json
