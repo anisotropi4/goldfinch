@@ -4,8 +4,7 @@
 Open Street Map data is used under the Open Street Map license https://www.opens
 treetmap.org/copyright
 
-Data for the analysis is from http://www.geofabrik.de/ using the download hostin
-g service http://download.geofabrik.de/
+OSM data for the analysis is downloaded from GeoFabrik (http://www.geofabrik.de/) using the download hosting service (http://download.geofabrik.de/)
 
 ## Pre-requisites
 
@@ -14,7 +13,7 @@ To extract and process the data is dependant on the following tools:
   * python3 (https://python.org) 
   * wget (https://www.gnu.org/software/wget/)
   * parallel (https://www.gnu.org/software/parallel/)
-  * `xml-split4.py`, `add-x-tag.sh` and `xml-to-ndjson.sh`scripts from `bin` directory of (https://github.com/anisotropi4/goldfinch) in the local directory
+  * `xml-split4.py`, `add-x-tag.sh` and `xml-to-ndjson.sh`scripts from `bin` directory of (https://github.com/anisotropi4/goldfinch) copied to the local directory
   * jq (https://stedolan.github.io/jq)
   * xml-to-json (https://hackage.haskell.org/package/xml-to-json)
   * osmctools apt repository (https://gitlab.com/osm-c-tools/osmctools)
@@ -22,7 +21,7 @@ To extract and process the data is dependant on the following tools:
   * arangoimp arangodb import tool (https://www.arangodb.com/download-major/ubuntu)
   * d3 (https://d3js.org) and leaflet (http://leafletjs.com)
 
-**For ease of python dependency management python3 miniconda (https://conda.io/miniconda.html) is recomended**
+*For ease of python dependency management python3 miniconda (https://conda.io/miniconda.html) is recomended*
 
 ## Obtain, convert and filter OSM data
 
@@ -32,7 +31,7 @@ This an attempt to apply the OSEMN model (Obtain, Scrub, Explore, Model, and iNt
 
 The `create-update.sh` script updates the `great-britain-update.osm.pbf` data file or downloads the data if not present
 
-$ ./create-update.sh
+    $ ./create-update.sh
 
 The `REGION` parameter in the `create-update.sh` script identifies the OSM region to process
 
@@ -44,7 +43,7 @@ This uses a simple pipeline to extract and manipulate OpenStreetMap data extract
 
 The `run.sh` script executes the pipeline of activities:
 
-$ ./run.sh
+    $ ./run.sh
 
 Which then:
 
@@ -66,7 +65,7 @@ The `run.sh` only creates if a file with the same name does not exist
 
 To delete all files processed by the `run.sh` script run the `clean-up.sh`. As the execute permission bit is not set `clean-up.sh` script 
 
-$ sh ./clean-up.sh
+    $ sh ./clean-up.sh
 
 ### Set up of an arangodb database
 
@@ -76,8 +75,7 @@ Information and scripts to install and configure an arangodb docker installation
 
 A simple webserver running on port 8273 can be accessed in `python3` as follows  
 
-$ python3 -m http.server 8273
-
+    $ python3 -m http.server 8273
 
 ### Visualisation References
 
