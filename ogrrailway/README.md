@@ -1,4 +1,4 @@
-# A set of query scripts to generate railway .ndjson reports for Great Britain using Open Street Map data and `osmctools`
+# A set of scripts to generate British railway visualisation using Open Street Map data and `osmctools`
 
 ## Open Street Map (OSM)
 Open Street Map data is used under the Open Street Map license https://www.opens
@@ -86,3 +86,4 @@ The key element is the use of the quadtree function in the visiblenodes function
 * The Leaflet javascript library (http://leafletjs.com)
 * parallel (https://doi.org/10.5281/zenodo.1146014)
 * The OSEMN approach is set out by the Dataists (http://www.dataists.com/tag/osemn) and is based on the work of Jeroen Janssens in 'Data Science at the Command Line' https://github.com/jeroenjanssens/data-science-at-the-command-line  
+* Open Steet Map C Tools (osmctools) to reduce the complexity of running an OverPass API server to process data (https://gitlab.com/osm-c-tools/osmctools)

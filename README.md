@@ -39,6 +39,13 @@ This contains a set of scripts that calculate a "valid distance" parameter for t
 
 This contains a set of scripts to create an ArangoDB edge collection and Foxx service that provides a shortest-path d3/leaflet mashup visualisation using a simple URL /startnode/endnode/ microservice
 
+## ogrrailway
+
+A set of query shell-scripts that extract British railway data using the osmctools (https://gitlab.com/osm-c-tools/osmctools) toolset rather than the Overpass API under a Debian based Linux distribution. This then processes the railway data using an arangodb database (https://www.arangodb.com/) for visualisation in a d3/Leaflet javascript mashup
+
+More information about OpenStreetMap can be found here:
+  * OpenStreetMap: http://www.openstreetmap.org
+
 ## 'bin' directory scripts  
 
 The 'bin' directory 'aql' scripts are used extensively in the 'goldfinch' and other projects and should be installed in the user-account `${HOME}/bin` directory:
