@@ -22,7 +22,7 @@ To extract and process the data is dependant on the following tools:
   * arangoimp arangodb import tool (https://www.arangodb.com/download-major/ubuntu)
   * d3 (https://d3js.org) and leaflet (http://leafletjs.com)
 
-### For ease of python dependency management python3 miniconda (https://conda.io/miniconda.html) is recomended 
+**For ease of python dependency management python3 miniconda (https://conda.io/miniconda.html) is recomended**
 
 ## Obtain, convert and filter OSM data
 
