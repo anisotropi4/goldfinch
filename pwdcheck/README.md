@@ -47,6 +47,6 @@ $
 ```
 
 
-##Acknowledgments
+## Acknowledgments
 
 Thanks to Troy Hunt and https://haveibeenpwned.com/  for making this data available
