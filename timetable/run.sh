@@ -1,4 +1,4 @@
-#!/bin/sh -x 
+#!/bin/sh 
 
 URL="https://networkrail.opendata.opentraintimes.com/mirror/schedule/cif/"
 
@@ -16,6 +16,13 @@ if [ ! -f file-list.txt ]; then
     N=$(echo ${LINE} | cut -d':' -f1)
     tail -n +${N} full-file-list.txt > file-list.txt
 fi    
+
+for DIRECTORY in data schedule storage
+do
+    if [ ! -d ${DIRECTORY} ]; then
+        mkdir ${DIRECTORY}
+    fi
+done
 
 for FILENAME in $(cat file-list.txt | sed 's/.gz$//')
 do
@@ -41,15 +48,8 @@ if [ ! -f timetable-${DATESTRING}.ndjson ]; then
     cat schedule/*-path | ./wtt-timetable2.py > timetable-${DATESTRING}.ndjson
 fi
 
-FILTER=20181214/20181215
-if [ ! -f wtt-${DATESTRING}.ndjson ]; then
-    < timetable-${DATESTRING}.ndjson ./wtt-select2.py ${FILTER} > wtt-${DATESTRING}.ndjson
-fi
+echo $(date +%Y%m%d)/$(date --date="tomorrow" +%Y%m%d)
+if [ ! -f wtt-${DATESTRING}-0.ndjson ]; then
 
-if [ ! -f output-all.json ]; then
-    < wtt-${DATESTRING}.ndjson ./wtt-map.py > output-all.json 2> missing-TIPLOC.tsv
-    < output-all.json sort -n | jq -sc '.' > /tmp/output-all.json.$$
-    mv /tmp/output-all.json.$$ output-all.json
-    echo "TIPLOC	HeadCode	count" > missing-report.tsv
-    < missing-TIPLOC.tsv cut -f1-2 -d'	' | unip >> missing-report.tsv
+    ./filter.sh $(date +%Y%m%d)/$(date --date="tomorrow" +%Y%m%d)
 fi
