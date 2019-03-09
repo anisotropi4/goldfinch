@@ -45,7 +45,7 @@ The `run.sh` script executes the pipeline of activities:
 
     $ ./run.sh
 
-Which then:
+This script:
 
 * Converts the `.osm.pbf` file to a `.o5m` format file
 * Extracts elements associated with tags 'rail', 'railway' or 'train' to a `.osm` format
@@ -61,7 +61,7 @@ Running a webserver on a random port, say 8273, with access to the `visualisatio
 
 ### Data file management
 
-The `run.sh` only creates if a file with the same name does not exist
+The `run.sh` only creates a file if a file with the same name does not exist
 
 To delete all files processed by the `run.sh` script run the `clean-up.sh`. As the execute permission bit is not set `clean-up.sh` script 
 
