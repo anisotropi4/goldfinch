@@ -1,4 +1,4 @@
-# A set of query scripts to generate railway .ndjson reports for Great Britain using Open Street Map data and `osmctools`
+# Query scripts to generate railway `.ndjson` reports for Great Britain using OSM data and `osmctools`
 
 ## Open Street Map (OSM)
 Open Street Map data is used under the Open Street Map license https://www.opens
