@@ -1,5 +1,5 @@
 # goldfinch
-A set of scripts for working with PostgreSQL and ArangoDB databases based on extending Jeroen Janssens 'Data Science on the Command Line' https://github.com/jeroenjanssens/data-science-at-the-command-line
+A set of scripts for working with PostgreSQL and ArangoDB databases based on extending Jeroen Janssens 'Data Science on the Command Line' https://github.com/jeroenjanssens/data-science-at-the-command-line, plus helper and miscellaneous scripts
 
 Now with additional scripts for processing and converting large(ish) xml files to (ndjson)
 
@@ -41,10 +41,18 @@ This contains a set of scripts to create an ArangoDB edge collection and Foxx se
 
 ## ogrrailway
 
-A set of query shell-scripts that extract British railway data using the osmctools (https://gitlab.com/osm-c-tools/osmctools) toolset rather than the Overpass API under a Debian based Linux distribution. This then processes the railway data using an arangodb database (https://www.arangodb.com/) for visualisation in a d3/Leaflet javascript mashup
+A set of query shell-scripts that extract British railway data using the [osmctools](https://gitlab.com/osm-c-tools/osmctools) toolset rather than the Overpass API under a Debian based Linux distribution. This then processes the railway data using an [arangodb database](https://www.arangodb.com/) for visualisation in a d3/Leaflet javascript mashup
 
 More information about OpenStreetMap can be found here:
   * OpenStreetMap: http://www.openstreetmap.org
+
+## markdown
+
+A set of python and shell scripts to locally process and convert between [Markdown](https://daringfireball.net/projects/markdown) `.md` and `.yaml` format files, and out `.html`
+
+## pwdcheck
+
+A set of scripts to generate and search 128 ordered sha1sum hash files for passwords known to be hacked. Thanks to Troy Hunt and https://haveibeenpwned.com/ for making this data available
 
 ## 'bin' directory scripts  
 
