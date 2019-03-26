@@ -28,9 +28,11 @@ this_template = """<html>
 		}
 	}
 </style>
+{{ header }}
 <article class="markdown-body">
 {{ bodytext }}
 </article>
+{{ footer }}
 </html>
 """
 
@@ -59,7 +61,12 @@ output_dict = {}
 if args.yaml:
     yaml_text = yaml.safe_load(fin)
     output_dict['titletext'] = yaml_text['title']
+    if 'header' in yaml_text:
+        output_dict['header'] = yaml_text['header']
     output_dict['bodytext'] = markdown(yaml_text['body'])
+    if 'footer' in yaml_text:
+        output_dict['footer'] = yaml_text['footer']
+
 else:
     body_text = fin.read()
     output_dict['titletext'] = 'Title'
