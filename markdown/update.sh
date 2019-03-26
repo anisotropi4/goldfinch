@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ -d ! archive ]; then
+if [ ! -d archive ]; then
     mkdir archive
 fi
 
