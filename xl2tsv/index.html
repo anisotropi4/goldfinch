@@ -1,0 +1,80 @@
+<html>
+<head>
+<title># Dump spreadsheet content `xl2tsv.py`</title>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="github-markdown.min.css">
+<style>
+	.markdown-body {
+		box-sizing: border-box;
+		min-width: 200px;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+
+	@media (max-width: 767px) {
+		.markdown-body {
+			padding: 15px;
+		}
+	}
+</style>
+
+<article class="markdown-body">
+<h1>Dump spreadsheet content <code>xl2tsv.py</code></h1>
+<p>The <code>xl2tsv.py</code> script dumps the content of xls(x) files to a <code>[tabname].tsv</code> diles in the (default) output directory. Command line parameters:</p>
+<ul>
+<li>--tabnames to dump the names of the tabs in the file(s) and stop  </li>
+<li>--path (optional) set the output directory path (default) output  </li>
+<li>--tab (optional) set the name of the tab to process  </li>
+<li>--filename (optional) append file name to </li>
+</ul>
+<h2>Dependencies</h2>
+<p>The <code>xl2tsv.py</code> is a simple wrapper script based on the python <a href="https://pypi.org/project/xlrd">xlrd</a> and <a href="https://pandas.pydata.org">pandas</a> libraries:</p>
+<pre><code> $ pip install xlrd pandas
+</code></pre>
+<h2>Usage Examples</h2>
+<h3>Basic usage</h3>
+<p>Dump the <code>Airports</code>, <code>Junctions</code>, <code>RailStations</code> and <code>VariableDefinitions</code> tab data from the <code>connectivity-statistics-destination-lists.xls</code> into <code>.tsv</code> files in the <code>output</code> directory:</p>
+<pre><code>  $ ./xl2tsv.py connectivity-statistics-destination-lists.xls 
+  $ ls output
+Airports.tsv  Junctions.tsv  RailStations.tsv  VariableDefinitions.tsv
+</code></pre>
+<h3>All tabs in a file</h3>
+<p>Dump the names of the tabs from the <code>connectivity-statistics-destination-lists.xls</code> file:</p>
+<pre><code>$ ./xl2tsv.py --tabnames connectivity-statistics-destination-lists.xls 
+VariableDefinitions Airports    RailStations    Junctions
+</code></pre>
+<h3>One tab into a given directory</h3>
+<p>Dump the <code>Junctions</code> tab data into the <code>connectivity</code> directory:</p>
+<pre><code>  $ ./xl2tsv.py --tab Junctions --path connectivity  connectivity-statistics-destination-lists.xls 
+  $ ls connectivity
+Junctions.tsv
+</code></pre>
+<h3>All tabs from multiple-files into multiple <code>.tsv</code> files named source-filename</h3>
+<p>Dump all the tab data from the <code>connectivity-statistics.xls</code> and <code>US gun crime.xlsx</code> files into the <code>output</code> directory with filenames <code>&lt;filename&gt;:&lt;tab&gt;.tsv</code>:</p>
+<pre><code>  $ ./xl2tsv.py --filename connectivity-statistics.xls 'US gun crime.xlsx' 
+  $ ls output
+ connectivity-statistics:Airports.tsv
+ connectivity-statistics:Junctions.tsv
+ connectivity-statistics:RailStations.tsv
+ connectivity-statistics:VariableDefinitions.tsv
+'US gun crime:2010 SUMMARY.tsv'
+'US gun crime:2011 MURDER.tsv'
+'US gun crime:ASSAULT 2009.tsv'
+'US gun crime:ASSAULT 2010.tsv'
+'US gun crime:ASSAULT 2011.tsv'
+'US gun crime:CHART TRENDS.tsv'
+'US gun crime:MURDER 2009.tsv'
+'US gun crime:MURDER 2010.tsv'
+'US gun crime:MURDER TRENDS.tsv'
+'US gun crime:POPULATION DATA.tsv'
+'US gun crime:ROBBERY 2009.tsv'
+'US gun crime:ROBBERY 2010.tsv'
+'US gun crime:ROBBERY 2011.tsv'
+'US gun crime:SUMMARY 2011.tsv'
+</code></pre>
+
+</article>
+
+</html>
