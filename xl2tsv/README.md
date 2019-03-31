@@ -1,6 +1,6 @@
 # Dump spreadsheet content `xl2tsv.py`
 
-The `xl2tsv.py` script dumps the content of xls(x) files to a `[tabname].tsv` diles in the (default) output directory. Command line parameters:
+The `xl2tsv.py` script dumps the content of xls(x) files to a `[<source-filename>:]<tabname>.tsv` files in the (default) `output` directory. Command line parameters:
 
 +   --tabnames to dump the names of the tabs in the file(s) and stop  
 +   --path (optional) set the output directory path (default) output  
