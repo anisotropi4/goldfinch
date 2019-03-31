@@ -7,6 +7,8 @@ The `xl2tsv.py` script dumps the content of xls(x) files to a `[<source-filename
 +   --tab (optional) set the name of the tab to process  
 +   --filename (optional) append file name to 
 
+The `xl2ndjson.py` script dumps the same tab data to a `.ndjson` (New-line Delimited JSON file).
+
 ## Dependencies
 
 The `xl2tsv.py` is a simple wrapper script based on the python [xlrd](https://pypi.org/project/xlrd) and [pandas](https://pandas.pydata.org) libraries. To install these libraries:
