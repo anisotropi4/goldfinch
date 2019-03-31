@@ -50,6 +50,11 @@ More information about OpenStreetMap can be found here:
 
 A set of python and shell scripts to locally process and convert between [Markdown](https://daringfireball.net/projects/markdown) `.md` and `.yaml` format files, and out `.html`
 
+## xl2tsv
+
+A python script that dumps the content of xls(x) files to a `[<source-filename>:]<tabname>.tsv` files in the (default) output directory.
+
+
 ## pwdcheck
 
 A set of scripts to generate and search 128 ordered sha1sum hash files for passwords known to be hacked. Thanks to Troy Hunt and https://haveibeenpwned.com/ for making this data available
