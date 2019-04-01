@@ -44,7 +44,7 @@ if args.tabnames:
         print('\t'.join(df.keys()))
     sys.exit(0)
 
-for filename in args.inputfiles:
+for filename in args.inputfiles:    
     if args.tab:
         tab = args.tab
         filebase = ''
@@ -53,11 +53,13 @@ for filename in args.inputfiles:
             if '.' in filename:
                 filebase = filename.rsplit('.', 1)[0] + ':'
         try:
-            df = pd.read_excel(filename, tab)
+            df = pd.read_excel(filename, tab).fillna('')
             if args.stdout:
-                df.to_csv(sys.stdout, index=False, sep='\t')
+                df.to_json(sys.stdout, orient='records', lines=True)
+                print()
             else:
-                df.to_csv('{}/{}{}.tsv'.format(path, filebase, tab), index=False, sep='\t')
+                df.to_json('{}/{}{}.ndjson'.format(path, filebase, tab), orient='records', lines=True)
+
         except KeyError:
             pass
     else:
@@ -68,5 +70,6 @@ for filename in args.inputfiles:
             if '.' in filename:
                 filebase = filename.rsplit('.', 1)[0] + ':'
         for tab in df.keys():
-            df[tab].to_csv('{}/{}{}.tsv'.format(path, filebase, tab), index=False, sep='\t')
+            df[tab] = df[tab].fillna('')
+            df[tab].to_json('{}/{}{}.ndjson'.format(path, filebase, tab), orient='records', lines=True)
 
