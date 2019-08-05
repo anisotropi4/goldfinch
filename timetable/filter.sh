@@ -9,7 +9,7 @@ FILTER=${1:-$FILTER}
 while true
 do
     echo ${FILTER}
-    if [ ! -f wtt-${DATESTRING}.ndjson ]; then
+    if [ ! -f wtt-${DATESTRING}-$#.ndjson ]; then
         < timetable-${DATESTRING}.ndjson ./wtt-select2.py ${FILTER} > wtt-${DATESTRING}-$#.ndjson
     fi
 
