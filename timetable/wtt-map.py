@@ -51,7 +51,7 @@ with open('NaPTAN-Rail.ndjson', 'rb') as fp:
             naptan[tiploc_map[tiploc]['TIPLOC']] = {'name': this_object['Name'], 'longitude': trim_f(longitude), 'latitude': trim_f(latitude), 'lookup': True}
 
 osmdata = {}
-with open('osmrail-all.ndjson', 'rb') as fp:
+with open('osmnaptan-all.ndjson', 'rb') as fp:
     for line in fp:
         this_object = json.loads(line)
         (longitude, latitude) = (this_object['lat'], this_object['lon'])
