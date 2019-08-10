@@ -34,7 +34,8 @@ do
     echo Convert ${FILENAME} file to ndjson
     if [ ! -f schedule/${FILENAME} ]
     then
-        < data/${FILENAME} ./wtt3.py > schedule/${FILENAME}
+        #< data/${FILENAME} ./wtt3.py > schedule/${FILENAME}
+        < data/${FILENAME} ./wtt4.py > schedule/${FILENAME}
     fi
 
     if [ ! -f schedule/${FILENAME}-path ]; then
@@ -68,6 +69,6 @@ if [ ! -f timetable-${DATESTRING}.ndjson ]; then
 fi
 
 echo filter $(date +%Y%m%d)/$(date --date="tomorrow" +%Y%m%d) dates
-if [ ! -f wtt-${DATESTRING}-0.ndjson ]; then
+if [ ! -f wtt-${DATESTRING}-1.ndjson ]; then
     ./filter.sh $(date +%Y%m%d)/$(date --date="tomorrow" +%Y%m%d)
 fi
