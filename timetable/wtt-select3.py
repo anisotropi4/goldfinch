@@ -126,9 +126,7 @@ OUTPUT = {}
 
 (START_INTERVAL, END_INTERVAL) = interval_p(INTERVAL, return_duration=False)
 
-#for line in sys.stdin:
-for line in open('timetable-20190810.ndjson'):
-#for line in open('timetable-20190804.ndjson'):
+for line in sys.stdin:
     N = N + 1
 
     object_json = json.loads(line)
