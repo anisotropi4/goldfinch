@@ -18,7 +18,7 @@ if [ ! -f ${REGION}-railway.osm ]; then
 fi
 
 if [ ! -x ./xml-split4.py ]; then
-    echo "Install xml-split.py from the 'bin' directory of (https://github.com/anisotropi4/goldfinch) into the local directory"
+    echo "Install xml-split4.py from the 'bin' directory of (https://github.com/anisotropi4/goldfinch) into the local directory"
     exit 1
 fi
 
