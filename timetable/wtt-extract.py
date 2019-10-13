@@ -158,4 +158,3 @@ for this_day in repeat_pair(START_DATE, END_DATE + DAY):
     SCHEDULE += set_schedule(WTT[date_idx & day_idx], this_date)
     for i in SCHEDULE:
         fout.write(json.dumps(i) + '\n')
-
