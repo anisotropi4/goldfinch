@@ -4,6 +4,7 @@
 (ndjson) representation of the working timetable"""
 import json
 import sys
+from uuid import uuid1
 from datetime import datetime, timedelta, time
 from iso8601datetime.duration import fromisoday_p, ISO8601_DATE, duration_f, time_f
 from iso8601datetime.interval import interval_f, interval_p
@@ -435,5 +436,6 @@ for l in sys.stdin:
     else:
         sys.stderr.write('Error: unknown record type ' + l[0:2] + '\n' + l)
         sys.exit(1)
+    OUTPUT['UUID'] = uuid1().hex
     print(json.dumps(OUTPUT))
     OUTPUT = {}
