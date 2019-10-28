@@ -12,7 +12,8 @@ import pandas as pd
 import numpy as np
 
 DAY = timedelta(days=1)
-WEEK = timedelta(days=7)
+SIXDAY = 6 * DAY
+WEEK = 7 * DAY
 N = 0
 
 ACTIVE_SERVICES=False
@@ -52,7 +53,7 @@ def insert_interval(this_object, insert_object):
     if a1 >= b1 and a1 <= b2:
         return set_interval((b1, b2 , b)) + set_interval((b2 + DAY, a2, a))
     return set_interval((a1, b1 - DAY, a)) + set_interval((b1, b2, b)) + set_interval((b2 + DAY, a2, a))
-    
+
 def day_bitmap(date_object):
     return 2 ** (6 - date_object.weekday())
 
@@ -101,9 +102,10 @@ df1 = df1.drop(df1[df1['ID'] != 'PA'].index).fillna(value={'Duration': 'PT00:00:
 df1['Start'] = pd.DataFrame(df1['Interval'].str.split('/').tolist(), columns=['start_dt', 1]).iloc[:, 0].str[10:]
 df2 = pd.DataFrame(df1['Dates'].str.split('/').tolist(), columns=['start_date', 'end_date'])
 df2['start_date'] = pd.to_datetime(df2['start_date'], format='%Y-%m-%d').apply(monday_offset)
-df2['end_date'] = pd.to_datetime(df2['end_date'], format='%Y-%m-%d').apply(monday_offset) + WEEK
+df2['end_date'] = pd.to_datetime(df2['end_date'], format='%Y-%m-%d').apply(monday_offset) + SIXDAY
 df1 = df1.join(df2)
 
+df1['Act'] = df1['Days']
 #Identify all unique UIDs in timetable
 SCHEDULE = pd.DataFrame(df1[~df1['UID'].duplicated(keep=False)]).reset_index(drop=True)
 
@@ -154,6 +156,9 @@ for UID in df2.index.unique():
 UPDATE = pd.DataFrame(UPDATE)
 SCHEDULE = SCHEDULE.append(UPDATE, ignore_index=True, sort=False)
 
+def interval_overlap(start_date, end_date, this_object):
+    return (start_date >= this_object['start_date']) and (end_date < this_object['end_date'])
+
 # Identify all UIDs with overlapping bitmap days, interleave and set unique week bitmap
 df2 = DUPLICATES.set_index('UID', drop=False)
 df2 = df2.loc[df3[~df3].index]
@@ -161,20 +166,35 @@ df2['bit'] = df2['Days'].map(day_int)
 
 UPDATE = []
 for UID in df2.index.unique():
-    object_iter = df2.loc[UID].iterrows()
-    _, object_json = next(object_iter)
-    start_date = object_json.pop('start_date')
-    end_date = object_json.pop('end_date')
-    123/0
-    this_schedule = [this_interval]
-    
+    this_schedule = None
+    these_objects = df2.loc[UID]
+    object_iter = these_objects.iterrows()
     for _, object_json in object_iter:
-        this_date = object_json.pop('start_date')
-        end_date = object_json.pop('end_date')
-        key = object_json['Dates']
-        this_interval = (start_date, end_date, key)
-        this_schedule = insert_interval(this_schedule, this_interval)
+        start_date = object_json['start_date']
+        end_date = object_json['end_date']
+        this_interval = (start_date, end_date, dict(object_json))
+        if this_schedule:
+            this_schedule = insert_interval(this_schedule, this_interval)
+        else:
+            this_schedule = [this_interval]
+
+    2/0
+    for i, (start_date, end_date, object_json) in enumerate(this_schedule):
+        object_bit = object_json['bit']
+        for _, this_object in these_objects.iterrows():
+            this_json = dict(this_object)
+            if this_json == object_json:
+                continue
+            this_bit = this_json['bit']
+            if not(object_bit ^ this_bit):
+                continue
+            if interval_overlap(start_date, end_date, this_object):
+                4/0
+
     321/0
+    for start_date, end_date, this_object in this_schedule:
+        UPDATE.append({**this_object, 'start_date': start_date, 'end_date': end_date})
+
 
 7531/0
 
@@ -216,7 +236,7 @@ df3 = df3.reset_index(drop=True)
 def overlap_p(rows):
     r = np.array(rows[['start_date', 'end_date']].values)
     return r
-    
+
 df2 = DUPLICATES.set_index(['UID', 'start_date'], drop=False).sort_index()
 
 2/0
@@ -349,7 +369,7 @@ for (UID, bitmap) in df3.index.unique():
         STP = object_json['STP']
         transaction = object_json['Transaction']
         this_interval = (start_date, end_date, dict(object_json))
-        if this_schedule:            
+        if this_schedule:
             this_schedule = insert_interval(this_schedule, this_interval)
             for start_date, end_date, this_object in this_schedule:
                 this_object['start_date'] = start_date
@@ -398,8 +418,8 @@ for UID in XOR.index.unique():
                 if base_start_date <= start_date and base_end_date >= end_date:
                     this_bitmap = this_interval[2]['Days']
                     n = days_str(day_int(this_bitmap) ^ day_int(base_bitmap))
-                    if n:                        
-                        5/0            
+                    if n:
+                        5/0
         else:
             this_schedule = [this_interval]
         these_intervals.append(this_interval)
@@ -430,7 +450,7 @@ try:
             STP = object_json['STP']
             transaction = object_json['Transaction']
             this_interval = (start_date, end_date, dict(object_json))
-            if this_schedule:            
+            if this_schedule:
                 this_schedule = insert_interval(this_schedule, this_interval)
                 for start_date, end_date, this_object in this_schedule:
                     this_object['start_date'] = start_date
@@ -499,7 +519,7 @@ for (UID, bitmap) in df3.index.unique():
         STP = object_json['STP']
         transaction = object_json['Transaction']
         this_interval = (start_date, end_date, dict(object_json))
-        if this_schedule:            
+        if this_schedule:
             this_schedule = insert_interval(this_schedule, this_interval)
             for start_date, end_date, this_object in this_schedule:
                 this_object['start_date'] = start_date
