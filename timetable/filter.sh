@@ -10,7 +10,7 @@ while true
 do
     echo ${FILTER}
     if [ ! -f wtt-${DATESTRING}-$#.ndjson ]; then
-        < timetable-${DATESTRING}.ndjson ./wtt-select4.py ${FILTER} > wtt-${DATESTRING}-$#.ndjson
+        ./wtt-select4.py timetable-${DATESTRING}.ndjson ${FILTER} > wtt-${DATESTRING}-$#.ndjson
     fi
 
     if [ ! -f output-all.json ]; then
