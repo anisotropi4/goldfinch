@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/bin/sh
 
 export PYTHONUNBUFFERED=1
 for DIRECTORY in data schedule storage
@@ -12,60 +12,71 @@ URL="https://networkrail.opendata.opentraintimes.com/mirror/schedule/cif/"
 
 echo Download CIF files
 echo Get file list
-if [ ! -f tbody.html ]; then
-    curl ${URL} | scrape -e 'tbody' > tbody.html
-    xml-to-json tbody.html | jq -cr '.tbody[] | .[].td[] | select(.a?.title?) | .a.title' > full-file-list.txt
+if [ ! -f full-file-list.html ]; then
+    curl ${URL} | scrape -e 'tbody' > full-file-list.html
+    xml-to-json full-file-list.html | jq -cr '.tbody[] | .[].td[] | select(.a?.title?) | .a.title' > full-file-list.txt
 fi
 
 LINE=$(fgrep -n _full.gz full-file-list.txt | tail -1)
 if [ ! -f file-list.txt ]; then
     N=$(echo ${LINE} | cut -d':' -f1)
     tail -n +${N} full-file-list.txt > file-list.txt
-fi    
+fi
 
 for FILENAME in $(cat file-list.txt | sed 's/.gz$//')
 do
-    echo Download ${FILENAME} CIF file
+    echo Process ${FILENAME} CIF file
     if [ ! -f data/${FILENAME} ]; then
+        echo Download ${FILENAME} CIF file
         curl -o data/${FILENAME}.gz ${URL}/${FILENAME}.gz
         gzip -d data/${FILENAME}.gz
     fi
 
-    echo Convert ${FILENAME} file to ndjson
     if [ ! -f schedule/${FILENAME} ]
     then
-        #< data/${FILENAME} ./wtt3.py > schedule/${FILENAME}
-        < data/${FILENAME} ./wtt4.py > schedule/${FILENAME}
+        echo Convert ${FILENAME} file to ndjson
+        < data/${FILENAME} ./wtt6.py > schedule/${FILENAME}
     fi
 
     if [ ! -f schedule/${FILENAME}-path ]; then
-        < schedule/${FILENAME} jq -c 'select(.ID == "PA")' > schedule/${FILENAME}-path
+        echo Extract Paths ${FILENAME} file to ndjson
+        < schedule/${FILENAME} jq -c 'select(.ID == "PA")' > storage/${FILENAME}-path
     fi
 
     if [ ! -f schedule/${FILENAME}-loc ]; then
-        < schedule/${FILENAME} jq -c 'select(.ID == "TI")' > schedule/${FILENAME}-loc
-    fi
-
-    if [ ! -f schedule/${FILENAME}-loc ]; then
-        < schedule/${FILENAME} jq -c 'select(.ID == "TI")' > schedule/${FILENAME}-loc
+        echo Extract Locations ${FILENAME} file to ndjson
+        < schedule/${FILENAME} jq -c 'select(.ID == "TI")' > storage/${FILENAME}-loc
     fi
 done
 
 DATESTRING=$(tail -1 file-list.txt | cut -d'_' -f1 | cut -d':' -f2 | cut -c1-8)
-echo ${DATESTRING}
+echo Creating WTT for ${DATESTRING}
 
 if [ ! -f timetable-${DATESTRING}-loc.ndjson ]; then
+    echo Create timetable-${DATESTRING}-loc.ndjson file
     for FILENAME in $(cat file-list.txt | sed 's/.gz$//')
     do
-        cat schedule/${FILENAME}-loc 
+        cat storage/${FILENAME}-loc
     done > timetable-${DATESTRING}-loc.ndjson
 fi
 
 if [ ! -f timetable-${DATESTRING}.ndjson ]; then
+    echo Create timetable-${DATESTRING}.ndjson file
     for FILENAME in $(cat file-list.txt | sed 's/.gz$//')
     do
-        cat schedule/${FILENAME}-path 
-    done | ./wtt-timetable2.py > timetable-${DATESTRING}.ndjson
+        cat storage/${FILENAME}-path
+    done | ./wtt-timetable5.py > timetable-${DATESTRING}.ndjson
+fi
+
+if [ ! -f timetable-${DATESTRING}-path.ndjson ]; then
+    echo Create timetable-${DATESTRING}-path.ndjson file
+    for FILENAME in $(cat file-list.txt | sed 's/.gz$//')
+    do
+        cat schedule/${FILENAME}
+    done | ./wtt-paths.py > timetable-${DATESTRING}-path.ndjson
+    ln -f timetable-${DATESTRING}-path.ndjson timetable-${DATESTRING}-path.jsonl
+    echo Post data to Solr
+    ./solr-post.sh timetable-${DATESTRING}-path.jsonl
 fi
 
 echo filter $(date +%Y%m%d)/$(date --date="tomorrow" +%Y%m%d) dates
