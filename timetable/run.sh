@@ -38,12 +38,12 @@ do
         < data/${FILENAME} ./wtt6.py > schedule/${FILENAME}
     fi
 
-    if [ ! -f schedule/${FILENAME}-path ]; then
+    if [ ! -f storage/${FILENAME}-path ]; then
         echo Extract Paths ${FILENAME} file to ndjson
         < schedule/${FILENAME} jq -c 'select(.ID == "PA")' > storage/${FILENAME}-path
     fi
 
-    if [ ! -f schedule/${FILENAME}-loc ]; then
+    if [ ! -f storage/${FILENAME}-loc ]; then
         echo Extract Locations ${FILENAME} file to ndjson
         < schedule/${FILENAME} jq -c 'select(.ID == "TI")' > storage/${FILENAME}-loc
     fi
@@ -68,15 +68,13 @@ if [ ! -f timetable-${DATESTRING}.ndjson ]; then
     done | ./wtt-timetable5.py > timetable-${DATESTRING}.ndjson
 fi
 
-if [ ! -f timetable-${DATESTRING}-path.ndjson ]; then
-    echo Create timetable-${DATESTRING}-path.ndjson file
+if [ ! -f timetable-${DATESTRING}-PATH ]; then
+    echo Create timetable-${DATESTRING} service files and post to Solr
     for FILENAME in $(cat file-list.txt | sed 's/.gz$//')
     do
         cat schedule/${FILENAME}
-    done | ./wtt-paths.py > timetable-${DATESTRING}-path.ndjson
-    ln -f timetable-${DATESTRING}-path.ndjson timetable-${DATESTRING}-path.jsonl
-    echo Post data to Solr
-    ./solr-post.sh timetable-${DATESTRING}-path.jsonl
+    done | ./wtt-paths2.py
+    touch timetable-${DATESTRING}-PATH
 fi
 
 echo filter $(date +%Y%m%d)/$(date --date="tomorrow" +%Y%m%d) dates
