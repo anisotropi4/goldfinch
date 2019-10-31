@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+
+import pysolr
 import pandas as pd
 from pandas.io.json import json_normalize
 import json
@@ -8,6 +10,10 @@ import datetime
 from datetime import datetime, date, timedelta, time, MINYEAR
 from iso8601datetime.interval import interval_p
 from iso8601datetime.duration import duration_f, duration_p, time_f, fromisoday_p
+
+solr_service = pysolr.Solr('http://localhost:8983/solr/BS', timeout=10)
+solr_path = pysolr.Solr('http://localhost:8983/solr/PATH', timeout=10)
+
 
 locations = {}
 
@@ -75,25 +81,51 @@ def coordinates(location_str):
         this_object = osmdata[location_str]
     return (any(this_object), this_object.get('longitude'), this_object.get('latitude'))
 
-for line in sys.stdin:
+def clean_query(this_object):
+    del this_object['_version_']
+    del this_object['id']
+    return this_object
+
+def get_query(solr, search_str, sort=''):
+    v = solr.search(q=search_str, sort=sort, start=0, rows=1024)
+    r = [clean_query(i) for i in v]
+    for m in range(1024, v.hits, 1024):
+        s = solr.search(q=search_str, sort=sort, start=m, rows=1024)
+        r += [clean_query(i) for i in s]
+    return r
+    
+def get_path(UUID):
+    search_str = 'UUID:{}'.format(UUID)
+    return get_query(solr_path, search_str)
+
+def get_service(UUID):
+    search_str = 'UUID:{}'.format(UUID)
+    return get_query(solr_service, search_str).pop(0)
+
+fin = sys.stdin
+fin = open('wtt-20191027-1.ndjson', 'r')
+
+for line in fin:
     object_json = json.loads(line)
     UID = object_json['UID']
-    headcode = object_json.get('Service').get('BS').get('Headcode')
-    schedule = object_json['Schedule']
-    (start_interval, end_interval) = interval_p(object_json['Interval'], return_duration=False)
-    operation_date = object_json['Day']
-    start_service = datetime.combine(fromisoday_p(operation_date).date(), start_interval.time())
+    UUID = object_json['UUID']
+    this_origin = object_json['Origin']
+    schedule = get_path(UUID)
+    service = get_service(UUID)
+    operation_date = object_json['Date']
+    start_service = fromisoday_p(operation_date + 'T' + this_origin)
+    headcode = service.get('Headcode')
 
     for event_object in schedule:
         TIPLOC = event_object['TIPLOC']
         event = event_object['ID']
-        event_type = event_object['Event']
-        offset = duration_p(event_object['Offset'])
+        event_type = event_object['T']
+        offset_dt = duration_p(event_object['Offset'])
         (found, lon, lat) = coordinates(TIPLOC)
         if not found:
             sys.stderr.write('{0}\t{1}\t{2}\t{3}\n'.format(TIPLOC, headcode, UID, operation_date))
             continue
-        this_datetime = duration_f(start_service + offset, day_format=False)
+        this_datetime = duration_f(start_service + offset_dt, day_format=False)
         output_object = {'Time': this_datetime,
                          'UID': UID,
                          'Date': operation_date,
