@@ -1,11 +1,11 @@
 #!/bin/bash
 
-CORENAME=PATH
 SOLRPATH=${HOME}/solr
 
 export PATH=${PATH}:${SOLRPATH}/bin
 
 FILENAME=$1
+CORENAME=$2
 
 echo Check if Solr running
 
