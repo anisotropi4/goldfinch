@@ -3,7 +3,6 @@
 # requirement: a unique train for each given bitmap day and UID
 
 import sys
-import argparse
 from datetime import datetime, date, timedelta, time, MINYEAR
 import json
 from iso8601datetime.duration import duration_p, fromisoday_p, ISO8601_DATE, duration_f
