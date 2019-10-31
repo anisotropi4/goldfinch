@@ -148,12 +148,12 @@ with open('storage/timetable.pkl', 'rb') as fp:
             end_time = (start_interval + duration).time()
 
             for active_date in SCHEDULE[UID][service_dates]:
-                    object_json['Active'] = active_date
-                    (start_date, end_date) = interval_p(active_date, return_duration=False)
-                    start_date = datetime.combine(start_date.date(), start_time)
-                    end_date = datetime.combine(end_date.date(), end_time)
-                    object_json['Interval'] = interval_f(start_date, end_date)
-                    print(json.dumps(object_json))
+                object_json['Active'] = active_date
+                (start_date, end_date) = interval_p(active_date, return_duration=False)
+                start_date = datetime.combine(start_date.date(), start_time)
+                end_date = datetime.combine(end_date.date(), end_time)
+                object_json['Interval'] = interval_f(start_date, end_date)
+                print(json.dumps(object_json))
 
     except EOFError:
         pass
