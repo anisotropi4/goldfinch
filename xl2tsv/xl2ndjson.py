@@ -9,7 +9,6 @@ parser = argparse.ArgumentParser(description='Dump xls(x) files tab(s) to .tsv f
 
 parser.add_argument('inputfiles', type=str, nargs='*', help='name of xls-file to process')
 
-
 tabgroup = parser.add_mutually_exclusive_group()
 
 tabgroup.add_argument('--tabnames', dest='tabnames', action='store_true',
@@ -28,6 +27,12 @@ filegroup.add_argument('--stdout', dest='stdout', action='store_true',
 
 parser.add_argument('--sourcename', dest='sourcename', action='store_true',
                     default=False, help='prepend filename to output tab file')
+
+parser.add_argument('--headers', type=str, dest='h_list', default=None,
+                    help='list of header names')
+
+parser.add_argument('--skip-rows', type=str, dest='skip', default=0,
+                    help='skip rows')
 
 args = parser.parse_args()
 
@@ -53,7 +58,12 @@ for filename in args.inputfiles:
             if '.' in filename:
                 filebase = filename.rsplit('.', 1)[0] + ':'
         try:
-            df = pd.read_excel(filename, tab).fillna('')
+            header_list = None
+            if args.h_list:
+                header_list = [i.strip() for i in args.h_list.split(',')]
+            if args.skip:
+                skip_list = [int(i.strip()) for i in args.skip.split(',')]
+            df = pd.read_excel(filename, tab, names=header_list, skiprows=skip_list).fillna('')
             if args.stdout:
                 df.to_json(sys.stdout, orient='records', lines=True)
                 print()
