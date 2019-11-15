@@ -6,10 +6,9 @@ import sys
 import argparse
 from datetime import datetime, date, timedelta, time, MINYEAR
 import json
-from iso8601datetime.duration import duration_p, fromisoday_p, ISO8601_DATE, duration_f
-from iso8601datetime.interval import interval_f, interval_p, repeat_pair
 import pandas as pd
 import numpy as np
+from uuid import uuid1
 
 DAY = timedelta(days=1)
 #SIXDAY = 6 * DAY
@@ -28,8 +27,17 @@ def monday_offset(date_object):
     return date_object - timedelta(days=date_object.weekday())
 
 INPUTDATA = []
+
 fin = sys.stdin
-#fin = open('schedule/201908100520_full-path', 'r', encoding='utf-8')
+
+DEBUG = True
+if __name__ == '__main__':
+    DEBUG = False
+    
+if DEBUG:
+    fin = open('schedule/PA-20191031.jsonl', 'r', encoding='utf-8') 
+    pd.set_option('display.max_columns', None)
+
 with open('storage/schedule.ndjson', 'w', encoding='utf-8') as fout:
     for line in fin:
         path = json.loads(line)
@@ -124,6 +132,10 @@ SCHEDULE = SCHEDULE.drop(['start_date', 'end_date'], axis=1)
 
 SCHEDULE = SCHEDULE.fillna(value={'Origin': '', 'Terminus': ''})
 
-for _, path in SCHEDULE.iterrows():
-    print(json.dumps({k: v for k, v in path.to_dict().items() if v}))
+idx_d2 = SCHEDULE['id'].duplicated()
+SCHEDULE.loc[idx_d2, 'id'] = [uuid1().hex for _ in SCHEDULE.loc[idx_d2, 'id'].index]
+
+OUTPUTDATA = [json.dumps({k: v for k, v in path.to_dict().items() if v}) for _, path in SCHEDULE.iterrows()]
+
+print('\n'.join(OUTPUTDATA))
 
