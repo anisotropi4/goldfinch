@@ -31,50 +31,95 @@ do
         curl -o data/${FILENAME}.gz ${URL}/${FILENAME}.gz
         gzip -d data/${FILENAME}.gz
     fi
-
-    if [ ! -f schedule/${FILENAME} ]
-    then
-        echo Convert ${FILENAME} file to ndjson
-        < data/${FILENAME} ./wtt6.py > schedule/${FILENAME}
-    fi
-
-    if [ ! -f storage/${FILENAME}-path ]; then
-        echo Extract Paths ${FILENAME} file to ndjson
-        < schedule/${FILENAME} jq -c 'select(.ID == "PA")' > storage/${FILENAME}-path
-    fi
-
-    if [ ! -f storage/${FILENAME}-loc ]; then
-        echo Extract Locations ${FILENAME} file to ndjson
-        < schedule/${FILENAME} jq -c 'select(.ID == "TI")' > storage/${FILENAME}-loc
-    fi
 done
 
 DATESTRING=$(tail -1 file-list.txt | cut -d'_' -f1 | cut -d':' -f2 | cut -c1-8)
-echo Creating WTT for ${DATESTRING}
+echo ${DATESTRING}
 
-if [ ! -f timetable-${DATESTRING}-loc.ndjson ]; then
-    echo Create timetable-${DATESTRING}-loc.ndjson file
-    for FILENAME in $(cat file-list.txt | sed 's/.gz$//')
-    do
-        cat storage/${FILENAME}-loc
-    done > timetable-${DATESTRING}-loc.ndjson
-fi
+if [ ! -s timetable-${DATESTRING}.jsonl ]
+then
+    echo Create timetable for ${DATESTRING}
+    echo Split CIF files
+    if [ ! -f output/HD_001 ]; then
+        if [ -d output ]; then
+            rm -rf output
+        fi
+        mkdir output
+        for FILENAME in $(cat file-list.txt | sed 's/.gz$//')
+        do
+            cat data/${FILENAME}
+        done | ./wtt-split.py
+    fi
 
-if [ ! -f timetable-${DATESTRING}.ndjson ]; then
-    echo Create timetable-${DATESTRING}.ndjson file
-    for FILENAME in $(cat file-list.txt | sed 's/.gz$//')
-    do
-        cat storage/${FILENAME}-path
-    done | ./wtt-timetable5.py > timetable-${DATESTRING}.ndjson
-fi
+    echo Convert ${DATESTRING} CIF files to jsonl
+    if [ ! -s storage/HD_001.jsonl ]; then
+        echo Create ${DATESTRING} jsonl files
+        ls output/*_??? | parallel ./wtt9.py
+    fi
+    echo Converted timetable-${DATESTRING} CIF files to jsonl
 
-if [ ! -f timetable-${DATESTRING}-PATH ]; then
-    echo Create timetable-${DATESTRING} service files and post to Solr
-    for FILENAME in $(cat file-list.txt | sed 's/.gz$//')
+    echo Create PA schedule PA-${DATESTRING}.jsonl file
+    if [ ! -s schedule/PA-${DATESTRING}.jsonl ]; then
+        cat storage/PA_???.jsonl > schedule/PA-${DATESTRING}.jsonl
+    fi
+
+    if [ ! -s schema.jsonl ]; then
+        echo Create Solr schema structure
+        if [ ! -f id-file.jsonl ]; then
+            echo Create id-file.jsonl
+            ls storage/*_???.jsonl | parallel ./get-id-file.py > id-file.jsonl
+        fi
+        echo Created Solr schema structure
+        ./get-schema.sh id-file.jsonl > schema.jsonl
+        if [ ! -s schema.jsonl ]; then
+            echo Error: empty schema.jsonl file
+            exit 2
+        fi
+    fi
+
+    if [ $(./solr/document-count.sh HD | jq -r '.[]') = "missing" ]; then
+        echo Create Solr schema
+        ./set-schema.sh schema.jsonl
+        echo Created Solr schema
+    fi
+
+    echo Post ${DATESTRING} data to Solr
+  
+    for ID in AA BS CR HD PATH TR ZZ
     do
-        cat schedule/${FILENAME}
-    done | ./wtt-paths2.py
-    touch timetable-${DATESTRING}-PATH
+        echo Post ${ID} json files to Solr
+        if [ $(./solr/document-count.sh ${ID} | jq '.[]') = 0 ]; then
+
+            cat storage/${ID}_*.jsonl | parallel --block 8M --pipe --cat ./solr-post.py --core ${ID} {}
+        fi
+        echo Posted ${ID} json files to Solr
+    done
+
+    echo Create PA-${DATESTRING}.jsonl timetable file
+    if [ ! -f PA-${DATESTRING}.jsonl ]; then
+        < schedule/PA-${DATESTRING}.jsonl ./wtt-timetable5.py > PA-${DATESTRING}.jsonl
+    fi
+
+    echo Created PA-${DATESTRING} timetable file
+    if [ ! -f PA-id-file.jsonl ]; then
+        ./get-id-file.py PA-${DATESTRING}.jsonl > PA-id-file.jsonl
+    fi
+
+    if [ ! -f PA-schema.jsonl ]; then
+        echo Create PA Solr core 
+        ./get-schema.sh PA-id-file.jsonl > PA-schema.jsonl
+    fi
+
+    if [ $(./solr/document-count.sh PA | jq -r '.[]') = "missing" ]; then
+        ./set-schema.sh PA-schema.jsonl
+    fi
+    
+    echo Post Solr PA-${DATESTRING} timetable file   
+    if [ $(./solr/document-count.sh PA | jq '.[]') = 0 ]; then
+
+        cat PA-${DATESTRING}.jsonl | parallel --block 8M --pipe --cat ./solr-post.py --core PA {}
+    fi
+    
 fi
 
 echo filter $(date +%Y%m%d)/$(date --date="tomorrow" +%Y%m%d) dates
