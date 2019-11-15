@@ -8,12 +8,9 @@ import numpy as np
 import sys
 import datetime
 from datetime import datetime, date, timedelta, time, MINYEAR
-from iso8601datetime.interval import interval_p
-from iso8601datetime.duration import duration_f, duration_p, time_f, fromisoday_p
 
 solr_service = pysolr.Solr('http://localhost:8983/solr/BS', timeout=10)
 solr_path = pysolr.Solr('http://localhost:8983/solr/PATH', timeout=10)
-
 
 locations = {}
 
@@ -50,7 +47,7 @@ naptan = {}
 with open('NaPTAN-Rail.ndjson', 'rb') as fp:
     for line in fp:
         this_object = json.loads(line)
-        (longitude, latitude) = (this_object['lat'], this_object['lon'])
+        (latitude, longitude) = (this_object['lat'], this_object['lon'])
         tiploc = this_object['TIPLOC']
         naptan[tiploc] = {'name': this_object['Name'], 'longitude': trim_f(longitude), 'latitude': trim_f(latitude)}
         if tiploc in tiploc_map:
@@ -60,7 +57,7 @@ osmdata = {}
 with open('osmnaptan-all.ndjson', 'rb') as fp:
     for line in fp:
         this_object = json.loads(line)
-        (longitude, latitude) = (this_object['lat'], this_object['lon'])
+        (latitude, longitude) = (this_object['lat'], this_object['lon'])
         if 'name' not in this_object:
             sys.stderr.write('No name: {}\n'.format(json.dumps(this_object)))
             continue
@@ -79,7 +76,7 @@ def coordinates(location_str):
         this_object = naptan[location_str]
     elif location_str in osmdata:
         this_object = osmdata[location_str]
-    return (any(this_object), this_object.get('longitude'), this_object.get('latitude'))
+    return (this_object.get('longitude', np.NaN), this_object.get('latitude', np.NaN))
 
 def clean_query(this_object):
     del this_object['_version_']
@@ -96,42 +93,53 @@ def get_query(solr, search_str, sort=''):
     
 def get_path(UUID):
     search_str = 'UUID:{}'.format(UUID)
-    return get_query(solr_path, search_str)
+    return get_query(solr_path, search_str, sort='Offset asc')
 
 def get_service(UUID):
-    search_str = 'UUID:{}'.format(UUID)
+    search_str = 'id:{}'.format(UUID)
     return get_query(solr_service, search_str).pop(0)
 
+DEBUG = True
 fin = sys.stdin
-fin = open('wtt-20191027-1.ndjson', 'r')
 
-for line in fin:
-    object_json = json.loads(line)
-    UID = object_json['UID']
-    UUID = object_json['UUID']
-    this_origin = object_json['Origin']
-    schedule = get_path(UUID)
-    service = get_service(UUID)
-    operation_date = object_json['Date']
-    start_service = fromisoday_p(operation_date + 'T' + this_origin)
-    headcode = service.get('Headcode')
+if __name__ == '__main__':
+    DEBUG = False
 
-    for event_object in schedule:
-        TIPLOC = event_object['TIPLOC']
-        event = event_object['ID']
-        event_type = event_object['T']
-        offset_dt = duration_p(event_object['Offset'])
-        (found, lon, lat) = coordinates(TIPLOC)
-        if not found:
-            sys.stderr.write('{0}\t{1}\t{2}\t{3}\n'.format(TIPLOC, headcode, UID, operation_date))
-            continue
-        this_datetime = duration_f(start_service + offset_dt, day_format=False)
-        output_object = {'Time': this_datetime,
-                         'UID': UID,
-                         'Date': operation_date,
-                         'Event': event_type,
-                         'TIPLOC': TIPLOC,
-                         'lon': lon,
-                         'lat': lat}
+if DEBUG:
+    fin = open('wtt-20191111-1.jsonl', 'r')
+    pd.set_option('display.max_columns', None)
+    INTERVAL='20191112/20191113'
 
-        print(json.dumps(output_object))
+DATA = pd.DataFrame([json.loads(line) for line in fin])
+MISSING = []
+for (i, PATH) in DATA.iterrows():
+    UUID = PATH['UUID']
+    STP = PATH['STP']
+    if STP in ['C']:
+        continue
+    SERVICE = get_service(UUID)
+    SCHEDULE = pd.DataFrame(get_path(UUID)).fillna('')
+    
+    SCHEDULE = SCHEDULE.rename(columns={'T': 'Event', 'Schedule': 'Time'})
+    for k in ['UID', 'Date']:
+        SCHEDULE[k] = PATH[k]
+
+    if 'TIPLOC' not in SCHEDULE:
+        sys.stderr.write('{}\n'.format(json.dumps(PATH.to_dict())))
+        continue
+
+    for k in ['Headcode', 'ATOC']:
+        SCHEDULE[k] = SERVICE[k] if k in SERVICE else ''
+
+    idx_loc = SCHEDULE['TIPLOC'] if 'TIPLOC' in SCHEDULE else 'missing'
+    LOCATION = pd.DataFrame(data=np.array(idx_loc.map(coordinates).tolist()), index=idx_loc, columns=['lat', 'lon']).drop_duplicates()
+
+    SCHEDULE = SCHEDULE.reset_index().set_index('TIPLOC').join(LOCATION).reset_index().set_index('index').sort_index()
+    for i in LOCATION[LOCATION['lat'].isna()].index:
+        sys.stderr.write('{}\n'.format(json.dumps({'TIPLOC': i, 'UUID': UUID})))
+        #MISSING.append({'TIPLOC': i, 'UUID': UUID})
+
+    for i in SCHEDULE[['Time', 'UID', 'Headcode', 'ATOC', 'Date', 'Event', 'TIPLOC', 'lat', 'lon']].to_dict(orient='records'):
+        print(json.dumps(i))
+        pass
+
