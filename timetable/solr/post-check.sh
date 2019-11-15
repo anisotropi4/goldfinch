@@ -1,7 +1,9 @@
 #!/bin/sh
 
+PATH=${PATH}:$(dirname ${0})
+
 M=0
-HOSTNAME=joseph
+HOSTNAME=localhost
 CORES=$@
 while true
 do
@@ -9,8 +11,8 @@ do
     echo Cycle"	"${M}
     for CORE in ${CORES}
     do
-        echo -n ${CORE}"	"
-        curl -s http://${HOSTNAME}:8983/solr/${CORE}/select?q=*%3A* | jq -c '.response | .numFound'        
+        echo -n "${CORE}\t"
+        document-count.sh ${CORE} | jq '.[]'
     done
     sleep 10
 done
