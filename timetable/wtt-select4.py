@@ -7,10 +7,7 @@ import json
 import pandas as pd
 import numpy as np
 import itertools as it
-from iso8601datetime.duration import duration_p, duration_f, fromisoday_p
-from iso8601datetime.interval import interval_f, interval_p, repeat_pair, ISO8601_DATE
-
-pd.set_option('display.max_columns', None)
+from dateutil.parser import parse
 
 DAY = timedelta(days=1)
 WEEK = 7 * DAY
@@ -86,9 +83,23 @@ def get_time_td(time_object):
 def get_dt(datetime_object):
     return (get_date_dt(datetime_object), get_time_td(datetime_object))
 
-
 def set_schedule(these_paths, this_date):
     return [{**i.to_dict(), **{'Date': this_date}} for _, i in these_paths.iterrows()]
+
+def repeat_this(start_object, duration_object, repeat):
+    this = []
+
+    for i in range(repeat):
+        this.append(start_object)
+        start_object = start_object + duration_object        
+    return this
+
+def repeat_pair(start_object, end_object, duration_object=DAY):
+    this = []
+    if isinstance(end_object, timedelta):
+        end_object = start_object + end_object
+    repeat = int((end_object - start_object) / duration_object) + 1
+    return repeat_this(start_object, duration_object, repeat)
 
 #INTERVAL='20190515/20190516'
 #INTERVAL='20190925T12:00:00/20190925T12:30:00'
@@ -97,12 +108,9 @@ def set_schedule(these_paths, this_date):
 #INTERVAL= '20191216T00:00:00/20191216T23:59:59'
 #INTERVAL = '20191016/20191018'
 
-INTERVAL = '2019-10-21T11:00:00/2019-10-21T12:00:00'
-INTERVAL = '2019-10-16T11:00:00/2019-10-18T12:00:00'
-#fin_name = 'timetable-20190920.ndjson'
-#fin_name = 'test/A'
-#fin_name = 'test/timetable-02.ndjson'
 fout_name = None
+
+DEBUG = True
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Select trains services \
@@ -117,6 +125,17 @@ output file', default=None)
     fin_name = args.inputfile
     fout_name = args.outputfile
     INTERVAL = args.interval
+    DEBUG = False
+
+if DEBUG:
+    pd.set_option('display.max_columns', None)
+    #fin_name = 'timetable-20190920.ndjson'
+    #fin_name = 'test/A'
+    #fin_name = 'test/timetable-02.ndjson'
+    fin_name = 'PA-20191111.jsonl'
+    #INTERVAL = '2019-10-21T11:00:00/2019-10-21T12:00:00'
+    #INTERVAL = '2019-10-16T11:00:00/2019-10-18T12:00:00'
+    INTERVAL = '20191112/20191113'
 
 fin = open(fin_name, 'r', encoding='utf-8')
 WTT = pd.DataFrame([json.loads(i) for i in fin])
@@ -151,7 +170,10 @@ df1.loc[idx2, 'end_overlap'] = True
 df1['d0_actual'] = df1['d0_bitmap'].apply(days_str)
 df1['d1_actual'] = df1['d1_bitmap'].apply(days_str)
 
-(START_INTERVAL, END_INTERVAL) = interval_p(INTERVAL, return_duration=False)
+def get_interval(interval):
+    return (parse(i) for i in interval.split('/'))
+
+(START_INTERVAL, END_INTERVAL) = get_interval(INTERVAL)
 (START_DATE, START_OFFSET) = get_dt(START_INTERVAL)
 (END_DATE, END_OFFSET) = get_dt(END_INTERVAL)
 
