@@ -65,7 +65,7 @@ then
 
     if [ ! -s schema.jsonl ]; then
         echo Create Solr schema structure
-        if [ ! -f id-file.jsonl ]; then
+        if [ ! -s id-file.jsonl ]; then
             echo Create id-file.jsonl
             ls storage/*_???.jsonl | parallel ./get-id-file.py > id-file.jsonl
         fi
@@ -77,22 +77,20 @@ then
         fi
     fi
 
-    if [ $(./solr/document-count.sh HD | jq -r '.[]') = "missing" ]; then
-        echo Create Solr schema
-        ./set-schema.sh schema.jsonl
-        echo Created Solr schema
-    fi
-
     echo Post ${DATESTRING} data to Solr
-  
+
     for ID in AA BS CR HD PATH TR ZZ
     do
-        echo Post ${ID} json files to Solr
-        if [ $(./solr/document-count.sh ${ID} | jq '.[]') = 0 ]; then
-
-            cat storage/${ID}_*.jsonl | parallel --block 8M --pipe --cat ./solr-post.py --core ${ID} {}
+        if [ $(./solr/document-count.sh ${ID} | jq -r '.[]') = "missing" ]; then
+            echo Create Solr ${ID} schema
+            ./set-schema.sh ${ID} schema.jsonl
+            echo Created Solr ${ID} schema
         fi
-        echo Posted ${ID} json files to Solr
+        if [ $(./solr/document-count.sh ${ID} | jq '.[]') = 0 ]; then
+            echo Post ${ID} json files to Solr
+            cat storage/${ID}_*.jsonl | parallel --block 8M --pipe --cat ./solr-post.py --core ${ID} {}
+            echo Posted ${ID} json files to Solr
+        fi
     done
 
     echo Create PA-${DATESTRING}.jsonl timetable file
@@ -106,20 +104,19 @@ then
     fi
 
     if [ ! -f PA-schema.jsonl ]; then
-        echo Create PA Solr core 
+        echo Create PA Solr core
         ./get-schema.sh PA-id-file.jsonl > PA-schema.jsonl
     fi
 
     if [ $(./solr/document-count.sh PA | jq -r '.[]') = "missing" ]; then
-        ./set-schema.sh PA-schema.jsonl
+        ./set-schema.sh PA PA-schema.jsonl
     fi
-    
-    echo Post Solr PA-${DATESTRING} timetable file   
-    if [ $(./solr/document-count.sh PA | jq '.[]') = 0 ]; then
 
+    echo Post Solr PA-${DATESTRING} timetable file
+    if [ $(./solr/document-count.sh PA | jq '.[]') = 0 ]; then
         cat PA-${DATESTRING}.jsonl | parallel --block 8M --pipe --cat ./solr-post.py --core PA {}
     fi
-    
+
 fi
 
 echo filter $(date +%Y%m%d)/$(date --date="tomorrow" +%Y%m%d) dates
