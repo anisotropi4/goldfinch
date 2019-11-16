@@ -33,18 +33,18 @@ def trim_f(this_object):
 #  },
 #  "features": [...]}
 
-with open('TIPLOC_Eastings_and_Northings.json', 'rb') as fp:
+with open('reference/TIPLOC_Eastings_and_Northings.json', 'rb') as fp:
     geoobject_json = json.load(fp)
     for this_object in geoobject_json['features']:
         properties = this_object['properties']
         (longitude, latitude) = this_object['geometry']['coordinates']
         locations[properties['TIPLOC']] = {'station': properties['NAME'], 'longitude': trim_f(longitude), 'latitude': trim_f(latitude)}
 
-df1 = pd.read_csv('TIPLOC-map.tsv', sep='\t')
+df1 = pd.read_csv('reference/TIPLOC-map.tsv', sep='\t')
 tiploc_map = df1.set_index('NaPTAN').to_dict('index')
 
 naptan = {}
-with open('NaPTAN-Rail.ndjson', 'rb') as fp:
+with open('reference/NaPTAN-Rail.ndjson', 'rb') as fp:
     for line in fp:
         this_object = json.loads(line)
         (latitude, longitude) = (this_object['lat'], this_object['lon'])
@@ -54,7 +54,7 @@ with open('NaPTAN-Rail.ndjson', 'rb') as fp:
             naptan[tiploc_map[tiploc]['TIPLOC']] = {'name': this_object['Name'], 'longitude': trim_f(longitude), 'latitude': trim_f(latitude), 'lookup': True}
 
 osmdata = {}
-with open('osmnaptan-all.ndjson', 'rb') as fp:
+with open('reference/osmnaptan-all.ndjson', 'rb') as fp:
     for line in fp:
         this_object = json.loads(line)
         (latitude, longitude) = (this_object['lat'], this_object['lon'])
@@ -62,11 +62,6 @@ with open('osmnaptan-all.ndjson', 'rb') as fp:
             sys.stderr.write('No name: {}\n'.format(json.dumps(this_object)))
             continue
         osmdata[this_object['TIPLOC']] = {'name': this_object['name'], 'longitude': trim_f(longitude), 'latitude': trim_f(latitude)}
-
-#df1 = pd.read_csv('NaPTAN-Rail2.tsv', sep='\t')
-#for index, row in df1.iterrows():
-#    if row['TiplocRef'] != '':
-#        naptan[row['TiplocRef']] = {'station': row['StationName'], 'longitude': row['Longitude'], 'latitude': row['Latitude']}
 
 def coordinates(location_str):
     this_object = {}
@@ -106,9 +101,9 @@ if __name__ == '__main__':
     DEBUG = False
 
 if DEBUG:
-    fin = open('wtt-20191111-1.jsonl', 'r')
+    fin = open('wtt-20191116-1.jsonl', 'r')
     pd.set_option('display.max_columns', None)
-    INTERVAL='20191112/20191113'
+    INTERVAL='20191116/20191117'
 
 DATA = pd.DataFrame([json.loads(line) for line in fin])
 MISSING = []
@@ -131,15 +126,15 @@ for (i, PATH) in DATA.iterrows():
     for k in ['Headcode', 'ATOC']:
         SCHEDULE[k] = SERVICE[k] if k in SERVICE else ''
 
+    HEADCODE = SCHEDULE['Headcode']
     idx_loc = SCHEDULE['TIPLOC'] if 'TIPLOC' in SCHEDULE else 'missing'
     LOCATION = pd.DataFrame(data=np.array(idx_loc.map(coordinates).tolist()), index=idx_loc, columns=['lat', 'lon']).drop_duplicates()
 
     SCHEDULE = SCHEDULE.reset_index().set_index('TIPLOC').join(LOCATION).reset_index().set_index('index').sort_index()
-    for i in LOCATION[LOCATION['lat'].isna()].index:
-        sys.stderr.write('{}\n'.format(json.dumps({'TIPLOC': i, 'UUID': UUID})))
-        #MISSING.append({'TIPLOC': i, 'UUID': UUID})
 
     for i in SCHEDULE[['Time', 'UID', 'Headcode', 'ATOC', 'Date', 'Event', 'TIPLOC', 'lat', 'lon']].to_dict(orient='records'):
         print(json.dumps(i))
-        pass
+        if np.isnan(i['lat']):
+            sys.stderr.write('\t'.join([i['TIPLOC'], i['Headcode'], i['UID'], UUID]))
+            sys.stderr.write('\n')
 
