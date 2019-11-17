@@ -14,7 +14,7 @@ do
     fi
 
     if [ ! -s output-all.json ]; then
-        < wtt-${DATESTRING}-$#.jsonl ./wtt-map.py > output-all.jsonl 2> missing-TIPLOC.tsv
+        < wtt-${DATESTRING}-$#.jsonl ./wtt-map.py ${FILTER} > output-all.jsonl 2> missing-TIPLOC.tsv
         < output-all.jsonl sort -n | jq -sc '.' > output-all.json
         echo "TIPLOC	HeadCode	count" > missing-report.tsv
         < missing-TIPLOC.tsv cut -f1-2 -d'	' | unip >> missing-report.tsv
