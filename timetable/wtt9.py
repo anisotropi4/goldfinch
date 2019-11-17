@@ -16,6 +16,7 @@ DEBUG = True
 filename = 'output/PATH_004'
 filename = 'output/PATH_016'
 filename = 'output/PATH_024'
+filename = 'output/PATH_008'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process trains services \
@@ -229,7 +230,6 @@ KEY = None
 CACHE = True
 
 SERVICE = np.array([])
-PATH = np.array([])
 
 [OUTPUT.append(line.strip()) for line in fin]
 ID = OUTPUT[0][0:2]
@@ -244,11 +244,10 @@ df1 = OP_FN[KEY](OUTPUT)
 
 if KEY == 'PATH':
     idx_sa = (df1['ID'] == 'BS') | (df1['ID'] == 'BX') | (df1['ID'] == 'CR')
-    SERVICE = df1.loc[idx_sa,['ID', 'Data', 'UUID']].values
+    SA = df1.loc[idx_sa, ['ID', 'Data', 'UUID']]
     WTT = get_wtt(df1)          
     lo_idx = (WTT['ID'] == 'LO')
     lt_idx = (WTT['ID'] == 'LT')
-    PATH = np.stack((WTT.loc[lo_idx, 'Schedule'].values, WTT.loc[lt_idx, 'Schedule'].values, WTT.loc[lt_idx, 'Offset'].values), axis=1).reshape(-1, 3)
     df1 = WTT
     df1['Schedule'] = df1['Schedule'].dt.strftime('%H:%M:%S')
     df1['Offset'] = df1['Offset'].dt.strftime('%H:%M:%S')
@@ -260,14 +259,16 @@ filename = 'storage/{}_{}.jsonl'.format(KEY, M)
 write_json(filename, df1, KEY)
 OUTPUT = []
 
-if not SERVICE.any():
+if SA.empty:
     if DEBUG:
         1/0
     sys.exit(0)
 
-PA = pd.DataFrame(PATH, columns=['Origin', 'Terminus', 'Duration']).apply(lambda x: pd.to_datetime(x).dt.strftime('%H:%M:%S'))
-SA = pd.DataFrame(SERVICE.reshape(-1, 3), columns=['ID', 'Data', 'UUID'])
-PA = pa_record(SA[SA['ID'] == 'BS']).join(PA)
+PA = WTT.loc[lo_idx, ['Schedule', 'UUID']].set_index('UUID').rename(columns={'Schedule': 'Origin'})
+df2 = WTT.loc[lt_idx, ['Schedule', 'Offset', 'UUID']].set_index('UUID').rename(columns={'Schedule': 'Terminus', 'Offset': 'Duration'})
+PA = PA.join(df2)
+df2 = pa_record(SA[SA['ID'] == 'BS']).set_index('UUID')
+PA = PA.join(df2).reset_index()
 
 BS = bs_record(SA[SA['ID'] == 'BS'])
 BX = bx_record(SA[SA['ID'] == 'BX'])
