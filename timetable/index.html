@@ -2,21 +2,22 @@
 <html>
     <head>
         <title>d3.js with OSM leaflet.js rendering of train movements by timing-points (TIPLOCs)</title>
-        <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.3.1/dist/leaflet.css">
-        <script src="https://npmcdn.com/leaflet@1.3.1/dist/leaflet.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
         <script src="http://d3js.org/d3.v5.min.js"></script>
     </head>
     <body>
         <!Default 1340 x 635>
-        <div id="map" style="width: 1350px; height: 750px"></div>
+        <div id="map" style="width: 1264px; height: 1008px"></div>
         <script type="text/javascript">
-         var radius = 3;
+         var radius = 6;
          var log2 = Math.log(2.0);
          var minZoom = 2;
          var maxZoom = 18;
          //var map = L.map('map').setView([51.53, -0.124], 8); //KGX
          //var map = L.map('map').setView([54.56, -1.08], 8);
-         var map = L.map('map').setView([53.96, -1.08], 7); // YRK
+         //var map = L.map('map').setView([53.96, -1.08], 8); // YRK
+         var map = L.map('map').setView([53.96, -1.58], 6); // YRKish
          var mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
          L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
              attribution: '&copy; ' + mapLink + ' Contributors',
@@ -28,17 +29,17 @@
              , g = svg.selectAll("g");
          var px = 200
            , py = 20;
-         svg.insert("rect").attr("id", "r0001").attr("x", px).attr("y", py).attr("rx", 4).attr("ry", 4).attr("width", 124).attr("height", 30).attr("fill", "white");
-         svg.insert("text").attr("x", (px + 4)).attr("y", (py + 20)).text("loading data");
+         svg.insert("rect").attr("id", "r0001").attr("x", px).attr("y", py).attr("rx", 4).attr("ry", 4).attr("width", 128).attr("height", 30).attr("fill", "white");
+         svg.insert("text").attr("x", (px + 8)).attr("y", (py + 20)).text("loading");
 
          var sequences = {};
          var collections;
          
-         var events = [ "O", "D", "P", "A",  "T"];
-         var ncolours = {};
+         var events = [ "OD", "ID", "IP", "IA",  "TA"];
+         var eventcolours = {};
 
          for (var i = 0; i < events.length; i++)
-             ncolours[events[i]] = d3.interpolatePlasma(i / (events.length - 1));
+             eventcolours[events[i]] = d3.interpolatePlasma(i / (events.length - 1));
 
          d3.json("output-all.json").then(function(d) {
              var minseq = Number.MAX_SAFE_INTEGER;
@@ -46,8 +47,11 @@
                  v.type = "CIFdata";
                  v.title = v["TIPLOC"];
                  v.title2 = v["Date"];
-                 v.time = v["Time"];
-                 thistime = Date.parse(v["Time"]);
+                 v.time = v["Date"] + "T" + v["Time"];
+                 thistime = Date.parse(v.time);
+                 if (isNaN(thistime)) {
+                     thistime = Date.parse("1970-01-01T" + v["Time"]);
+                 }
                  v.seq = thistime / 30000;
                  minseq = Math.min(v.seq, minseq);
                  v.LatLng = new L.LatLng(v.lat,v.lon);
@@ -56,6 +60,7 @@
              var locations = {};
              d.forEach(function(v, i) {
                  v.seq = v.seq - minseq;
+                 v.seq = v.seq - (v.seq % 10);
                  var u = {
                      Event: v.Event,
                      UID: v.UID,
@@ -161,13 +166,12 @@
                                         .append("path")
                                         .attr("d", path)
                                         .attr("fill", function(d) {
-                                            return ncolours[d.data[0]];
-                                        }).transition().delay(2000).ease(d3.easeLinear).attr("radius", 0).style("opacity", 0.05);
+                                            return eventcolours[d.data[0]];
+                                        }).transition().delay(8000).ease(d3.easeLinear).attr("radius", 0).style("opacity", 0.05);
                          }
                      }
-                 }, 200 * Number(sequence), sequence);
+                 }, 1000 * Number(sequence), sequence);
              }
-
          }
         </script>
     </body>
