@@ -10,7 +10,7 @@
         <!Default 1340 x 635>
         <div id="map" style="width: 1264px; height: 1008px"></div>
         <script type="text/javascript">
-         var radius = 6;
+         var radius = 3;
          var log2 = Math.log(2.0);
          var minZoom = 2;
          var maxZoom = 18;
@@ -40,19 +40,23 @@
 
          for (var i = 0; i < events.length; i++)
              eventcolours[events[i]] = d3.interpolatePlasma(i / (events.length - 1));
-
+         var n = 10;
          d3.json("output-all.json").then(function(d) {
              var minseq = Number.MAX_SAFE_INTEGER;
              d.forEach(function(v, i) {
                  v.type = "CIFdata";
                  v.title = v["TIPLOC"];
                  v.title2 = v["Date"];
-                 v.time = v["Date"] + "T" + v["Time"];
+                 //timestr = v["Time"].substring(0,6) + "00";
+
+                 m = Number(v["Time"].substring(3,5));
+                 m = "00" + String(n * Math.floor(m / n));
+                 timestr = v["Time"].substr(0,3) + m.substr(-2) + ":00";
+                 v.time = v["Actual"] + "T" + timestr;
                  thistime = Date.parse(v.time);
-                 if (isNaN(thistime)) {
+                 if (isNaN(thistime))
                      thistime = Date.parse("1970-01-01T" + v["Time"]);
-                 }
-                 v.seq = thistime / 30000;
+                 v.seq = thistime / 30000 / 2 / n;
                  minseq = Math.min(v.seq, minseq);
                  v.LatLng = new L.LatLng(v.lat,v.lon);
              });
@@ -60,7 +64,6 @@
              var locations = {};
              d.forEach(function(v, i) {
                  v.seq = v.seq - minseq;
-                 v.seq = v.seq - (v.seq % 10);
                  var u = {
                      Event: v.Event,
                      UID: v.UID,
@@ -84,7 +87,16 @@
              collections = Object.entries(locations);
              //svg.selectAll("svg text").text(JSON.stringify(collections));
 
-             render();
+             function dropSeq(item, index) {
+                 delete sequences[item];
+             }
+
+             //Object.keys(sequences).slice(0, 140).forEach(dropSeq);
+
+             setTimeout(function() {
+                 render();
+             }, (5 * 1000));
+
          });
 
          function get_count(v) {
@@ -98,7 +110,7 @@
              }
              return Object.entries(count);
          };
-
+         
          function render() {
              var tree = d3.quadtree().x(function(d) {
                  return d[1].lat;
@@ -167,10 +179,10 @@
                                         .attr("d", path)
                                         .attr("fill", function(d) {
                                             return eventcolours[d.data[0]];
-                                        }).transition().delay(8000).ease(d3.easeLinear).attr("radius", 0).style("opacity", 0.05);
+                                        }).transition().delay(40000).ease(d3.easeLinear).attr("radius", 0).style("opacity", 0.01);
                          }
                      }
-                 }, 1000 * Number(sequence), sequence);
+                 }, 4000 * Number(sequence), sequence);
              }
          }
         </script>

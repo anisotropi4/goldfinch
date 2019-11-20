@@ -1,8 +1,8 @@
-{"AA": ["Base-Suffix","Category","Dates","Days","ID","Indicator","Location","Location-Suffix","Main Train-UID","STP","Transaction","Type","UID"]}
-{"BS": ["Applicable Timetable","ATOC","Bank Holiday Running","Catering","Characteristics","Headcode","ID","NRS Headcode","Portion Id","Power Type","Reservations","Seating Class","seq","Service Branding","Sleepers","Speed","Timing Load","Train Category","Train Service","Train Status","UIC"]}
-{"CR": ["Catering","Headcode","ID","NRS Headcode","Operating Characteristics","Portion Id","Power Type","Reservations","Seating Class","Service Branding","Sleepers","Speed","Suffix","Timing Load","TIPLOC","Train Category","Train Service","UIC"]}
-{"HD": ["Bleed-off Update Ind","Current-File-Ref","Extract Datetime","Extract Interval","File Mainframe Identity","ID","seq","Version"]}
+{"AA": ["Base_Suffix","Category","Dates","Days","ID","Indicator","Location","Location_Suffix","Main_UID","STP","Transaction","Type","UID"]}
+{"BS": ["Applicable_Timetable","ATOC","Bank_Holiday_Running","Catering","Characteristics","Headcode","ID","NRS_Headcode","Portion_Id","Power_Type","Reservations","Seating_Class","seq","Service_Branding","Sleepers","Speed","Timing_Load","Train_Category","Train_Service","Train_Status","UIC"]}
+{"CR": ["Catering","Headcode","ID","NRS_Headcode","Operating_Characteristics","Portion_Id","Power_Type","Reservations","Seating_Class","Service_Branding","Sleepers","Speed","Suffix","Timing_Load","TIPLOC","Train_Category","Train_Service","UIC"]}
+{"HD": ["Bleed_off_Update_Ind","Current_File_Ref","Extract_Datetime","Extract_Interval","File_Mainframe_Identity","ID","Last_File_Ref","seq","Version"]}
 {"PA": ["Dates","Days","Duration","ID","Origin","STP","Terminus","Transaction","UID","UUID"]}
-{"PATH": ["Activity","Engineering Allowance","ID","Line","Offset","Path","Pathing Allowance","Performance Allowance","Platform","Public Schedule","Schedule","Suffix","T","TIPLOC","UUID"]}
-{"TR": ["Capitals Identification","CRS","Description","ID","Nalco","NLC check character","PO MCP","Stanox","TIPLOC","TPS Description"]}
+{"PATH": ["Activity","Engineering_Allowance","ID","Line","Offset","Path","Pathing_Allowance","Performance_Allowance","Platform","Public_Schedule","Schedule","Suffix","T","TIPLOC","UUID"]}
+{"TR": ["Capitals_Identification","CRS","Description","ID","Nalco","NLC_check_character","PO_MCP","Stanox","TIPLOC","TPS_Description"]}
 {"ZZ": ["ID","seq"]}

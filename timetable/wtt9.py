@@ -17,6 +17,8 @@ filename = 'output/PATH_004'
 filename = 'output/PATH_016'
 filename = 'output/PATH_024'
 filename = 'output/PATH_008'
+filename = 'output/AA_003'
+filename = 'output/PATH_090'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process trains services \
@@ -55,7 +57,7 @@ def strip_columns(this_frame):
 def header_record(records):
     """process CIF file header record from 80-character line string"""
     this_array = [[line[0:2], line[2:22], line[22:28], line[28:32], line[32:39], line[39:46], line[46:47], line[47:48], line[48:54], line[54:60]] for line in records]
-    this_frame = pd.DataFrame(data=this_array, columns=['ID', 'File Mainframe Identity', 'Date of Extract', 'Time of Extract', 'Current-File-Ref', 'Last-File-Ref', 'Bleed-off Update Ind', 'Version', 'User Extract Start Date', 'User Extract End Date'])    
+    this_frame = pd.DataFrame(data=this_array, columns=['ID', 'File Mainframe Identity', 'Date of Extract', 'Time of Extract', 'Current File Ref', 'Last File Ref', 'Bleed off Update Ind', 'Version', 'User Extract Start Date', 'User Extract End Date'])    
     this_frame['Extract Datetime'] = pd.to_datetime(this_frame['Time of Extract'] + this_frame['Date of Extract'], format='%H%M%d%m%y').dt.strftime('%Y-%m-%dT%H:%M:%S')
     this_frame['Extract Interval'] = header_date(this_frame['User Extract Start Date']) + '/' + header_date(this_frame['User Extract End Date'])
 
@@ -83,7 +85,7 @@ def notes_record(records):
 def association_record(records):
     """return CIF file train-association object from 80-character line string"""
     this_array = [[line[0:2],line[2:3],line[3:9],line[9:15],line[15:21],line[21:27],line[27:34],line[34:36],line[36:37],line[37:44],line[44:45],line[45:46],line[47:48],line[79:80]] for line in records]
-    this_frame = pd.DataFrame(data=this_array, columns=['ID','Transaction','Main Train-UID','UID','Date From','Date To','Days','Category','Indicator','Location','Base-Suffix','Location-Suffix','Type','STP'])
+    this_frame = pd.DataFrame(data=this_array, columns=['ID','Transaction','Main UID','UID','Date From','Date To','Days','Category','Indicator','Location','Base Suffix','Location Suffix','Type','STP'])
     this_frame['Dates'] = get_dates(this_frame)
     this_frame = this_frame.drop(['Date From', 'Date To'], axis=1)
     this_frame = this_frame.drop(blank_columns(this_frame), axis=1)
@@ -208,6 +210,8 @@ SOLR_DATA = {}
 
 def write_json(filename, this_df, key):
     this_df = this_df.fillna('')
+    this_df.columns = [i.replace(' ', '_') for i in this_df.columns.to_list()]
+
     this_buffer = ''
     for _, r in this_df.iterrows():
         u = {k: (v.rstrip() if isinstance(v, str) else v)
@@ -242,6 +246,8 @@ if ID in ['TI', 'TA', 'TD']:
 
 df1 = OP_FN[KEY](OUTPUT)
 
+SA = pd.DataFrame()
+
 if KEY == 'PATH':
     idx_sa = (df1['ID'] == 'BS') | (df1['ID'] == 'BX') | (df1['ID'] == 'CR')
     SA = df1.loc[idx_sa, ['ID', 'Data', 'UUID']]
@@ -264,11 +270,11 @@ if SA.empty:
         1/0
     sys.exit(0)
 
-PA = WTT.loc[lo_idx, ['Schedule', 'UUID']].set_index('UUID').rename(columns={'Schedule': 'Origin'})
-df2 = WTT.loc[lt_idx, ['Schedule', 'Offset', 'UUID']].set_index('UUID').rename(columns={'Schedule': 'Terminus', 'Offset': 'Duration'})
+PA = pa_record(SA[SA['ID'] == 'BS']).set_index('UUID')
+df2 = WTT.loc[lo_idx, ['Schedule', 'UUID']].set_index('UUID').rename(columns={'Schedule': 'Origin'})
 PA = PA.join(df2)
-df2 = pa_record(SA[SA['ID'] == 'BS']).set_index('UUID')
-PA = PA.join(df2).reset_index()
+df2 = WTT.loc[lt_idx, ['Schedule', 'Offset', 'UUID']].set_index('UUID').rename(columns={'Schedule': 'Terminus', 'Offset': 'Duration'})
+PA = PA.join(df2).reset_index().fillna('')
 
 BS = bs_record(SA[SA['ID'] == 'BS'])
 BX = bx_record(SA[SA['ID'] == 'BX'])

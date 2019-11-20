@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import pysolr
+import argparse
+from dateutil.parser import parse
 import pandas as pd
 from pandas.io.json import json_normalize
 import json
@@ -20,7 +22,7 @@ def trim_f(this_object):
         return v
     if type(this_object) is str:
         v = float(this_object)
-    return float('{0:.4f}'.format(v))
+    return float('{0:.5f}'.format(v))
 
 ## Decode GeoJson object:
 # {"type": "FeatureCollection",
@@ -37,7 +39,7 @@ with open('reference/TIPLOC_Eastings_and_Northings.json', 'rb') as fp:
     geoobject_json = json.load(fp)
     for this_object in geoobject_json['features']:
         properties = this_object['properties']
-        (longitude, latitude) = this_object['geometry']['coordinates']
+        (latitude, longitude) = this_object['geometry']['coordinates']
         locations[properties['TIPLOC']] = {'station': properties['NAME'], 'longitude': trim_f(longitude), 'latitude': trim_f(latitude)}
 
 df1 = pd.read_csv('reference/TIPLOC-map.tsv', sep='\t')
@@ -98,27 +100,52 @@ DEBUG = True
 fin = sys.stdin
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Map train services \
+based on working timetable')
+    parser.add_argument('interval', type=str, nargs='?', help='train operating \
+interval', default='2019-10-21T10:00:00/2019-10-21T12:00:00')
+    args = parser.parse_args()
+    INTERVAL = args.interval
     DEBUG = False
 
 if DEBUG:
-    fin = open('wtt-20191116-1.jsonl', 'r')
-    pd.set_option('display.max_columns', None)
-    INTERVAL='20191116/20191117'
+    fin = open('wtt-20191117-1.jsonl', 'r')
+    pd.set_option('display.max_columns', None)    
+    INTERVAL='20191117/20191118'
+
+def get_interval(interval):
+    return (parse(i) for i in interval.split('/'))
+
+def get_date_dt(date_object):
+    return datetime(date_object.year, date_object.month, date_object.day)
+
+def get_time_td(time_object):    
+    return timedelta(hours=time_object.hour, minutes=time_object.minute, seconds=time_object.second)
+
+def get_dt(datetime_object):
+    return (get_date_dt(datetime_object), get_time_td(datetime_object))
+
+(START_INTERVAL, END_INTERVAL) = get_interval(INTERVAL)
 
 DATA = pd.DataFrame([json.loads(line) for line in fin])
 MISSING = []
 for (i, PATH) in DATA.iterrows():
+    ORIGIN = parse(PATH['Date'] + 'T' + PATH['Origin'])
     UUID = PATH['UUID']
     STP = PATH['STP']
     if STP in ['C']:
         continue
     SERVICE = get_service(UUID)
     SCHEDULE = pd.DataFrame(get_path(UUID)).fillna('')
-    
     SCHEDULE = SCHEDULE.rename(columns={'T': 'Event', 'Schedule': 'Time'})
     for k in ['UID', 'Date']:
         SCHEDULE[k] = PATH[k]
-
+    TIME = (ORIGIN + pd.to_timedelta(SCHEDULE['Offset']))
+    idx_time = (TIME >= START_INTERVAL) & (TIME < END_INTERVAL)
+    SCHEDULE = SCHEDULE[idx_time]
+    SCHEDULE['Actual'] = TIME.dt.strftime('%Y-%m-%d')
+    if SCHEDULE.empty:
+        continue
     if 'TIPLOC' not in SCHEDULE:
         sys.stderr.write('{}\n'.format(json.dumps(PATH.to_dict())))
         continue
@@ -132,9 +159,10 @@ for (i, PATH) in DATA.iterrows():
 
     SCHEDULE = SCHEDULE.reset_index().set_index('TIPLOC').join(LOCATION).reset_index().set_index('index').sort_index()
 
-    for i in SCHEDULE[['Time', 'UID', 'Headcode', 'ATOC', 'Date', 'Event', 'TIPLOC', 'lat', 'lon']].to_dict(orient='records'):
-        print(json.dumps(i))
+    for i in SCHEDULE[['Actual', 'Time', 'Date', 'UID', 'Headcode', 'ATOC', 'Event', 'TIPLOC', 'lat', 'lon']].to_dict(orient='records'):
         if np.isnan(i['lat']):
             sys.stderr.write('\t'.join([i['TIPLOC'], i['Headcode'], i['UID'], UUID]))
             sys.stderr.write('\n')
-
+            continue
+        print(json.dumps(i))
+                

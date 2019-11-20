@@ -132,7 +132,7 @@ if DEBUG:
     #fin_name = 'timetable-20190920.ndjson'
     #fin_name = 'test/A'
     #fin_name = 'test/timetable-02.ndjson'
-    fin_name = 'PA-20191111.jsonl'
+    fin_name = 'PA-20191117.jsonl'
     #INTERVAL = '2019-10-21T11:00:00/2019-10-21T12:00:00'
     #INTERVAL = '2019-10-16T11:00:00/2019-10-18T12:00:00'
     INTERVAL = '20191112/20191113'
