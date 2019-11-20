@@ -19,3 +19,4 @@ Plus the data visualised is from OpenStreetMap (http://www.openstreetmap.org) us
 Arangodb (https://www.arangodb.com)
 jq (https://stedolan.github.io/jq)
 The data is used under the OpenStreetMap Creative Commons Attribution (http://wiki.openstreetmap.org/wiki/Wiki_content_license)
+parallel is used and cited under 'O. Tange (2018): GNU Parallel 2018, March 2018' (https://doi.org/10.5281/zenodo.1146014)'
