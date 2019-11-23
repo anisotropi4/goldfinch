@@ -13,5 +13,5 @@ if [ "${STATUS}" = "${FIELDNAME}" ]; then
     COMMAND="replace-field"
 fi
 
-curl -s -X POST -H 'Content-type:application/json' -d '{'${COMMAND}':{"name":'"${FIELDNAME}"',"type":"'${FIELDTYPE}'","multiValued":false,"stored":true }}' http://${HOSTNAME}:8983/api/cores/${CORENAME}/schema
+curl -s -X POST -H 'Content-type:application/json' -d '{'${COMMAND}':{"name":'"${FIELDNAME}"',"type":'"${FIELDTYPE}"',"multiValued":false,"stored":true }}' http://${HOSTNAME}:8983/api/cores/${CORENAME}/schema
 
