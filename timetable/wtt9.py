@@ -19,6 +19,7 @@ filename = 'output/PATH_024'
 filename = 'output/PATH_008'
 filename = 'output/AA_003'
 filename = 'output/PATH_090'
+filename = 'output/PATH_004'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process trains services \
@@ -44,6 +45,9 @@ def header_date(this_column):
 def wtt_date(this_column):
     return pd.to_datetime(this_column, format='%y%m%d').dt.strftime('%Y-%m-%d')
 
+def wtt_datetime(this_column):
+    return pd.to_datetime(this_column, format='%y%m%d').dt.strftime('%Y-%m-%dT%H:%M:%S')
+
 def wtt_time(this_column, format='%H%M%S'):
     this_column = this_column.str.replace('H', '30').str.replace(' ', '00')
     return pd.to_datetime(this_column, format=format)
@@ -53,6 +57,14 @@ def blank_columns(this_frame):
 
 def strip_columns(this_frame):
     return [n for n in this_frame.select_dtypes(include=['object']).columns if this_frame[n].str.isspace().any()]
+
+def get_dates(this_df):
+    this_df['Dates'] = wtt_date(this_df['Date From'])
+    this_df['Date From'] = wtt_datetime(this_df['Date From'])
+    to_idx = ~this_df['Date To'].str.isspace()
+    this_df.loc[to_idx, 'Dates'] = this_df.loc[to_idx, 'Dates'] + '/' + wtt_date(this_df.loc[to_idx, 'Date To'])
+    this_df.loc[to_idx, 'Date To'] = wtt_datetime(this_df.loc[to_idx, 'Date To'])
+    return this_df[['Date From', 'Date To', 'Dates']]
 
 def header_record(records):
     """process CIF file header record from 80-character line string"""
@@ -86,8 +98,8 @@ def association_record(records):
     """return CIF file train-association object from 80-character line string"""
     this_array = [[line[0:2],line[2:3],line[3:9],line[9:15],line[15:21],line[21:27],line[27:34],line[34:36],line[36:37],line[37:44],line[44:45],line[45:46],line[47:48],line[79:80]] for line in records]
     this_frame = pd.DataFrame(data=this_array, columns=['ID','Transaction','Main UID','UID','Date From','Date To','Days','Category','Indicator','Location','Base Suffix','Location Suffix','Type','STP'])
-    this_frame['Dates'] = get_dates(this_frame)
-    this_frame = this_frame.drop(['Date From', 'Date To'], axis=1)
+    this_frame[['Date From', 'Date To', 'Dates']] = get_dates(this_frame)
+    #this_frame = this_frame.drop(['Date From', 'Date To'], axis=1)
     this_frame = this_frame.drop(blank_columns(this_frame), axis=1)
     this_frame['id'] = [md5(x.encode()).hexdigest() for x in records]
     return this_frame
@@ -100,17 +112,11 @@ def wtt_records(records):
     this_frame = this_frame.fillna(method='ffill')
     return this_frame
 
-def get_dates(this_df):
-    this_df['Dates'] = wtt_date(this_df['Date From'])
-    to_idx = ~this_df['Date To'].str.isspace()
-    this_df.loc[to_idx, 'Dates'] = this_df.loc[to_idx, 'Dates'] + '/' + wtt_date(this_df.loc[to_idx, 'Date To'])
-    return this_df['Dates']
-
 def pa_record(this_df):
     this_array = [['PA', line[2:3], line[3:9], line[9:15], line[15:21], line[21:28], line[79:80]] for line in this_df['Data']]
     this_frame = pd.DataFrame(data=this_array, columns=['ID', 'Transaction','UID','Date From','Date To','Days','STP'])
-    this_frame['Dates'] = get_dates(this_frame)
-    this_frame = this_frame.drop(['Date From', 'Date To'], axis=1)
+    this_frame[['Date From', 'Date To', 'Dates']] = get_dates(this_frame)
+    #this_frame = this_frame.drop(['Date From', 'Date To'], axis=1)
     this_frame['UUID'] = this_df['UUID'].tolist()
     return this_frame
 
