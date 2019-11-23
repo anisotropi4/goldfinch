@@ -47,7 +47,7 @@ def wtt_date(this_column):
 
 def wtt_time(this_column, format='%H%M%S'):
     this_column = this_column.str.replace('H', '30').str.replace(' ', '00')
-    return pd.to_date(this_column, format=format)
+    return pd.to_datetime(this_column, format=format)
 
 def blank_columns(this_frame):
     return [n for n in this_frame.select_dtypes(include=['object']).columns if this_frame[n].str.isspace().all() or (this_frame[n] == '').all()]
