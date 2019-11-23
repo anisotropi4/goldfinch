@@ -13,7 +13,7 @@ do
         ./wtt-select4.py PA-${DATESTRING}.jsonl ${FILTER} > wtt-${DATESTRING}-$#.jsonl
     fi
 
-    if [ ! -s output-all.json ]; then
+    if [ ! -s visualisation/output-all.json ]; then
         < wtt-${DATESTRING}-$#.jsonl ./wtt-map.py ${FILTER} > output-all.jsonl 2> missing-TIPLOC.tsv
         < output-all.jsonl sort -n | jq -sc '.' > visualistion/output-all.json
         echo "TIPLOC	HeadCode	count" > missing-report.tsv
