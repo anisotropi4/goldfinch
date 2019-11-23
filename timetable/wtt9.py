@@ -45,12 +45,9 @@ def header_date(this_column):
 def wtt_date(this_column):
     return pd.to_datetime(this_column, format='%y%m%d').dt.strftime('%Y-%m-%d')
 
-def wtt_datetime(this_column):
-    return pd.to_datetime(this_column, format='%y%m%d').dt.strftime('%Y-%m-%dT%H:%M:%S')
-
 def wtt_time(this_column, format='%H%M%S'):
     this_column = this_column.str.replace('H', '30').str.replace(' ', '00')
-    return pd.to_datetime(this_column, format=format)
+    return pd.to_date(this_column, format=format)
 
 def blank_columns(this_frame):
     return [n for n in this_frame.select_dtypes(include=['object']).columns if this_frame[n].str.isspace().all() or (this_frame[n] == '').all()]
@@ -60,10 +57,10 @@ def strip_columns(this_frame):
 
 def get_dates(this_df):
     this_df['Dates'] = wtt_date(this_df['Date From'])
-    this_df['Date From'] = wtt_datetime(this_df['Date From'])
+    this_df['Date From'] = wtt_date(this_df['Date From'])
     to_idx = ~this_df['Date To'].str.isspace()
     this_df.loc[to_idx, 'Dates'] = this_df.loc[to_idx, 'Dates'] + '/' + wtt_date(this_df.loc[to_idx, 'Date To'])
-    this_df.loc[to_idx, 'Date To'] = wtt_datetime(this_df.loc[to_idx, 'Date To'])
+    this_df.loc[to_idx, 'Date To'] = wtt_date(this_df.loc[to_idx, 'Date To'])
     return this_df[['Date From', 'Date To', 'Dates']]
 
 def header_record(records):
