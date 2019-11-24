@@ -33,9 +33,9 @@ fin = sys.stdin
 DEBUG = True
 if __name__ == '__main__':
     DEBUG = False
-    
+
 if DEBUG:
-    fin = open('schedule/PA-20191031.jsonl', 'r', encoding='utf-8') 
+    fin = open('schedule/PA-20191123.jsonl', 'r', encoding='utf-8')
     pd.set_option('display.max_columns', None)
 
 with open('storage/schedule.ndjson', 'w', encoding='utf-8') as fout:
@@ -47,16 +47,23 @@ with open('storage/schedule.ndjson', 'w', encoding='utf-8') as fout:
         json.dump(path, fout)
         fout.write('\n')
 
+
 #df1 = pd.read_json(INPUTDATA, orient='records', dtype={'Days': str}, lines=True, encoding='utf8')
 df1 = pd.DataFrame(INPUTDATA)
 
 df1 = df1.drop(df1[df1['ID'] != 'PA'].index).fillna(value={'Duration': 'PT00:00:00'})
 
-df2 = pd.DataFrame(df1['Dates'].str.split('/').tolist(), columns=['start_date', 'end_date'])
-df2['start_date'] = pd.to_datetime(df2['start_date'], format='%Y-%m-%d').apply(monday_offset)
-idx2 = df2['end_date'].isnull()
-df2.loc[idx2, 'end_date'] = df2.loc[idx2, 'start_date']
-df2['end_date'] = pd.to_datetime(df2['end_date'], format='%Y-%m-%d').apply(monday_offset) + WEEK
+#df2 = pd.DataFrame(df1['Dates'].str.split('/').tolist(), columns=['start_date', 'end_date'])
+for KEY in ['Date_From', 'Date_To']:
+    df1[KEY] = pd.to_datetime(df1[KEY], format='%Y-%m-%d')
+
+
+df2 = df1[['Date_From', 'Date_To']].copy().rename(columns={'Date_From': 'Start_Date', 'Date_To': 'End_Date'})
+df2['Start_Date'] = df2['Start_Date'].apply(monday_offset)
+idx2 = df2['End_Date'].isnull()
+df2.loc[idx2, 'End_Date'] = df2.loc[idx2, 'Start_Date']
+df2['End_Date'] = df2['End_Date'].apply(monday_offset) + WEEK
+
 df1 = df1.join(df2)
 idx1 = df1['Days'].isna()
 df1.loc[idx1, 'Days'] = '0000000'
@@ -70,13 +77,13 @@ SCHEDULE = pd.DataFrame(df1[~idx1]).reset_index(drop=True)
 DUPLICATES = df1[idx1]
 
 # Identify all UIDs without date overlap in timetable
-df2 = DUPLICATES[['UID', 'start_date', 'end_date']].sort_values(['UID', 'start_date']).reset_index(drop=True)
-df3 = df2[['UID', 'start_date']].rename({'UID': 'UID2', 'start_date': 'overlap'}, axis=1).shift(-1)
+df2 = DUPLICATES[['UID', 'Start_Date', 'End_Date']].sort_values(['UID', 'Start_Date']).reset_index(drop=True)
+df3 = df2[['UID', 'Start_Date']].rename({'UID': 'UID2', 'Start_Date': 'overlap'}, axis=1).shift(-1)
 df2 = df2.join(df3)
 df3 = df2[df2['UID'] == df2['UID2']].drop('UID2', axis=1).set_index('UID')
 
 df2 = DUPLICATES.set_index('UID', drop=False)
-idx3 = df3[df3['end_date'] > df3['overlap']].index.unique()
+idx3 = df3[df3['End_Date'] > df3['overlap']].index.unique()
 
 UPDATE = df2.drop(idx3)
 UPDATE = UPDATE.reset_index(drop=True)
@@ -95,7 +102,7 @@ def overlay_bits(b):
     return tuple(v[::-1])
 
 def interleave(these_objects):
-    this_interval = [(j['start_date'], j['end_date'], day_int(j['Days']), (j),) for j in these_objects]
+    this_interval = [(j['Start_Date'], j['End_Date'], day_int(j['Days']), (j),) for j in these_objects]
     idx = sorted(set([j for i in this_interval for j in (i[0], i[1])]))
     all_paths = {}
     for i in this_interval:
@@ -113,8 +120,8 @@ def interleave(these_objects):
         for bit, path in zip(bits, paths):
             if bit > 0:
                 path = path.copy()
-                path['start_date'] = k1
-                path['end_date'] = k2
+                path['Start_Date'] = k1
+                path['End_Date'] = k2
                 path['Actual'] = days_str(bit)
                 this_schedule.append(path)
     return this_schedule
@@ -127,8 +134,11 @@ for UID in df2.index.unique():
 UPDATE = pd.DataFrame(UPDATE)
 SCHEDULE = SCHEDULE.append(UPDATE, ignore_index=True, sort=False)
 
-SCHEDULE['Active'] = SCHEDULE['start_date'].dt.strftime('%Y-%m-%d')  + '/' + SCHEDULE['end_date'].dt.strftime('%Y-%m-%d')
-SCHEDULE = SCHEDULE.drop(['start_date', 'end_date'], axis=1)
+SCHEDULE['Active'] = SCHEDULE['Start_Date'].dt.strftime('%Y-%m-%d')  + '/' + SCHEDULE['End_Date'].dt.strftime('%Y-%m-%d')
+
+for KEY in ['Date_From', 'Date_To', 'Start_Date', 'End_Date']:
+   SCHEDULE[KEY] = SCHEDULE[KEY].dt.strftime('%Y-%m-%dT%H:%M:%SZ')
+#SCHEDULE = SCHEDULE.drop(['start_date', 'end_date'], axis=1)
 
 SCHEDULE = SCHEDULE.fillna(value={'Origin': '', 'Terminus': ''})
 
