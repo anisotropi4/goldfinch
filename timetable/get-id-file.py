@@ -9,6 +9,7 @@ import numpy as np
 
 DEBUG = True
 filename = 'storage/PATH_004.jsonl'
+filename = 'storage/HD_001.jsonl'
 filename = 'storage/PA_004.jsonl'
 
 if __name__ == '__main__':
@@ -31,12 +32,16 @@ M = M.split('-').pop(0)
 
 fin = open(filename, 'r')
 df1 = pd.DataFrame([json.loads(line.strip()) for line in fin])
+df1 = df1.fillna('')
 
 KEYS = df1.columns.tolist()
-
 DATEFIELDS = {}
 for KEY in KEYS:
     DATEFIELDS[KEY] = 'string'
+    if np.max(df1[KEY].apply(len)) < 10:
+        continue
+    if df1[KEY].str.contains('/').any():
+        continue
     try:
         df1[KEY] = pd.to_datetime(df1[KEY])
         DATEFIELDS[KEY] = 'pdate'
