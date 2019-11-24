@@ -45,6 +45,9 @@ def header_date(this_column):
 def wtt_date(this_column):
     return pd.to_datetime(this_column, format='%y%m%d').dt.strftime('%Y-%m-%d')
 
+def wtt_datetime(this_column):
+    return pd.to_datetime(this_column, format='%y%m%d').dt.strftime('%Y-%m-%dT%H:%M:%SZ')
+
 def wtt_time(this_column, format='%H%M%S'):
     this_column = this_column.str.replace('H', '30').str.replace(' ', '00')
     return pd.to_datetime(this_column, format=format)
@@ -57,17 +60,17 @@ def strip_columns(this_frame):
 
 def get_dates(this_df):
     this_df['Dates'] = wtt_date(this_df['Date From'])
-    this_df['Date From'] = wtt_date(this_df['Date From'])
+    this_df['Date From'] = wtt_datetime(this_df['Date From'])
     to_idx = ~this_df['Date To'].str.isspace()
     this_df.loc[to_idx, 'Dates'] = this_df.loc[to_idx, 'Dates'] + '/' + wtt_date(this_df.loc[to_idx, 'Date To'])
-    this_df.loc[to_idx, 'Date To'] = wtt_date(this_df.loc[to_idx, 'Date To'])
+    this_df.loc[to_idx, 'Date To'] = wtt_datetime(this_df.loc[to_idx, 'Date To'])
     return this_df[['Date From', 'Date To', 'Dates']]
 
 def header_record(records):
     """process CIF file header record from 80-character line string"""
     this_array = [[line[0:2], line[2:22], line[22:28], line[28:32], line[32:39], line[39:46], line[46:47], line[47:48], line[48:54], line[54:60]] for line in records]
     this_frame = pd.DataFrame(data=this_array, columns=['ID', 'File Mainframe Identity', 'Date of Extract', 'Time of Extract', 'Current File Ref', 'Last File Ref', 'Bleed off Update Ind', 'Version', 'User Extract Start Date', 'User Extract End Date'])    
-    this_frame['Extract Datetime'] = pd.to_datetime(this_frame['Time of Extract'] + this_frame['Date of Extract'], format='%H%M%d%m%y').dt.strftime('%Y-%m-%dT%H:%M:%S')
+    this_frame['Extract Datetime'] = pd.to_datetime(this_frame['Time of Extract'] + this_frame['Date of Extract'], format='%H%M%d%m%y').dt.strftime('%Y-%m-%dT%H:%M:%SZ')
     this_frame['Extract Interval'] = header_date(this_frame['User Extract Start Date']) + '/' + header_date(this_frame['User Extract End Date'])
 
     this_frame = this_frame.drop(['User Extract Start Date', 'User Extract End Date', 'Time of Extract', 'Date of Extract'], axis=1)
