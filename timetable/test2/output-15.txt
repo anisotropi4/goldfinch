@@ -1,0 +1,15 @@
+{"Date":"2019-10-19","UID":"T04002","Origin":"23:30:00","Duration":"PT03:00:00","Terminus":"02:30:00","Actual":"0000010"}
+{"Date":"2019-10-19","UID":"T05002","Origin":"23:30:00","Duration":"PT12:00:00","Terminus":"11:30:00","Actual":"0000010"}
+{"Date":"2019-10-19","UID":"T07002","Origin":"23:30:00","Duration":"PT03:00:00","Terminus":"02:30:00","Actual":"0000010"}
+{"Date":"2019-10-19","UID":"T08002","Origin":"23:30:00","Duration":"PT12:00:00","Terminus":"11:30:00","Actual":"0000010"}
+{"Date":"2019-10-19","UID":"T10002","Origin":"23:30:00","Duration":"PT03:00:00","Terminus":"02:30:00","Actual":"0000010"}
+{"Date":"2019-10-19","UID":"T11002","Origin":"23:30:00","Duration":"PT12:00:00","Terminus":"11:30:00","Actual":"0000010"}
+{"Date":"2019-10-20","UID":"T04001","Origin":"23:30:00","Duration":"PT03:00:00","Terminus":"02:30:00","Actual":"0000001"}
+{"Date":"2019-10-20","UID":"T05001","Origin":"23:30:00","Duration":"PT12:00:00","Terminus":"11:30:00","Actual":"0000001"}
+{"Date":"2019-10-20","UID":"T06001","Origin":"00:30:00","Duration":"PT12:00:00","Terminus":"12:30:00","Actual":"0000001"}
+{"Date":"2019-10-20","UID":"T07001","Origin":"23:30:00","Duration":"PT03:00:00","Terminus":"02:30:00","Actual":"0000001"}
+{"Date":"2019-10-20","UID":"T08001","Origin":"23:30:00","Duration":"PT12:00:00","Terminus":"11:30:00","Actual":"0000001"}
+{"Date":"2019-10-20","UID":"T09001","Origin":"00:30:00","Duration":"PT12:00:00","Terminus":"12:30:00","Actual":"0000001"}
+{"Date":"2019-10-20","UID":"T10001","Origin":"23:30:00","Duration":"PT03:00:00","Terminus":"02:30:00","Actual":"0000001"}
+{"Date":"2019-10-20","UID":"T11001","Origin":"23:30:00","Duration":"PT12:00:00","Terminus":"11:30:00","Actual":"0000001"}
+{"Date":"2019-10-20","UID":"T12001","Origin":"00:30:00","Duration":"PT12:00:00","Terminus":"12:30:00","Actual":"0000001"}
