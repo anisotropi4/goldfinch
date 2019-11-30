@@ -10,12 +10,12 @@ while true
 do
     echo ${FILTER}
     if [ ! -s wtt-${DATESTRING}-$#.jsonl ]; then
-        ./wtt-select4.py PA-${DATESTRING}.jsonl ${FILTER} > wtt-${DATESTRING}-$#.jsonl
+        ./wtt-select5.py ${FILTER} > wtt-${DATESTRING}-$#.jsonl
     fi
 
     if [ ! -s visualisation/output-all.json ]; then
         < wtt-${DATESTRING}-$#.jsonl ./wtt-map.py ${FILTER} > output-all.jsonl 2> missing-TIPLOC.tsv
-        < output-all.jsonl sort -n | jq -sc '.' > visualistion/output-all.json
+        < output-all.jsonl sort -n | jq -sc '.' > visualisation/output-all.json
         echo "TIPLOC	HeadCode	count" > missing-report.tsv
         < missing-TIPLOC.tsv cut -f1-2 -d'	' | unip >> missing-report.tsv
     fi
