@@ -21,6 +21,7 @@ filename = 'output/AA_003'
 filename = 'output/PATH_090'
 filename = 'output/PATH_004'
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process trains services \
 file to json')
@@ -62,7 +63,7 @@ def get_dates(this_df):
     this_df['Dates'] = wtt_date(this_df['Date From'])
     this_df['Date From'] = wtt_datetime(this_df['Date From'])
     to_idx = ~this_df['Date To'].str.isspace()
-    this_df.loc[to_idx, 'Dates'] = this_df.loc[to_idx, 'Dates'] + '/' + wtt_date(this_df.loc[to_idx, 'Date To'])
+    this_df.loc[to_idx, 'Dates'] = this_df.loc[to_idx, 'Dates'] + '/' + wtt_date(this_df.loc[to_idx, 'Date To']) + ':' + this_df.loc[to_idx, 'Days']
     this_df.loc[to_idx, 'Date To'] = wtt_datetime(this_df.loc[to_idx, 'Date To'])
     return this_df[['Date From', 'Date To', 'Dates']]
 
