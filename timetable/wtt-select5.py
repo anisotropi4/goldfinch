@@ -140,6 +140,16 @@ def get_interval(interval):
 (END_DATE, END_OFFSET) = get_dt(END_INTERVAL)
 
 import requests
+def check_webservice():
+    r = requests.get('http://localhost:5000/').json()
+    return r['solr_api']
+
+try:
+    check_webservice()
+except requests.exceptions.ConnectionError:
+    sys.stderr.write('ERROR: wtt-select5.py flask Solr webservice not running\n')
+    sys.exit(1)
+
 def get_data(ID, uri):
     r = requests.get('http://localhost:5000/api/{}/{}'.format(ID, uri)).json()
     return r[ID]
