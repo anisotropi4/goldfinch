@@ -20,7 +20,7 @@ filename = 'output/PATH_008'
 filename = 'output/AA_003'
 filename = 'output/PATH_090'
 filename = 'output/PATH_004'
-
+filename = 'output/AA_132'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process trains services \
@@ -59,18 +59,22 @@ def blank_columns(this_frame):
 def strip_columns(this_frame):
     return [n for n in this_frame.select_dtypes(include=['object']).columns if this_frame[n].str.isspace().any()]
 
+def days_str(this_series):
+    return pd.to_datetime(this_series).apply(lambda v: '{:b}'.format(64 >> v.weekday()).zfill(7))
+
 def get_dates(this_df):
-    this_df['Dates'] = wtt_date(this_df['Date From'])
+    no_idx = this_df['Date To'].str.isspace()
+    this_df.loc[no_idx, 'Days'] = days_str(this_df.loc[no_idx, 'Date From'])
+    this_df.loc[no_idx, 'Date To'] = this_df.loc[no_idx, 'Date From']
+    this_df['Dates'] = wtt_date(this_df['Date From']) + '.' + wtt_date(this_df['Date To']) + '.' + this_df['Days']
     this_df['Date From'] = wtt_datetime(this_df['Date From'])
-    to_idx = ~this_df['Date To'].str.isspace()
-    this_df.loc[to_idx, 'Dates'] = this_df.loc[to_idx, 'Dates'] + '/' + wtt_date(this_df.loc[to_idx, 'Date To']) + ':' + this_df.loc[to_idx, 'Days']
-    this_df.loc[to_idx, 'Date To'] = wtt_datetime(this_df.loc[to_idx, 'Date To'])
-    return this_df[['Date From', 'Date To', 'Dates']]
+    this_df['Date To'] = wtt_datetime(this_df['Date To'])
+    return this_df[['Date From', 'Date To', 'Dates', 'Days']]
 
 def header_record(records):
     """process CIF file header record from 80-character line string"""
     this_array = [[line[0:2], line[2:22], line[22:28], line[28:32], line[32:39], line[39:46], line[46:47], line[47:48], line[48:54], line[54:60]] for line in records]
-    this_frame = pd.DataFrame(data=this_array, columns=['ID', 'File Mainframe Identity', 'Date of Extract', 'Time of Extract', 'Current File Ref', 'Last File Ref', 'Bleed off Update Ind', 'Version', 'User Extract Start Date', 'User Extract End Date'])    
+    this_frame = pd.DataFrame(data=this_array, columns=['ID', 'File Mainframe Identity', 'Date of Extract', 'Time of Extract', 'Current File Ref', 'Last File Ref', 'Bleed off Update Ind', 'Version', 'User Extract Start Date', 'User Extract End Date'])
     this_frame['Extract Datetime'] = pd.to_datetime(this_frame['Time of Extract'] + this_frame['Date of Extract'], format='%H%M%d%m%y').dt.strftime('%Y-%m-%dT%H:%M:%SZ')
     this_frame['Extract Interval'] = header_date(this_frame['User Extract Start Date']) + '/' + header_date(this_frame['User Extract End Date'])
 
@@ -81,7 +85,7 @@ def header_record(records):
 
 def tiploc_record(records):
     """return CIF file TIPLOC object from 80-character line string"""
-    this_array = [[line[0:2],line[2:9],line[9:11],line[11:17],line[17:18],line[18:44],line[44:49],line[49:53],line[53:56],line[56:72],line[72:79]] for line in records]    
+    this_array = [[line[0:2],line[2:9],line[9:11],line[11:17],line[17:18],line[18:44],line[44:49],line[49:53],line[53:56],line[56:72],line[72:79]] for line in records]
     this_frame = pd.DataFrame(data=this_array, columns=['ID','TIPLOC','Capitals Identification','Nalco','NLC check character','TPS Description','Stanox','PO MCP','CRS','Description','New TIPLOC'])
     this_frame = this_frame.drop(blank_columns(this_frame), axis=1)
     this_frame['id'] = [md5(x.encode()).hexdigest() for x in records]
@@ -99,7 +103,7 @@ def association_record(records):
     """return CIF file train-association object from 80-character line string"""
     this_array = [[line[0:2],line[2:3],line[3:9],line[9:15],line[15:21],line[21:27],line[27:34],line[34:36],line[36:37],line[37:44],line[44:45],line[45:46],line[47:48],line[79:80]] for line in records]
     this_frame = pd.DataFrame(data=this_array, columns=['ID','Transaction','Main UID','UID','Date From','Date To','Days','Category','Indicator','Location','Base Suffix','Location Suffix','Type','STP'])
-    this_frame[['Date From', 'Date To', 'Dates']] = get_dates(this_frame)
+    this_frame[['Date From', 'Date To', 'Dates', 'Days']] = get_dates(this_frame)
     #this_frame = this_frame.drop(['Date From', 'Date To'], axis=1)
     this_frame = this_frame.drop(blank_columns(this_frame), axis=1)
     this_frame['id'] = [md5(x.encode()).hexdigest() for x in records]
@@ -116,7 +120,7 @@ def wtt_records(records):
 def pa_record(this_df):
     this_array = [['PA', line[2:3], line[3:9], line[9:15], line[15:21], line[21:28], line[79:80]] for line in this_df['Data']]
     this_frame = pd.DataFrame(data=this_array, columns=['ID', 'Transaction','UID','Date From','Date To','Days','STP'])
-    this_frame[['Date From', 'Date To', 'Dates']] = get_dates(this_frame)
+    this_frame[['Date From', 'Date To', 'Dates', 'Days']] = get_dates(this_frame)
     #this_frame = this_frame.drop(['Date From', 'Date To'], axis=1)
     this_frame['UUID'] = this_df['UUID'].tolist()
     return this_frame
@@ -154,7 +158,7 @@ def intermediate_location(this_df):
     this_frame['index'] = this_df.index.tolist()
 
     idx_pass = (~this_frame['Schedule Pass'].str.isspace())
-    
+
     df_arrival = this_frame[~idx_pass].rename(columns={'Schedule Arrival': 'Schedule', 'Public Arrival': 'Public Schedule'})
     df_arrival = df_arrival.drop(['Schedule Departure', 'Public Departure', 'Schedule Pass'], axis=1)
     df_arrival['T'] = 'IA'
@@ -205,7 +209,7 @@ def get_wtt(this_df):
     WTT.loc[~idx_ps, 'Public Schedule'] = ''
     WTT = WTT.drop('index', axis=1)
     return WTT
-    
+
 def end_record(records):
     this_array = [[line[0:2]] for line in records]
     this_frame = pd.DataFrame(data=this_array, columns=['ID'])
@@ -258,7 +262,7 @@ SA = pd.DataFrame()
 if KEY == 'PATH':
     idx_sa = (df1['ID'] == 'BS') | (df1['ID'] == 'BX') | (df1['ID'] == 'CR')
     SA = df1.loc[idx_sa, ['ID', 'Data', 'UUID']]
-    WTT = get_wtt(df1)          
+    WTT = get_wtt(df1)
     lo_idx = (WTT['ID'] == 'LO')
     lt_idx = (WTT['ID'] == 'LT')
     df1 = WTT
