@@ -281,6 +281,7 @@ PA = pa_record(SA[SA['ID'] == 'BS']).set_index('UUID')
 df2 = WTT.loc[lo_idx, ['Schedule', 'UUID']].set_index('UUID').rename(columns={'Schedule': 'Origin'})
 PA = PA.join(df2)
 df2 = WTT.loc[lt_idx, ['Schedule', 'Offset', 'UUID']].set_index('UUID').rename(columns={'Schedule': 'Terminus', 'Offset': 'Duration'})
+df2['Op Days'] = np.ceil((pd.to_timedelta(df2['Terminus']) + pd.to_timedelta(df2['Duration'])) / DAY).apply(int).fillna(0).astype(object)
 PA = PA.join(df2).reset_index().fillna('')
 
 BS = bs_record(SA[SA['ID'] == 'BS'])
