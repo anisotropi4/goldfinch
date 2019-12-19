@@ -6,6 +6,7 @@ import argparse
 import os.path as path
 import pandas as pd
 import numpy as np
+import pandas.api.types as pd_types
 
 DEBUG = True
 filename = 'storage/PATH_004.jsonl'
@@ -38,14 +39,18 @@ KEYS = df1.columns.tolist()
 DATEFIELDS = {}
 for KEY in KEYS:
     DATEFIELDS[KEY] = 'string'
-    if np.max(df1[KEY].apply(len)) < 10:
-        continue
-    if df1[KEY].str.contains('/').any():
-        continue
-    try:
-        df1[KEY] = pd.to_datetime(df1[KEY])
+    if pd_types.is_datetime64_any_dtype(df1[KEY]):
         DATEFIELDS[KEY] = 'pdate'
-    except ValueError:
-        pass
+        continue
+    if pd_types.is_string_dtype(df1[KEY]):
+        if np.max(df1[KEY].apply(len)) < 10:
+            continue
+        if df1[KEY].str.contains('/').any():
+            continue
+        try:
+            df1[KEY] = pd.to_datetime(df1[KEY])
+            DATEFIELDS[KEY] = 'pdate'
+        except ValueError:
+            pass
 
 print(json.dumps({M: len(KEYS), 'keys': [{KEY: DATEFIELDS[KEY]} for KEY in KEYS if KEY != 'id']}))
