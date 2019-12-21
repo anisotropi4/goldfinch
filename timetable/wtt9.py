@@ -43,7 +43,8 @@ if DEBUG:
     pd.set_option('display.max_columns', None)
 
 ISO8601_DATE = datetime(1900, 1, 1)
-DAY = pd.Timedelta(days=1)
+DAY = pd.offsets.Day()
+MONDAY = pd.offsets.Week(weekday=0)
 
 def header_date(this_column):
     return pd.to_datetime(this_column, format='%d%m%y').dt.strftime('%Y-%m-%d')
@@ -52,7 +53,7 @@ def wtt_date(this_column):
     return pd.to_datetime(this_column, format='%y%m%d').dt.strftime('%Y-%m-%d')
 
 def wtt_datetime(this_column):
-    return pd.to_datetime(this_column, format='%y%m%d').dt.strftime('%Y-%m-%dT%H:%M:%SZ')
+    return this_column.dt.strftime('%Y-%m-%dT%H:%M:%SZ')
 
 def wtt_time(this_column, format='%H%M%S'):
     this_column = this_column.str.replace('H', '30').str.replace(' ', '00')
@@ -71,7 +72,9 @@ def get_dates(this_df):
     no_idx = this_df['Date To'].str.isspace()
     this_df.loc[no_idx, 'Days'] = days_str(this_df.loc[no_idx, 'Date From'])
     this_df.loc[no_idx, 'Date To'] = this_df.loc[no_idx, 'Date From']
-    this_df['Dates'] = wtt_date(this_df['Date From']) + '.' + wtt_date(this_df['Date To']) + '.' + this_df['Days']
+    this_df['Date From'] = pd.to_datetime(this_df['Date From'], format='%y%m%d')
+    this_df['Date To'] = pd.to_datetime(this_df['Date To'], format='%y%m%d')
+    this_df['Dates'] = wtt_date(this_df['Date From'] - MONDAY) + '.' + wtt_date(this_df['Date To'] + MONDAY) + '.' + this_df['Days']
     this_df['Date From'] = wtt_datetime(this_df['Date From'])
     this_df['Date To'] = wtt_datetime(this_df['Date To'])
     return this_df[['Date From', 'Date To', 'Dates', 'Days']]
