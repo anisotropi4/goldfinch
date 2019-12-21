@@ -10,13 +10,15 @@ def clean_query(this_object):
     this_object.pop('_version_', None)
     return this_object
 
-def raw_query(solr, search_str, nrows=10, **rest):
-    v = solr.search(q=search_str, start=0, rows=nrows, **rest)
-    return v.raw_response
-
 def get_count(solr, search_str='*:*', **rest):
-    v = raw_query(solr, search_str, nrows=0, **rest)
-    return int(v['response']['numFound'])
+    v = solr.search(q=search_str, start=0, nrows=0, **rest)
+    return v.hits
+
+def raw_query(solr, search_str='*:*', nrows=10, **rest):
+    if not nrows:
+        nrows = get_count(solr) + 10
+    v = solr.search(q=search_str, start=0, rows=nrows, **rest)
+    return v.docs
 
 def get_query(solr, search_str, sort='id asc', limitrows=False, nrows=10, **rest):
     v = solr.search(q=search_str, sort=sort, start=0, rows=nrows, **rest)
