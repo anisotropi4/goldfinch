@@ -53,6 +53,8 @@ df1 = pd.DataFrame(INPUTDATA)
 
 df1 = df1.drop(df1[df1['ID'] != 'PA'].index).fillna(value={'Duration': 'PT00:00:00'})
 
+df1['ID'] = 'PT'
+
 #df2 = pd.DataFrame(df1['Dates'].str.split('/').tolist(), columns=['start_date', 'end_date'])
 for KEY in ['Date_From', 'Date_To']:
     df1[KEY] = pd.to_datetime(df1[KEY], format='%Y-%m-%d')
