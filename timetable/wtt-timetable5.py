@@ -35,7 +35,7 @@ if __name__ == '__main__':
     DEBUG = False
 
 if DEBUG:
-    fin = open('schedule/PA-20191123.jsonl', 'r', encoding='utf-8')
+    fin = open('schedule/PA-20191130.jsonl', 'r', encoding='utf-8')
     pd.set_option('display.max_columns', None)
 
 with open('storage/schedule.ndjson', 'w', encoding='utf-8') as fout:
@@ -134,16 +134,14 @@ for UID in df2.index.unique():
 UPDATE = pd.DataFrame(UPDATE)
 SCHEDULE = SCHEDULE.append(UPDATE, ignore_index=True, sort=False)
 
-SCHEDULE['Active'] = SCHEDULE['Start_Date'].dt.strftime('%Y-%m-%d')  + '/' + SCHEDULE['End_Date'].dt.strftime('%Y-%m-%d')
+SCHEDULE['Active'] = SCHEDULE['Start_Date'].dt.strftime('%Y-%m-%d')  + '.' + SCHEDULE['End_Date'].dt.strftime('%Y-%m-%d') + '.' + SCHEDULE['Actual'] + '.' + SCHEDULE['Op_Days']
+
+SCHEDULE['id'] = SCHEDULE['id'] + '.' + SCHEDULE.groupby('id').cumcount().apply(str)
 
 for KEY in ['Date_From', 'Date_To', 'Start_Date', 'End_Date']:
    SCHEDULE[KEY] = SCHEDULE[KEY].dt.strftime('%Y-%m-%dT%H:%M:%SZ')
-#SCHEDULE = SCHEDULE.drop(['start_date', 'end_date'], axis=1)
 
 SCHEDULE = SCHEDULE.fillna(value={'Origin': '', 'Terminus': ''})
-
-idx_d2 = SCHEDULE['id'].duplicated()
-SCHEDULE.loc[idx_d2, 'id'] = [uuid1().hex for _ in SCHEDULE.loc[idx_d2, 'id'].index]
 
 OUTPUTDATA = [json.dumps({k: v for k, v in path.to_dict().items() if v}) for _, path in SCHEDULE.iterrows()]
 
