@@ -10,8 +10,8 @@ import pandas as pd
 import numpy as np
 from uuid import uuid1
 
-DAY = timedelta(days=1)
-#SIXDAY = 6 * DAY
+DAY = pd.offsets.Day()
+MONDAY = pd.offsets.Week(weekday=0)
 WEEK = 7 * DAY
 N = 0
 
@@ -47,24 +47,24 @@ with open('storage/schedule.ndjson', 'w', encoding='utf-8') as fout:
         json.dump(path, fout)
         fout.write('\n')
 
-
 #df1 = pd.read_json(INPUTDATA, orient='records', dtype={'Days': str}, lines=True, encoding='utf8')
 df1 = pd.DataFrame(INPUTDATA)
 
-df1 = df1.drop(df1[df1['ID'] != 'PA'].index).fillna(value={'Duration': 'PT00:00:00'})
+df1 = df1.drop(df1[df1['ID'] != 'PA'].index).fillna(value={'Duration': '00:00:00'})
 
 df1['ID'] = 'PT'
 
 #df2 = pd.DataFrame(df1['Dates'].str.split('/').tolist(), columns=['start_date', 'end_date'])
 for KEY in ['Date_From', 'Date_To']:
-    df1[KEY] = pd.to_datetime(df1[KEY], format='%Y-%m-%d')
-
+    df1[KEY] = pd.to_datetime(df1[KEY])
 
 df2 = df1[['Date_From', 'Date_To']].copy().rename(columns={'Date_From': 'Start_Date', 'Date_To': 'End_Date'})
-df2['Start_Date'] = df2['Start_Date'].apply(monday_offset)
 idx2 = df2['End_Date'].isnull()
 df2.loc[idx2, 'End_Date'] = df2.loc[idx2, 'Start_Date']
-df2['End_Date'] = df2['End_Date'].apply(monday_offset) + WEEK
+
+idx_monday = df2['Start_Date'].dt.dayofweek == 0
+df2.loc[~idx_monday, 'Start_Date'] = df2.loc[~idx_monday, 'Start_Date'] - MONDAY
+df2['End_Date'] = df2['End_Date'] + MONDAY
 
 df1 = df1.join(df2)
 idx1 = df1['Days'].isna()
@@ -75,7 +75,6 @@ df1['Actual'] = df1['Days']
 #Identify all unique UIDs in timetable
 idx1 = df1['UID'].duplicated(keep=False)
 SCHEDULE = pd.DataFrame(df1[~idx1]).reset_index(drop=True)
-
 DUPLICATES = df1[idx1]
 
 # Identify all UIDs without date overlap in timetable
@@ -148,4 +147,3 @@ SCHEDULE = SCHEDULE.fillna(value={'Origin': '', 'Terminus': ''})
 OUTPUTDATA = [json.dumps({k: v for k, v in path.to_dict().items() if v}) for _, path in SCHEDULE.iterrows()]
 
 print('\n'.join(OUTPUTDATA))
-
