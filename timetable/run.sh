@@ -79,7 +79,7 @@ then
 
     echo Post ${DATESTRING} data to Solr
 
-    for ID in AA BS CR HD PATH TR ZZ
+    for ID in AA BS CR HD PA PATH TR ZZ
     do
         if [ $(./solr/document-count.sh ${ID} | jq -r '.[]') = "missing" ]; then
             echo Create Solr ${ID} schema
@@ -95,30 +95,11 @@ then
 
     echo Create PA-${DATESTRING}.jsonl timetable file
     if [ ! -f PA-${DATESTRING}.jsonl ]; then
-        < schedule/PA-${DATESTRING}.jsonl ./wtt-timetable5.py > PA-${DATESTRING}.jsonl
+        < schedule/PA-${DATESTRING}.jsonl ./wtt-timetable6.py > PA-${DATESTRING}.jsonl
     fi
-
-    echo Created PA-${DATESTRING} timetable file
-    if [ ! -f PA-id-file.jsonl ]; then
-        ./get-id-file.py PA-${DATESTRING}.jsonl > PA-id-file.jsonl
-    fi
-
-    if [ ! -f PA-schema.jsonl ]; then
-        echo Create PA Solr core
-        ./get-schema.sh PA-id-file.jsonl > PA-schema.jsonl
-    fi
-
-    if [ $(./solr/document-count.sh PA | jq -r '.[]') = "missing" ]; then
-        ./set-schema.sh PA PA-schema.jsonl
-    fi
-
-    echo Post Solr PA-${DATESTRING} timetable file
-    if [ $(./solr/document-count.sh PA | jq '.[]') = 0 ]; then
-        cat PA-${DATESTRING}.jsonl | parallel --block 8M --pipe --cat ./solr-post.py --core PA {}
-    fi
-
 fi
 
+exit 7
 echo filter $(date +%Y%m%d)/$(date --date="tomorrow" +%Y%m%d) dates
 if [ ! -f wtt-${DATESTRING}-1.ndjson ]; then
     ./filter.sh $(date +%Y%m%d)/$(date --date="tomorrow" +%Y%m%d)
