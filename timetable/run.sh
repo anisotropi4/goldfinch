@@ -63,39 +63,46 @@ then
         cat storage/PA_???.jsonl > schedule/PA-${DATESTRING}.jsonl
     fi
 
-    if [ ! -s schema.jsonl ]; then
-        echo Create Solr schema structure
-        if [ ! -s id-file.jsonl ]; then
-            echo Create id-file.jsonl
-            ls storage/*_???.jsonl | parallel ./get-id-file.py > id-file.jsonl
-        fi
-        echo Created Solr schema structure
-        ./get-schema.sh id-file.jsonl > schema.jsonl
-        if [ ! -s schema.jsonl ]; then
-            echo Error: empty schema.jsonl file
-            exit 2
-        fi
-    fi
-
-    echo Post ${DATESTRING} data to Solr
-
     for ID in AA BS CR HD PA PATH TR ZZ
     do
         if [ $(./solr/document-count.sh ${ID} | jq -r '.[]') = "missing" ]; then
+            echo Create Solr ${ID} core
+            ./solr/create-core.sh ${ID}
+            echo Created Solr ${ID} core
             echo Create Solr ${ID} schema
-            ./set-schema.sh ${ID} schema.jsonl
+            ./set-schema.py storage/${ID}_???.jsonl
             echo Created Solr ${ID} schema
         fi
+    done
+    for ID in AA BS CR HD PA PATH TR ZZ
+    do
         if [ $(./solr/document-count.sh ${ID} | jq '.[]') = 0 ]; then
             echo Post ${ID} json files to Solr
-            cat storage/${ID}_*.jsonl | parallel --block 8M --pipe --cat ./solr-post.py --core ${ID} {}
+            cat storage/${ID}_*.jsonl | parallel --block 8M --pipe --cat ./solr/post.py --core ${ID} {}
             echo Posted ${ID} json files to Solr
         fi
     done
 
-    echo Create PA-${DATESTRING}.jsonl timetable file
-    if [ ! -f PA-${DATESTRING}.jsonl ]; then
-        < schedule/PA-${DATESTRING}.jsonl ./wtt-timetable6.py > PA-${DATESTRING}.jsonl
+    echo Create PT-${DATESTRING}-7.jsonl timetable file
+    if [ ! -f PT-${DATESTRING}-7.jsonl ]; then
+        < schedule/PA-${DATESTRING}.jsonl ./wtt-timetable7.py > PT-${DATESTRING}-7.jsonl
+    fi
+    echo Created PT-${DATESTRING}-7.jsonl timetable file
+    
+    ID=PT
+    if [ $(./solr/document-count.sh ${ID} | jq -r '.[]') = "missing" ]; then
+        echo Create Solr ${ID} core
+        ./solr/create-core.sh ${ID}
+        echo Created Solr ${ID} core
+        echo Create Solr ${ID} schema
+        ./set-schema.py PT-${DATESTRING}-7.jsonl
+        echo Created Solr ${ID} schema
+    fi
+
+    if [ $(./solr/document-count.sh ${ID} | jq '.[]') = 0 ]; then
+        echo Post ${ID} json files to Solr
+        cat PT-${DATESTRING}-7.jsonl | parallel --block 8M --pipe --cat ./solr/post.py --core ${ID} {}
+        echo Posted ${ID} json files to Solr
     fi
 fi
 
