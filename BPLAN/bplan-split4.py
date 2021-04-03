@@ -240,7 +240,11 @@ for i, e in enumerate(TIMINGS.index):
 
 COLUMNS = ['Origin Name', 'Destination Name', 'Origin', 'Destination', 'Duration']
 
-TIMINGS['Duration'] = pd.to_datetime(DS2, unit='s').dt.strftime('%H:%M:%S')
+TIMINGS['Duration'] = DS2
+TIMINGS = TIMINGS.dropna()
+IDX1 = TIMINGS['Duration'] != 0.0
+TIMINGS = TIMINGS[IDX1]
+TIMINGS['Duration'] = pd.to_datetime(TIMINGS['Duration'], unit='s').dt.strftime('%H:%M:%S')
 TIMINGS = TIMINGS[COLUMNS]
 
 END = datetime.datetime.now() 
@@ -258,3 +262,15 @@ while END < TIMINGS.shape[0]:
                               sep='\t',
                               index=False)
 
+TIMINGS = TIMINGS.sort_values('Duration', ascending=False)
+
+START = 0
+END = 0
+CHUNK = 524288
+while END < TIMINGS.shape[0]:
+    START = END
+    END += CHUNK
+    n = END // CHUNK
+    TIMINGS[START:END].to_csv('BPLAN-timing-sort-{:02}.tsv'.format(n),
+                              sep='\t',
+                              index=False)
