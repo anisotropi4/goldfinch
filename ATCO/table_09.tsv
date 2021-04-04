@@ -1,0 +1,7 @@
+Parent Element	Transfer Field	Old CSV Field Name	Mandatory	Type	Size	V
+StopAreaRef	StopAreaCode	GroupID	Yes	PK, FK	12	1.0
+StopAreaRef	AtcoCode	ATCOCode	Yes	PK, FK	12	1.0
+StopAreaRef	CreationDateTime+	new	No	xsd:date Time	10	+2.0
+StopAreaRef	ModificationDateTime+	new	No	xsd:date Time	10	+2.0
+StopAreaRef	RevisionNumber+	new	No	revision	5	+2.0
+StopAreaRef	Modification+	new	No	modification	3	+2.0

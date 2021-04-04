@@ -1,0 +1,44 @@
+Parent Element	CSV Field/Element	Old CSV Field Name	Mandatory	Type	Size	V
+Stop point	ATCOCode	ATCO code	Yes	PK	12	1.0
+Identifiers	NaptanCode	SMS Number	No	AK	12	1.0
+Identifiers	PlateCode	new	No	nmtojen	12	2.0
+Identifiers	CleardownCode	new	No	int	10	+2.0
+Descriptor	CommonName	same	Yes	placename	48	1.0
+Descriptor	CommonNameLang+	new	No	xml:language	2	+2.0
+Descriptor	ShortCommonName	new	No	placeName	48	1.0
+Descriptor	ShortCommonNameLang+	new	No	xml:language	2	+2.0
+Descriptor	Landmark	same	No (2.1)	name	48	1.0
+Descriptor	LandmarkLang+	new	No	xml:language	2	+2.0
+Descriptor	Street	same	No (21)	placeName	48	1.0
+Descriptor	StreetLang+	new	No	xml:language	2	+2.0
+Descriptor	Crossing	new	No	placeName	48	+2.0
+Descriptor	CrossingLang+	new	No	xml:language	2	+2.0
+Descriptor	Indicator	Identifier	No	placeName	48	1.0
+Descriptor	IndicatorLang+	new	No	xml:language	2	+2.0
+Descriptor	Bearing	Direction	Yes	bearing	2	1.0
+Place	NptgLocalityCode	NatGazID	Yes	FK	8	1.0
+–derived	LocalityName	NatGazLocality	Derived	placeName	48	1.0
+–derived	ParentLocalityName	ParentNatGazLocality	Derived	placeName	48	1.0
+–derived	GrandParentLocalityName	NatGazLocality	Derived	placeName	48	1.0
+Place	Town	same	No	placeName	48	1.0
+	TownLang+	new	No	xml:language	2	+2.0
+Place	Suburb	same	No	placeName	48	1.0
+	SuburbLang+	new	No	xml:language	2	+2.0
+StopPoint	LocalityCentre	same	Yes	xsd:boolean	1	*1.0
+Place	GridType	same	No	GridType	1	1.0
+Place	Easting	same	Yes	easting	6	1.0
+Place	Northing	same	Yes	northing	7	1.0
+–derived	Longitude	lon	Derived	longitude		1.0
+–derived	Latitude	lat	Derived	latitude		1.0
+StopPoint	StopType	Stoptype	Yes	enum	3	1.0
+Bus	BusStopType	BusStopType	no	enum	3	1.0
+Bus	TimingStatus	BusRegistrationStatus	No	enum	3	1.0
+Bus	DefaultWaitTime	DefaultWaitTime	no	duration		
+StopPoint	Notes	same	No	nlString	*	1.0
+StopPoint	NotesLang+	new	No	xml:language	2	+2.0
+StopPoint	AdministrativeAreaCode+	new	Yes	FK	8	+2.0
+StopPoint	CreationDateTime+	new	Yes	xsd:dateTime	10	*1.0
+StopPoint	ModificationDateTime	LastChanged	No	xsd:dateTime	10	*1.0
+StopPoint	RevisionNumber+	new	No	revision	5	+2.0
+StopPoint	Modification	RecordStatus	No	modification	3	1.0
+StopPoint	Status	RecordStatus	No	enum	3	1.0

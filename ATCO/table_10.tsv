@@ -1,0 +1,7 @@
+Parent Element	Transfer Field	Old CSV Field Name	Mandatory	Type	Size	V
+ParentStopArea	ParentStopAreaCode	ParentID	Yes	PK, FK	12	1.0
+ParentStopArea	ChildStopAreaCode	ChildID	Yes	PK, FK	12	1.0
+ParentStopArea	CreationDateTime+	new	No	xsd:date Time	10	+2.0
+ParentStopArea	ModificationDateTime	LastChanged	No	xsd:date Time	10	+2.0
+ParentStopArea	RevisionNumber+	new	No	revision	5	+2.0
+ParentStopArea	Modification+	new	No	modification	3	+2.0

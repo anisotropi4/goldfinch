@@ -1,0 +1,10 @@
+Parent Element	Transfer Field	Old CSV Filed Name	Mandatory	Type	Size	V
+FlexibleZone	AtcoCode	new	Yes	PK,FK	12	2.0
+Flexible Zone	Sequence	new	Yes	xsd:integer	5	2.0
+Location	GridType	new	Yes	gridType	1	2.0
+Location	Easting	new	Yes	easting	6	2.0
+Location	Northing	new	Yes	northing	7	2.0
+FlexibleZone	CreationDateTime	new	No	xsd:dateTime	10	+2.0
+FlexibleZone	ModificationDateTime	new	No	xsd:dateTime	10	+2.0
+FlexibleZone	RevisionNumber	new	No	revision	5	+2.0
+FlexibleZone	Modification+	new	No	modification	3	+2.0

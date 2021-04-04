@@ -1,0 +1,18 @@
+Parent Element	Transfer Field	Old CSV Field Name	Mandatory	Type	Size	V
+Descriptor	AtcoCode	ATCOCode	Yes	PK, FK	12	1.0
+Descriptor	CommonName	same	Yes	placeName	48	1.0
+CommonName	CommonNameLang+	new	No	xml:language	2	+2.0
+Descriptor	ShortName	same	Yes	placeName	48	1.0
+ShortName	ShortCommonNameLang+	new	No	xml:language	2	+2.0
+Descriptor	Landmark	same	No (2.1)	placeName	48	1.0
+LandMark	LandmarkLang+	new	No	xml:language	2	+2.0
+Descriptor	Street	same	No (2.1)	placeName	48	1.0
+Street	StreetLang+	new	No	xml:language	2	2.0
+Descriptor	Crossing	same	Yes	placeName	48	+2.0
+Crossing	CrossingLang+	new	No	xml:language	2	+2.0
+Descriptor	Indicator	Identifier	Yes	placeName	48	1.0
+Indicator	IndicatorLang+	new	No	xml:language	2	+2.0
+Descriptor	CreationDateTime	new	Yes	xsd:dateTime	10	+2.0
+Descriptor	ModificationDateTime	new	No	xsd:dateTime	10	+2.0
+Descriptor	RevisionNumber	new	No	revision	5	+2.0
+Descriptor	Modification	new	No	modification	3	2.0

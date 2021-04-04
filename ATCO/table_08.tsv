@@ -1,0 +1,6 @@
+Parent Element	Transfer Field	Old CSV Field Name	Mandatory	Type	Size	V
+StopArea	StopAreaCode	GroupID	Yes	PK	12	1.0
+StopArea	Name	GroupName	Yes	placeName	48	1.0
+Name	NameLang+	new	No	xml:language	2	+2.0
+StopArea	AdministrativeAreaCode+	new	Yes	FK	8	+2.0
+StopArea	StopAreaType	Type	Yes	enum(1)	4	1.0

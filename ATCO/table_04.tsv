@@ -1,0 +1,10 @@
+Parent Element	Transfer Field	Old CSV Field Name	Mandatory	Type	Size	V
+AltLocalities	AtcoCode	ATCOCode	Yes	PK, FK	12	1.0
+AltLocalities	NptgLocalityCode	NatGazlD	Yes	PK, FK	8	1.0
+–derived	(LocalityName)	NatGazLocality	Derived	placeName	48	1.0
+–derived	(ParentLocalityName)	ParentNatGazLocality	Derived	placeName	48	1.0
+–derived	(GrandParent-LocalityName)	NatGazLocality	Derived	placeName	48	1.0
+AltLocalities	CreationDateTime	new	No	xsd:dateTime	10	+2.0
+AltLocalities	ModificationDateTime	new	No	xsd:dateTime	10	+2.0
+AltLocalities	RevisionNumber	new	No	revision	5	+2.0
+AltLocalities	Modification+	new	No	modification	3	+2.0

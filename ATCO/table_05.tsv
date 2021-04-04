@@ -1,0 +1,12 @@
+Parent Element	Transfer Field	Old CSV Field Name	Mandatory	Type	Size	V
+StopAvailability	AtcoCode	new	Yes	PK, FK	12	+2.0
+StopAvailability	StartDate	new	Yes	PK, xsd:date	8	+2.0
+StopAvailability	EndDate	new	No	xsd:date	8	+2.0
+StopAvailability	AvailabilityStatus	new	Yes	Enum (Active I Suspended I Transferred)	48	+2.0
+StopAvailability	Note	new	No	n/String	*	+2.0
+Note	NoteLang+	new	No	language	2	+2.0
+StopAvailability	TransferStopAtcoCode	new	No	FK	12	+2.0
+StopAvailability	CreationDateTime	new	No	xsd:dateTime	10	+2.0
+StopAvailability	ModificationDateTime	new	No	xsd:dateTime	10	+2.0
+StopAvailability	RevisionNumber	new	No	revision	5	+2.0
+StopAvailability	Modification+	new	No	modification	3	+2.0

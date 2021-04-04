@@ -1,0 +1,12 @@
+Parent Element	Transfer Field	Old CSV Field Name	Mandatory	Type	Size	6
+HailAndRideSection	AtcoCode	ATCOCode	Yes	PK, FK	12	1.0
+StartPoint	StartGridType	same	Yes	grid Type	1	1.0
+StartPoint	StartEasting	same	Yes	easting	6	1.0
+StartPoint	StartNorthing	same	Yes	northing	7	1.0
+EndPoint	EndGridType	same	Yes	grid Type	1	1.0
+EndPoint	EndEasting	same	Yes	easting	6	1.0
+EndPoint	EndNorthing	same	Yes	northing	7	1.0
+HailAndRideSection	CreationDateTime	new	No	xsd:dateTime	10	+2.0
+HailAndRideSection	ModificationDateTime	new	No	xsd:dateTime	10	+2.0
+HailAndRideSection	RevisionNumber	new	No	revision	5	+2.0
+HailAndRideSection	Modification+	new	No	modification	3	+2.0
