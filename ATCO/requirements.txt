@@ -1,0 +1,4 @@
+pandas >= 1.2.3
+xmltodict >= 0.12
+lxml >= 4.6.3
+
