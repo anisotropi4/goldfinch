@@ -23,28 +23,13 @@ The framework is built using [dash](http://gondor.apana.org.au/~herbert/dash/) (
 ## Pre-requisites
 
 To extract and process the data requires the following software
-
-### jq
-
-The [jq](https://stedolan.github.io/jq/) JSON script tool is used in the to filter, map and transform structured data on the command line. To install `jq` on a Debian based Linux type
-```console
-    $ sudo apt-get install jq
-```
-
-### cURL
-
-The [cURL](http://curl.haxx.se) command line tool is used to download HTML and data. To install `curl` on a Debian based Linux type
-```console
-    $ sudo apt-get install curl
-```
-
 ## python modules
 
-The `pandas`, `lxml` and `xmltodict` are used to manage docker container configuration and to process data. To manage [python](https://www.python.org/) module installation and dependencies create and active a python virtual environment in the `wagtail` directory type
+The `pandas` and `lxml` modules are used to  process data. To manage [python](https://www.python.org/) module installation and dependencies create and active a python virtual environment in the `wagtail` directory type
 ```console
     $ virtualenv venv
     $ source venv/bin/activate
-    $ pip install -r requirements
+    $ pip install -r requirements.txt
 ```
 
 To exit the virtual environment type
