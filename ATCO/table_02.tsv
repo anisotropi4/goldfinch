@@ -21,19 +21,19 @@ Place	NptgLocalityCode	NatGazID	Yes	FK	8	1.0
 –derived	ParentLocalityName	ParentNatGazLocality	Derived	placeName	48	1.0
 –derived	GrandParentLocalityName	NatGazLocality	Derived	placeName	48	1.0
 Place	Town	same	No	placeName	48	1.0
-	TownLang+	new	No	xml:language	2	+2.0
+ 	TownLang+	new	No	xml:language	2	+2.0
 Place	Suburb	same	No	placeName	48	1.0
-	SuburbLang+	new	No	xml:language	2	+2.0
+ 	SuburbLang+	new	No	xml:language	2	+2.0
 StopPoint	LocalityCentre	same	Yes	xsd:boolean	1	*1.0
 Place	GridType	same	No	GridType	1	1.0
 Place	Easting	same	Yes	easting	6	1.0
 Place	Northing	same	Yes	northing	7	1.0
-–derived	Longitude	lon	Derived	longitude		1.0
-–derived	Latitude	lat	Derived	latitude		1.0
+–derived	Longitude	lon	Derived	longitude	 	1.0
+–derived	Latitude	lat	Derived	latitude	 	1.0
 StopPoint	StopType	Stoptype	Yes	enum	3	1.0
 Bus	BusStopType	BusStopType	no	enum	3	1.0
 Bus	TimingStatus	BusRegistrationStatus	No	enum	3	1.0
-Bus	DefaultWaitTime	DefaultWaitTime	no	duration		
+Bus	DefaultWaitTime	DefaultWaitTime	no	duration	 	 
 StopPoint	Notes	same	No	nlString	*	1.0
 StopPoint	NotesLang+	new	No	xml:language	2	+2.0
 StopPoint	AdministrativeAreaCode+	new	Yes	FK	8	+2.0

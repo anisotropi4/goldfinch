@@ -1,13 +1,13 @@
 Prefix as character	Prefix as number	Mnemonic	Admin Area Name Inc Vars	Admin Area Name	ATCO	Traveline Region	Notes
-	1	London	Greater London	Greater London	490	London	Uses Numerics
-ADC	232	Aberdeen	Aberdeen City	Aberdeen	639	Scotland	
-AHL	245	Ampthill	Central Bedfordshire	Central Bedfordshire	21	South East	
+ 	1	London	Greater London	Greater London	490	London	Uses Numerics
+ADC	232	Aberdeen	Aberdeen City	Aberdeen	639	Scotland	 
+AHL	245	Ampthill	Central Bedfordshire	Central Bedfordshire	21	South East	 
 AND	263	Andover	Hampshire (var 3)	Hampshire	190	South West	Not in use
-ANG	264	Angus	Angus	Angus	649	Scotland	
-AOL	265	Clackmannanshire	Clackmannanshire	Clackmannanshire	668	Scotland	
+ANG	264	Angus	Angus	Angus	649	Scotland	 
+AOL	265	Clackmannanshire	Clackmannanshire	Clackmannanshire	668	Scotland	 
 AYL	295	Aylesbury	Buckinghamshire (var 2)	Buckinghamshire	40	South East	Not in use
-AYR	297	Ayr	South Ayrshire	South Ayrshire	619	Scotland	
-BFS	237	Bedford	Bedford	Bedford	20	South East	
+AYR	297	Ayr	South Ayrshire	South Ayrshire	619	Scotland	 
+BFS	237	Bedford	Bedford	Bedford	20	South East	 
 BHM	Birmingham	246	National - West Midlands Rail	National - Tram/Metro/Underground	940	DfT	Not used for Rail
 BHM	Birmingham	246	West Midlands (var 5)	West Midlands	430	West Midlands	Not in use
 BIR	247	Merseyside (var 3)	Merseyside	Merseyside	280	North West	Not in use
@@ -15,66 +15,66 @@ BKE	253	Basingstoke	Hampshire (var 4)	Hampshire	190	South West	Not in use
 BKN	256	Bracknell Forest	Bracknell Forest	Bracknell Forest	38	South East	Not in use
 BLA	252	Blackburn with Darwen	Blackburn with Darwen	Blackburn with Darwen	258	North West	Not in use
 BLG	254	Blaenau Gwent	Blaenau Gwent	Blaenau Gwent	532	Wales	Not in use?
-BLP	257	Blackpool	Blackpool	Blackpool	259		North West
-BLP	257	Blackpool	National - Blackpool Fleetwood	National - Train/metro/Underground	940	North West	
+BLP	257	Blackpool	Blackpool	Blackpool	259	 	North West
+BLP	257	Blackpool	National - Blackpool Fleetwood	National - Train/metro/Underground	940	North West	 
 BLY	259	Barnsley	National - South Yorkshire Rail & Fleetwood	National - Tram/Metro/Underground	940	DfT	Not in use
 BLY	259	Barnsley	South Yorkshire (var 3)	South Yorkshire	370	Yorkshire	Not in use
-BOU	268	Bournemouth	Bournemouth	Bournemouth	129	South West	
-BRA	272	Bradford	West Yorkshire (var 3)	West Yorkshire	450	Yorkshire	
-BRE	273	Bridgend	Bridgend	Bridgend	551	Wales	
-BRI	274	Brighton	Brighton & Hove	Brighton & Hove	149	South East	
-BRK	275	West Berkshire	West Berkshire	West Berkshire	30	South East	
-BST	278	Bristol	Bristol, City of	Bristol	10	South West	
-BTH	284	Bath	Bath & North East Somerset	Bath & North East Somerset	18	South West	
-BUC	282	Buckinghamshire	Buckinghamshire	Buckinghamshire	40	South East	
+BOU	268	Bournemouth	Bournemouth	Bournemouth	129	South West	 
+BRA	272	Bradford	West Yorkshire (var 3)	West Yorkshire	450	Yorkshire	 
+BRE	273	Bridgend	Bridgend	Bridgend	551	Wales	 
+BRI	274	Brighton	Brighton & Hove	Brighton & Hove	149	South East	 
+BRK	275	West Berkshire	West Berkshire	West Berkshire	30	South East	 
+BST	278	Bristol	Bristol, City of	Bristol	10	South West	 
+BTH	284	Bath	Bath & North East Somerset	Bath & North East Somerset	18	South West	 
+BUC	282	Buckinghamshire	Buckinghamshire	Buckinghamshire	40	South East	 
 BUR	287	Burton-on-Trent	Staffordshire (var 2)	Staffordshire	380	West Midlands	Not in use
 BWC	292	Berwick	Northumberland (var 3)	Northumberland	310	North East	Not in use
-BXT	298	Buxton	Derbyshire (var 4)	Derbyshire	100	East Midlands	
-CDI	234	Cardiff	Cardiff	Cardiff	571	Wales	
-CEJ	235	Ceredigion	Ceredigion	Ceredigion	523	Wales	
-CHA	242	Chatham	Medway	Medway	249	South East	
-CHE	243	Cheshire East	Cheshire East	Cheshire East	60	North west	
+BXT	298	Buxton	Derbyshire (var 4)	Derbyshire	100	East Midlands	 
+CDI	234	Cardiff	Cardiff	Cardiff	571	Wales	 
+CEJ	235	Ceredigion	Ceredigion	Ceredigion	523	Wales	 
+CHA	242	Chatham	Medway	Medway	249	South East	 
+CHE	243	Cheshire East	Cheshire East	Cheshire East	60	North west	 
 CHT	248	Cheltenham	Gloucestershire (var 3)	Gloucestershire	160	South West	Not in use
-CHW	249	Cheshire West	Cheshire West & Chester	Cheshire & Chester	61	North West	
+CHW	249	Cheshire West	Cheshire West & Chester	Cheshire & Chester	61	North West	 
 CMB	262	Cambridgeshire	Cambridgeshire	Cambridgeshire	50	East	Anglia
 CNW	269	Conwy	Conwy	Conwy	513	Wales	Not in use
-CNW	269	Conwy	National - Great Orme Tramway	National - Tram / Metro / Underground	940	DfT	
-COR	267	Cornwall	Cornwall & Isles of Scilly	Cornwall	80	South West	
-CPY	279	Caerphilly	Caerphilly	Caerphilly	554	Wales	
-CRM	276	Carmarthenshire	Carmarthenshire	Carmarthenshire	522	Wales	
+CNW	269	Conwy	National - Great Orme Tramway	National - Tram / Metro / Underground	940	DfT	 
+COR	267	Cornwall	Cornwall & Isles of Scilly	Cornwall	80	South West	 
+CPY	279	Caerphilly	Caerphilly	Caerphilly	554	Wales	 
+CRM	276	Carmarthenshire	Carmarthenshire	Carmarthenshire	522	Wales	 
 CTF	283	Chesterfield	Derbyshire (var 2)	Derbyshire	100	East Midlands	Not in use
-CUM	286	Cumbria	Cumbria	Cumbria	90	North West	
+CUM	286	Cumbria	Cumbria	Cumbria	90	North West	 
 CVY	289	Coventry	West Midlands (var 2)	West Midlands	430	West Midlands	Not in use
 CVY	289	Coventry	National - West Midlands Rail	National - Tram/Metro/Underground	940	DfT	Not in use
 CYD	293	Croydon	Greater London (var 5)	Greater London	490	London	Not in use: Released
 CYD	293	Croydon	National - London Rail System	National - Tram/Metro/Underground	940	Dft	Not in use: Released
 DBE	323	Derbyshire	Derbyshire (var 3)	Derbyshire	100	East Midlands	Not in use
-DBG	324	Denbighshire	Denbighshire	Denbighshire	511	Wales	
-DBS	327	Derbyshire	Derbyshire	Derbyshire	100	East Midlands	
-DBY	329	Derby	Derby	Derby	109	East Midlands	
+DBG	324	Denbighshire	Denbighshire	Denbighshire	511	Wales	 
+DBS	327	Derbyshire	Derbyshire	Derbyshire	100	East Midlands	 
+DBY	329	Derby	Derby	Derby	109	East Midlands	 
 DCT	328	Doncaster	National - South Yorkshire Rail	National Tram/Metro/Underground	940	DfT	Not in use
 DCT	328	Doncaster	South Yorkshire	South Yorkshire	370	Yorkshire	Not in use
-DGA	342	Dumfries Galloway	Dumfries Galloway	Dumfries Galloway	680	Scotland	
+DGA	342	Dumfries Galloway	Dumfries Galloway	Dumfries Galloway	680	Scotland	 
 DHM	346	Durham	Durham (var 2)	Durham	130	North East	Not in use
-DLO	356	Darlington	Darlington	Darlington	76	North East	
-DND	363	Dundee	Dundee City	Dundee City	640	Scotland	
-DOR	367	Dorset	Dorset	Dorset	120	South West	
+DLO	356	Darlington	Darlington	Darlington	76	North East	 
+DND	363	Dundee	Dundee City	Dundee City	640	Scotland	 
+DOR	367	Dorset	Dorset	Dorset	120	South West	 
 DUD	383	Dudley	National - West Midlands Rail	National - Tram/Metro/Underground	940	DfT	Not in use
 DUD	383	Dudley	West Midlands (var 3)	West Midlands	430	West Midlands	Not in use
-DUR	387	Durham	Durham	Durham	130	North East	
-DVN	386	Devon	Devon	Devon	110	South West	
+DUR	387	Durham	Durham	Durham	130	North East	 
+DVN	386	Devon	Devon	Devon	110	South West	 
 EGR	347	East Grinstead	West Sussex (var 2)	West Sussex	440	South East	Not in use
 ELP	357	Ellesmere Port	Cheshire (var 2)	Cheshire	60	North West	Not in use
-ENB	362	Edinburgh	City of Edinburgh	City of Edinburgh	620	Scotland	
+ENB	362	Edinburgh	City of Edinburgh	City of Edinburgh	620	Scotland	 
 ENG	364	Ealing	Greater London (var 4)	Greater London	490	London	Not in use: Released
 ENG	364	Ealing	National - London Rail System	National - Tram/Metro/Underground	940	DfT	Not in use: Released
-ERE	373	East Renfrewshire	East Renfrewshire	East Renfrewshire	612	Scotland	
+ERE	373	East Renfrewshire	East Renfrewshire	East Renfrewshire	612	Scotland	 
 ESC	372	Essex Chelmsford	Essex (var 2)	Essex	150	South East	Not in use
-ESX	379	Essex	Essex	Essex	150	South East	
+ESX	379	Essex	Essex	Essex	150	South East	 
 XTR	987	Exeter	Exeter	Cornwall	111	South West	Added
-FAL	352	Falkirk	Falkirk	Falkirk		669	Scotland
-FIF	343	Fife	Fife	Fife	650	Scotland	
-FLI	354	Flintshire	Flintshire	Flintshire	512	Wales	
+FAL	352	Falkirk	Falkirk	Falkirk	 	669	Scotland
+FIF	343	Fife	Fife	Fife	650	Scotland	 
+FLI	354	Flintshire	Flintshire	Flintshire	512	Wales	 
 FNL	365	Fenland	Cambridgeshire (var 3)	Cambridgeshire	50	East Anglia	Not in use
 GAT	428	Gateshead	National - Tyne Wear Rail	National Tram/Metro/Underground	940	Dft	Not in use
 GAT	428	Gateshead	Tyne & Wear (var 3)	Tyne & Wear	410	North East	Not in use
@@ -82,188 +82,188 @@ GLA	452	Glasgow City	Glasgow City (var 2)	Glasgow City	609	Scotland	Not in use
 GLA	452	Glasgow City	National - Glasgow Rail System	National Tram/Metro/Underground	940	DfT	Not in use
 GLG	454	Glasgow City	Glasgow City (var 2)	Glasgow City	609	Scotland	Not in use
 GLG	454	Glasgow City	National - Glasgow Rail System	National Tram/Metro/Underground	940	DfT	Not in use
-GLO	456	Gloucestershire	Gloucestershire	Gloucestershire	160	South West	
+GLO	456	Gloucestershire	Gloucestershire	Gloucestershire	160	South West	 
 GLS	457	Gloucestershire	Gloucestershire  (var 2)	Gloucestershire	160	South West	Not in use
-GRI	474	Grimsby	North East Lincolnshire	Lincolnshire	228	East Midlands	
+GRI	474	Grimsby	North East Lincolnshire	Lincolnshire	228	East Midlands	 
 GRM	476	Grantham	Lincolnshire (var 3)	Lincolnshire	270	East Midlands	Not in use
 GTW	489	Gatwick	West Sussex (var 2)	West Sussex	440	South East	Not in use
-GUE	483	Guernsey	Guernsey	Guernsey			Not in use
+GUE	483	Guernsey	Guernsey	Guernsey	 	 	Not in use
 GUI	484	Surrey (var 3)	Surrey	Surrey	400	South East	Not in use
-GWE	493	Gwent	Monmouthshire	Monmouthshire	533	Wales	
+GWE	493	Gwent	Monmouthshire	Monmouthshire	533	Wales	 
 GWN	496	Gwynedd	National - Ffestiniog Railway	National Tram/Metro/Underground	940	DfT	Not in use
-HAL	425	Halton	Halton	Halton	68	North West	
-HAM	426	Hampshire	Hampshire	Hampshire	190	South West	
-HAR	427	Hartlepool	Hartlepool	Hartlepool	75	North East	
+HAL	425	Halton	Halton	Halton	68	North West	 
+HAM	426	Hampshire	Hampshire	Hampshire	190	South West	 
+HAR	427	Hartlepool	Hartlepool	Hartlepool	75	North East	 
 HAW	429	Harlow	Essex (var 3)	Essex	150	South East	Not in use
 HEM	436	Hemel Hempstead	Hertfordshire (var 3)	Hertfordshire	210	South East	Not in use
-HER	437	Herefordshire	Herefordshire, county of	Herefordshire	209	West Midlands	
+HER	437	Herefordshire	Herefordshire, county of	Herefordshire	209	West Midlands	 
 HFL	435	Huddersfield	West Yorkshire (var 7)	West Yorkshire	450	Yorkshire	Not in use
-HJT	458	Hjaltland	Shetland Islands	Shetland Islands	603	Scotland	
-HLD	453	Highland	Highland	Highland	670	Scotland	
+HJT	458	Hjaltland	Shetland Islands	Shetland Islands	603	Scotland	 
+HLD	453	Highland	Highland	Highland	670	Scotland	 
 HLX	459	Halifax	West Yorkshire (var 6)	West Yorkshire	450	Yorkshire	Not in use
 HRE	473	Harrogate	West Yorkshire (var 5)	West Yorkshire	450	Yorkshire	Not in use
-HRT	478	Hertfordshire	Hertfordshire	Hertfordshire	210	South East	
+HRT	478	Hertfordshire	Hertfordshire	Hertfordshire	210	South East	 
 HTS	487	Hastings	East Sussex (var 3)	East Sussex	140	South East	Not in use
 HUN	486	Huntingdon	Cambridgeshire (var 2)	Cambridgeshire	50	East Anglia	Not in use
-INV	468	Inverclyde	Inverclyde	Inverclyde	613	Scotland	
-IOW	469	Isle of Wight	Isle of Wight	Isle of Wight	230	South East	
+INV	468	Inverclyde	Inverclyde	Inverclyde	613	Scotland	 
+IOW	469	Isle of Wight	Isle of Wight	Isle of Wight	230	South East	 
 IPW	479	Ipswich	Suffolk (var 3)	Suffolk	390	East Anglia	Not in use
-JSY	579	Jersey	Jersey	Jersey			Not in use
+JSY	579	Jersey	Jersey	Jersey	 	 	Not in use
 KDL	535	Kendal	Cumbria (Var 2)	Cumbria	90	North West	Not in use
-KMK	565	Kilmarnock	East Ayrshire	East Ayrshire	618	Scotland	
-KNT	568	Kent	Kent	Kent	240	South East	
+KMK	565	Kilmarnock	East Ayrshire	East Ayrshire	618	Scotland	 
+KNT	568	Kent	Kent	Kent	240	South East	 
 KNT	568	Kent	National - Kent Rail System	National - Tram/Metro/Underground	940	DfT	Not in use
 (KOH)	564	Kingston upon Hull	Kingston upon Hull, City of Lancashire	Kingston upon Hull	229	Yorkshire	Uses Numeric
-LAN	526	Lancashire	Lancashire	Lancashire	250	North West	
-LAN	526	National - Blackwood Fleetwood rail	National - Tram/Metro/Underground	940	DfT		Not in use
-LAT	528	Lancaster	Lancaster (var 2)	Lancaster	250	North West	
+LAN	526	Lancashire	Lancashire	Lancashire	250	North West	 
+LAN	526	National - Blackwood Fleetwood rail	National - Tram/Metro/Underground	940	DfT	 	Not in use
+LAT	528	Lancaster	Lancaster (var 2)	Lancaster	250	North West	 
 LBR	527	Loughborough	Leicestershire (var 2)	Leicestershire	260	East Midlands	Not in use
 LBZ	529	Leighton Buzzard	Bedfordshire (var 2)	Bedfordshire	20	South East	Not in use
 LDN	536	London	Greater London	Greater London	490	London	Not in use: Released
 LDN	536	London	National - London Rail System	National - Tram/Metro/Underground	940	DfT	Not in use: Released
-LDS	537	Leeds	West Yorkshire (var 2)	West Yorkshire	450	Yorkshire	
+LDS	537	Leeds	West Yorkshire (var 2)	West Yorkshire	450	Yorkshire	 
 LEI	532	Leicester	Leicester	Leicester	269	East Midlands	Till July 2007
 LEI	532	Leicestershire	Leicestershire	Leicestershire	260	East Midlands	From July 2007
 LEC	532	Leicestershire	Leicestershire (var 4)	Leicestershire	260	East Midlands	Till July 2007
 LEC	532	Leicester	Leicester	Leicester	269	East Midlands	Not in use
 LEW	539	Lewes	East Sussex (var 2)	East Sussex	140	South East	Not in use
-LGP	547	Lochgilphead	Argyll & Bute (Lochgilphead)	Argyll & Bute	607	Scotland	
+LGP	547	Lochgilphead	Argyll & Bute (Lochgilphead)	Argyll & Bute	607	Scotland	 
 LIC	542	Lincolnshire	Lincolnshire (var 2)	Lincolnshire	270	East Midlands	Not in use
-LIN	546	Lincolnshire	Lincolnshire	Lincolnshire	270	East Midlands	
+LIN	546	Lincolnshire	Lincolnshire	Lincolnshire	270	East Midlands	 
 LIV	548	Liverpool	Merseyside (var 2)	Merseyside	280	North West	Not in use
-LTA	582	East Lothian	East Lothian	East Lothian	627	Scotland	
-LTN	586	Luton	Luton	Luton	29	South East	
+LTA	582	East Lothian	East Lothian	East Lothian	627	Scotland	 
+LTN	586	Luton	Luton	Luton	29	South East	 
 LTY	598	Lytham St Annes	Lancashire (var 4)	Lancashire	250	North West	Not in use
 MAI	624	Maidstone	Kent (var 2)	Kent	240	South East	Not in use
 MAI	624	Maidstone	National - Kent Rail System	National - Tram/Metro/Underground	940	DfT	Not in use
-MAN	626	Manchester	Greater Manchester	Greater Manchester	180	North West	
+MAN	626	Manchester	Greater Manchester	Greater Manchester	180	North West	 
 MAN	626	Manchester	National - Manchester Metroline	National - Tram/Metro/Underground	940	DfT	Not in use
-MBR	627	Middlesbrough	Middlesbrough	Middlesbrough	79	North East	
+MBR	627	Middlesbrough	Middlesbrough	Middlesbrough	79	North East	 
 MDX	639	Middlesex	Greater London (var 2)	Greater London	490	London	Not in use
 MDX	639	Middlesex	National - London Rail System	National - Tram/Metro/Underground	940	DfT	Not in use: Released
 MEL	635	Melton Mowbray	Leicestershire (var 3)	Leicestershire	260	East Midlands	Not in use
 MER	637	Merseyside	Merseyside	Merseyside	280	North West	Not in use
 MHT	648	Midhurst	West Sussex (var 2)	West Sussex	440	South East	Not in use
-MID	643	Midlothian	Midlothian	Midlothian	628	Scotland	
-MLG	654	Milngavie	East Dunbartonshire	East Dunbartonshire	611	Scotland	
-MLT	658	Milton Keynes	Milton Keynes	Milton Keynes	49	South East	
+MID	643	Midlothian	Midlothian	Midlothian	628	Scotland	 
+MLG	654	Milngavie	East Dunbartonshire	East Dunbartonshire	611	Scotland	 
+MLT	658	Milton Keynes	Milton Keynes	Milton Keynes	49	South East	 
 MPH	674	Morpeth	Northumberland (var 2)	Northumberland	310	North East	Not in use
 MRC	672	Morecombe	Lancashire (var 3)	Lancashire	250	North West	Not in use
-MRY	679	Moray	Moray	Moray	638	Scotland	
-MTY	689	Merthyr Tydfil	Merthyr Tydfil	Merthyr Tydfil	553	Wales	
-NAY	629	North Ayrshire	North Ayrshire	North Ayrshire	617	Scotland	
+MRY	679	Moray	Moray	Moray	638	Scotland	 
+MTY	689	Merthyr Tydfil	Merthyr Tydfil	Merthyr Tydfil	553	Wales	 
+NAY	629	North Ayrshire	North Ayrshire	North Ayrshire	617	Scotland	 
 NCL	625	Newcastle	Tyne & Wear (var 2)	Tyne & Wear	410	North East	Not in use
 NCL	625	Newcastle	National - Tyne & Wear Rail System	National - Tram/Metro/Underground	940	DfT	Not in use
-NFO	636	Norfolk	Norfolk	Norfolk	290	East Anglia	
+NFO	636	Norfolk	Norfolk	Norfolk	290	East Anglia	 
 NHA	642	Northampton Town	Northamptonshire (var 2)	Northamptonshire	300	East Midlands	Not in use
-NLA	652	North Lanarkshire	North Lanarkshire	North Lanarkshire	616	Scotland	
-NLD	653	Northumberland	Northumberland	Northumberland	310	North East	
+NLA	652	North Lanarkshire	North Lanarkshire	North Lanarkshire	616	Scotland	 
+NLD	653	Northumberland	Northumberland	Northumberland	310	North East	 
 NLY	659	Newcastle-Under-Lyme	Staffordshire (var 2)	Staffordshire	380	West Midlands	Not in use
-NPT	678	Neath Port Talbot	Neath Port Talbot	Neath Port Talbot	582	Wales	
-NRE	673	NRES	National - Rail	National - Rail	910	DfT	
+NPT	678	Neath Port Talbot	Neath Port Talbot	Neath Port Talbot	582	Wales	 
+NRE	673	NRES	National - Rail	National - Rail	910	DfT	 
 NRW	679	Norwich	Norwich	Norfolk	291	East Anglia	Added
-NYS	697	North Yorkshire	Yorkshire	Yorkshire	320	Yorkshire	
-NTH	684	Northamptonshire	Northamptonshire	Northamptonshire	300	East Midlands	
+NYS	697	North Yorkshire	Yorkshire	Yorkshire	320	Yorkshire	 
+NTH	684	Northamptonshire	Northamptonshire	Northamptonshire	300	East Midlands	 
 NTH	684	Northamptonshire	National - Nottingham Rail System	National - Tram/Metro/Underground	940	DfT	Not in use
-NTM	686	Nottingham	Nottingham	Nottingham	339	East Midlands	
+NTM	686	Nottingham	Nottingham	Nottingham	339	East Midlands	 
 NTS	687	Nottinghamshire	Nottinghamshire	Nottinghamshire	330	East Midlands	Not in use
 NTS	687	Nottinghamshire	National - Nottinghamshire Rail System	National - Tram/Metro/Underground	940	DfT	Not in use
 NUE	683	Nuneaton	Warwickshire (var 2)	Warwickshire	420	West Midlands	Not in use
 NWK	695	Newark on Trent	Nottinghamshire (var 2)	Nottinghamshire	330	East Midlands	Not in use
 NTS	695	Nottinghamshire	National - Nottinghamshire Rail System	National - Tram/Metro/Underground	940	DfT	Not in use
-NWM	696	West Midlands	West Midlands	West Midlands	430	West Midlands	
+NWM	696	West Midlands	West Midlands	West Midlands	430	West Midlands	 
 NWM	696	West Midlands	National - West Midlands Rail	National - Tram/Metro/Underground	940	DfT	Not in use
-NWP	697	Newport	Newport	Newport	531	Wales	
-NXG	694	National Coach	National - Coach	National - Coach	900	DfT	
+NWP	697	Newport	Newport	Newport	531	Wales	 
+NXG	694	National Coach	National - Coach	National - Coach	900	DfT	 
 (NYC)	692	North Yorkshire	National - Wensleydale Railway	National - Tram/Metro/Underground	940	DfT	Uses Numerics
-ORK	675	Orkney Islands	Orkney Islands	Orkney Islands	602	Scotland	
+ORK	675	Orkney Islands	Orkney Islands	Orkney Islands	602	Scotland	 
 ORM	676	Ormskirk	Lancashire (var 6)	Lancashire	250	North West	Not in use
-OXF	693	Oxfordshire	Oxfordshire	Oxfordshire	340	South East	
+OXF	693	Oxfordshire	Oxfordshire	Oxfordshire	340	South East	 
 PAI	724	Paisley	National - Glasgow Rail System	National - Tram/Metro/Underground	940	DfT	Not in use
 PAI	724	Paisley	Glasgow City (var 3)	Glasgow City	609	Scotland	Not in use
-PEM	736	Pembrokeshire	Pembrokeshire	Pembrokeshire	521	Wales	
-PER	737	Perth	Perth	Perth & Kinross	648	Scotland	
-PET	738	Peterborough	Peterborough	Peterborough	59	East Midlands	
-PLE	753	Poole	Poole	Poole	128	South West	
-PLY	759	Plymouth	Plymouth	Plymouth	118	South West	
-POR	767	Portsmouth	Portsmouth	Portsmouth	199	South West	
-POW	769	Powys	Powys	Powys	561	Wales	
-RDG	734	Reading	Reading	Reading	39	South East	
-REC	732	Redcar & Cleveland	Redcar & Cleveland	Redcar & Cleveland	78	North East	
-REW	739	Renfrewshire	Renfrewshire	Renfrewshire	614	Scotland	
-RHO	746	Rhondda, Cynon, Taff	Rhondda, Cynon, Taff	Rhondda, Cynon, Taff	552	Wales	
-RTL	785	Rutland	Rutland	Rutland	268	East Midlands	
+PEM	736	Pembrokeshire	Pembrokeshire	Pembrokeshire	521	Wales	 
+PER	737	Perth	Perth	Perth & Kinross	648	Scotland	 
+PET	738	Peterborough	Peterborough	Peterborough	59	East Midlands	 
+PLE	753	Poole	Poole	Poole	128	South West	 
+PLY	759	Plymouth	Plymouth	Plymouth	118	South West	 
+POR	767	Portsmouth	Portsmouth	Portsmouth	199	South West	 
+POW	769	Powys	Powys	Powys	561	Wales	 
+RDG	734	Reading	Reading	Reading	39	South East	 
+REC	732	Redcar & Cleveland	Redcar & Cleveland	Redcar & Cleveland	78	North East	 
+REW	739	Renfrewshire	Renfrewshire	Renfrewshire	614	Scotland	 
+RHO	746	Rhondda, Cynon, Taff	Rhondda, Cynon, Taff	Rhondda, Cynon, Taff	552	Wales	 
+RTL	785	Rutland	Rutland	Rutland	268	East Midlands	 
 SAN	726	Sandwell	West Midlands (var 6)	West Midland	430	West Midlands	Not in use
 SAN	726	Sandwell	National - West Midlands Rail	National - Tram/Metro/Underground	940	DfT	Not in use
-SBR	727	Scottish Borders	Scottish Borders	Scottish Borders	690	Scotland	
-SCU	728	Scunthorpe	North Lincolnshire	North Lincolnshire	227	East Midlands	
+SBR	727	Scottish Borders	Scottish Borders	Scottish Borders	690	Scotland	 
+SCU	728	Scunthorpe	North Lincolnshire	North Lincolnshire	227	East Midlands	 
 SFL	735	Suffolk	Suffolk (var 2)	Suffolk	390	East Anglia	Not in use
-SGL	745	South Gloucestershire	South Gloucestershire	South Gloucestershire	17	South West	
+SGL	745	South Gloucestershire	South Gloucestershire	South Gloucestershire	17	South West	 
 SHF	743	Sheffield	"South Yorkshire	(var 2)"	South Yorkshire	370	Yorkshire	Not in use
 SHF	743	Sheffield	National - South Yorkshire Railway	National - Tram/Metro/Underground	940	DfT	Not in use
-SHR	747	Shropshire	Shropshire	Shropshire	350	West Midlands	
+SHR	747	Shropshire	Shropshire	Shropshire	350	West Midlands	 
 SHW	749	Shrewsbusy	Shropshire (var 2)	Shropshire	350	West Midlands	Not in use
 SKM	756	Skelmersdale	Lancashire (var 5)	Lancashire	250	North West	Not in use
-SKT	758	Stockton-on-Tees	Stockton-on-Tees	Stockton-on-Tees	77	North East	
-SLA	752	South Lanarkshire	South Lanarkshire	South Lanarkshire	615	Scotland	
-SLG	754	Slough	Slough	Slough	37	South East	
+SKT	758	Stockton-on-Tees	Stockton-on-Tees	Stockton-on-Tees	77	North East	 
+SLA	752	South Lanarkshire	South Lanarkshire	South Lanarkshire	615	Scotland	 
+SLG	754	Slough	Slough	Slough	37	South East	 
 SND	763	Sunderland	Tyne & Wear (var 4)	Tyne & Wear	410	North East	Not in use
 SND	763	Sunderland	National - Tyne & Wear Rail	National - Tram/Metro/Underground	940	DfT	Not in use
-SOA	762	Southend-on-Sea	Southend-on-Sea	Southend-on-Sea	158	South East	
-SOH	764	Southampton	Southampton	Southampton	198	South West	
+SOA	762	Southend-on-Sea	Southend-on-Sea	Southend-on-Sea	158	South East	 
+SOH	764	Southampton	Southampton	Southampton	198	South West	 
 SOH	764	Solihull	National - West Midlands Rail System	National - Tram/Metro/Underground	940	DfT	Not in use
-SOL	765	Solihull	West Midlands (var 7)	West Midlands	430	West Midlands	
-SOT	768	Somerset	Somerset	Somerset	360	South West	
-STA	782	Staffordshire	Staffordshire	Staffordshire	380	West Midlands	
-STI	784	Stirling	Stirling	Stirling	660	Scotland	
-STO	786	Stoke-on-Trent	Stoke-on-Trent	Stoke-on-Trent	389	West Midlands	
-SUF	783	Suffolk	Suffolk	Suffolk	390	East Anglia	
-SUR	787	Surrey	Surrey	Surrey	400	South East	
-SUY	789	Surrey	Surrey (var 2)	Surrey	400	South East	
-SWA	792	Swansea	Swansea	Swansea	581	Wales	
-SWI	794	Swindon	Swindon	Swindon	468	South West	
-SYO	796	South Yorkshire	South Yorkshire	South Yorkshire	370	Yorkshire	
+SOL	765	Solihull	West Midlands (var 7)	West Midlands	430	West Midlands	 
+SOT	768	Somerset	Somerset	Somerset	360	South West	 
+STA	782	Staffordshire	Staffordshire	Staffordshire	380	West Midlands	 
+STI	784	Stirling	Stirling	Stirling	660	Scotland	 
+STO	786	Stoke-on-Trent	Stoke-on-Trent	Stoke-on-Trent	389	West Midlands	 
+SUF	783	Suffolk	Suffolk	Suffolk	390	East Anglia	 
+SUR	787	Surrey	Surrey	Surrey	400	South East	 
+SUY	789	Surrey	Surrey (var 2)	Surrey	400	South East	 
+SWA	792	Swansea	Swansea	Swansea	581	Wales	 
+SWI	794	Swindon	Swindon	Swindon	468	South West	 
+SYO	796	South Yorkshire	South Yorkshire	South Yorkshire	370	Yorkshire	 
 SYO	796	South Yorkshire	National - South Yorkshire Railway	National - Tram/Metro/Underground	940	DfT	Not in use
 TAU	828	Taunton	Somerset (var 2)	Somerset	360	South West	Not in use
-TBY	829	Torbay	Torbay	Torbay	119	South West	
-TEL	835	Telford & Wrekin	Telford & Wrekin	Telford & Wrekin	359	West Midlands	
+TBY	829	Torbay	Torbay	Torbay	119	South West	 
+TEL	835	Telford & Wrekin	Telford & Wrekin	Telford & Wrekin	359	West Midlands	 
 THA	842	Thanet	Kent (var 4)	Kent	240	South East	Not in use
 THA	842	Thanet	National - Kent Railway System	National - Tram/Metro/Underground	940	DfT	Not in use
-THU	848	Thurrock	Thurrock	Thurrock	159	South East	
+THU	848	Thurrock	Thurrock	Thurrock	159	South East	 
 TNB	862	Tonbridge	Kent (var 3)	Kent	240	South East	Not in use
 TNB	862	Tonbridge	National - Kent Railway System	National - Tram/Metro/Underground	940	DfT	Not in use
-TOR	867	Torfaen	Torfaen	Torfaen	534	Wales	
+TOR	867	Torfaen	Torfaen	Torfaen	534	Wales	 
 TSD	873	Teesdale	Durham (var 4)	Durham	130	North East	Not in use
-TWR	897	Tyne & Wear	Tyne & Wear	Tyne & Wear	410	North East	
+TWR	897	Tyne & Wear	Tyne & Wear	Tyne & Wear	410	North East	 
 TWR	897	Tyne & Wear	National - Tyne & Wear Rail System	National - Tram/Metro/Underground	940	DfT	Not in use
 TYD	893	Tynedale	Northumberland (var 4)	Northumberland	310	North East	Not in use
-UXB	892	Uxbridge	Greater London (var 3)	Greater London	490	Not in use: Released	
+UXB	892	Uxbridge	Greater London (var 3)	Greater London	490	Not in use: Released	 
 UXB	892	Uxbridge	National - London Rail System	National - Tram/Metro/Underground	940	DfT	Not in use: Released
-VGL	845	Vale of Glamorgan	Vale of Glamorgan, The	Vale of Glamorgan, The	572	Wales	
+VGL	845	Vale of Glamorgan	Vale of Glamorgan, The	Vale of Glamorgan, The	572	Wales	 
 (WAF)	923	Wakefield	West Yorkshire (var 4)	West Yorkshire	450	Yorkshire	Not in use
 WAL	925	Walsall	West Midlands (var 3)	West Midlands	430	West Midlands	Not in use
 WAL	925	Walsall	National - West Midlands Rail	National - Tram/Metro/Underground	940	DfT	Not in use
-WAR	927	Warwickshire	Warwickshire	Warwickshire	420	West Midlands	
+WAR	927	Warwickshire	Warwickshire	Warwickshire	420	West Midlands	 
 WAT	928	Watford	Hertfordshire (var 2)	Hertfordshire	210	South East	Not in use
 WCM	926	High Wycombe	Buckinghamshire (var 3)	Buckinghamshire	40	South East	Not in use
-WDU	938	West Dunbartonshire	West Dunbartonshire	West Dunbartonshire	608	Scotland	
+WDU	938	West Dunbartonshire	West Dunbartonshire	West Dunbartonshire	608	Scotland	 
 WEA	932	Wearside	Durham (var 3)	Durham	130	North East	Not in use
 WEM	936	Wembley	Greater London (var 6)	Greater London	490	London	Not in use: Released
 WEM	936	Wembley	National - London Rail System	National - Tram/Metro/Underground	940	DfT	Not in use: Released
 WIC	942	Winchester	Hampshire (var 2)	Hampshire	190	South West	Not in use
-WIL	945	Wiltshire	Wiltshire	Wiltshire	460	South West	
-WIN	946	Windsor & Maidenhead	Windsor & Maidenhead	Windsor & Maidenhead	36	South East	
-WIS	947	Western Isles	Western Isles	Western Isles	601	Scotland	
-WLO	956	West Lothian	West Lothian	West Lothian	629	Scotland	
+WIL	945	Wiltshire	Wiltshire	Wiltshire	460	South West	 
+WIN	946	Windsor & Maidenhead	Windsor & Maidenhead	Windsor & Maidenhead	36	South East	 
+WIS	947	Western Isles	Western Isles	Western Isles	601	Scotland	 
+WLO	956	West Lothian	West Lothian	West Lothian	629	Scotland	 
 WLV	958	Wolverhampton	West Midlands var 8	West Midlands	380	West Midlands	Not in use
-WOC	962	Worcestershire	Worcestershire	Worcestershire	200	West Midlands	
-WOK	965	Wokingham	Wokingham	Wokingham	35	South East	
-WRE	973	Wrexham	Wrexham	Wrexham	514	Wales	
-WRG	974	Warrington	Warrington	Warrington	69	North West	
+WOC	962	Worcestershire	Worcestershire	Worcestershire	200	West Midlands	 
+WOK	965	Wokingham	Wokingham	Wokingham	35	South East	 
+WRE	973	Wrexham	Wrexham	Wrexham	514	Wales	 
+WRG	974	Warrington	Warrington	Warrington	69	North West	 
 WRL	975	Wirrall	Merseyside (var 2)	Merseyside	280	North West	Not in use
-WSM	976	Weston Super Mare	North Somerset	North Somerset	19	South West	
-WSX	979	West Sussex	West Sussex	West Sussex	440	South East	
-YKW	959	West Yorkshire	West Yorkshire	West Yorkshire	450	Yorkshire	
+WSM	976	Weston Super Mare	North Somerset	North Somerset	19	South West	 
+WSX	979	West Sussex	West Sussex	West Sussex	440	South East	 
+YKW	959	West Yorkshire	West Yorkshire	West Yorkshire	450	Yorkshire	 
 YNY	969	Ynys Môn	Ynys Môn	Isle of Anglesey	541	Wales	Not in use
 (YOE)	963	Yorkshire East	East Riding of Yorkshire	East Riding of Yorkshire	220	Yorkshire	Uses Numeric
 YOR	967	York	York	York	329	Yorkshire	Not in use
